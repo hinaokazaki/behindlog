@@ -1,0 +1,120 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id                 String   @id              // ← Supabaseのauth.users.id（UUID）
+  name               String
+  color_theme        ColorThemeType
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  records            DailyRecord[]
+  goals              Goal[]
+  todos              Todo[] 
+  commits            CommitTime[]
+  contactMessages    ContactMessage[]
+  friendships1       Friendship[] @relation("User1")
+  friendships2       Friendship[] @relation("User2")
+  invitedFriendships Friendship[] @relation("InviterUser")
+}
+
+model Friendship {
+  id              Int      @id @default(autoincrement())
+  user_id_1       String
+  user_id_2       String
+  inviter_user_id String
+  invitee_email   String
+  message         String
+  status          InvitationStatus
+  token           String   @default(uuid())
+  responded_at    DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user1           User     @relation("User1", fields: [user_id_1], references: [id])
+  user2           User     @relation("User2", fields: [user_id_2], references: [id])
+  inviterUser     User     @relation("InviterUser", fields: [inviter_user_id], references: [id])
+}
+
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  user_id   String?  // 未ログインの投稿も許可するため nullable
+  name      String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+
+  user      User?    @relation(fields: [user_id], references: [id])
+}
+
+model DailyRecord {
+  id               Int      @id @default(autoincrement())
+  user_id          String
+  recorded_at      DateTime
+  total_study_time Int
+  memo             String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  user             User     @relation(fields: [user_id], references: [id])
+}
+
+model Goal {
+  id         Int     @id @default(autoincrement())
+  user_id    String
+  title      String
+  deadline   DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user       User     @relation(fields: [user_id], references: [id])
+}
+
+model Todo {
+  id           Int     @id @default(autoincrement())
+  user_id      String
+  title        String
+  due_date     DateTime
+  is_completed Boolean
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user         User     @relation(fields: [user_id], references: [id])
+}
+
+model CommitTime {
+  id           Int     @id @default(autoincrement())
+  user_id      String
+  target_time  Int     // 単位: 分
+  start_date   DateTime
+  end_date     DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user         User     @relation(fields: [user_id], references: [id])
+}
+
+enum ColorThemeType {
+  original
+  cool
+  warm
+  nature
+  sunshine
+}
+
+enum InvitationStatus {
+  pending
+  accepted
+  declined
+}

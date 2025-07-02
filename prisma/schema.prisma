@@ -106,15 +106,15 @@ model CommitTime {
 }
 
 enum ColorThemeType {
-  original
-  cool
-  warm
-  nature
-  sunshine
+  ORIGINAL
+  COOL
+  WARM
+  NATURE
+  SUNSHINE
 }
 
 enum InvitationStatus {
-  pending
-  accepted
-  declined
+  PENDING
+  ACCEPTED
+  DECLINED
 }

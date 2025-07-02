@@ -15,7 +15,7 @@ datasource db {
 model User {
   id                 String   @id              // ← Supabaseのauth.users.id（UUID）
   name               String
-  color_theme        ColorThemeType
+  colorTheme         ColorThemeType
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
@@ -31,78 +31,78 @@ model User {
 
 model Friendship {
   id              Int      @id @default(autoincrement())
-  user_id_1       String
-  user_id_2       String
-  inviter_user_id String
-  invitee_email   String
+  userId1         String
+  userId2         String
+  inviterUserId   String
+  inviteeEmail    String
   message         String
   status          InvitationStatus
   token           String   @default(uuid())
-  responded_at    DateTime?
+  respondedAt     DateTime?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  user1           User     @relation("User1", fields: [user_id_1], references: [id], onDelete: Cascade)
-  user2           User     @relation("User2", fields: [user_id_2], references: [id], onDelete: Cascade)
-  inviterUser     User     @relation("InviterUser", fields: [inviter_user_id], references: [id], onDelete: Cascade)
+  user1           User     @relation("User1", fields: [userId1], references: [id], onDelete: Cascade)
+  user2           User     @relation("User2", fields: [userId2], references: [id], onDelete: Cascade)
+  inviterUser     User     @relation("InviterUser", fields: [inviterUserId], references: [id], onDelete: Cascade)
 }
 
 model ContactMessage {
   id        Int      @id @default(autoincrement())
-  user_id   String?  // 未ログインの投稿も許可するため nullable
+  userId    String?  // 未ログインの投稿も許可するため nullable
   name      String
   email     String
   message   String
   createdAt DateTime @default(now())
 
-  user      User?    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model DailyRecord {
   id               Int      @id @default(autoincrement())
-  user_id          String
-  recorded_at      DateTime
-  total_study_time Int
+  userId           String
+  recordedAt       DateTime
+  totalStudyTime   Int
   memo             String
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  user             User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Goal {
   id         Int     @id @default(autoincrement())
-  user_id    String
+  userId     String
   title      String
   deadline   DateTime
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Todo {
   id           Int     @id @default(autoincrement())
-  user_id      String
+  userId       String
   title        String
-  due_date     DateTime
-  is_completed Boolean
+  dueDate      DateTime
+  isCompleted  Boolean
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  user         User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model CommitTime {
   id           Int     @id @default(autoincrement())
-  user_id      String
-  target_time  Int     // 単位: 分
-  start_date   DateTime
-  end_date     DateTime
+  userId       String
+  targetTime   Int     // 単位: 分
+  startDate    DateTime
+  endDate      DateTime
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  user         User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum ColorThemeType {

@@ -42,9 +42,9 @@ model Friendship {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  user1           User     @relation("User1", fields: [user_id_1], references: [id])
-  user2           User     @relation("User2", fields: [user_id_2], references: [id])
-  inviterUser     User     @relation("InviterUser", fields: [inviter_user_id], references: [id])
+  user1           User     @relation("User1", fields: [user_id_1], references: [id], onDelete: Cascade)
+  user2           User     @relation("User2", fields: [user_id_2], references: [id], onDelete: Cascade)
+  inviterUser     User     @relation("InviterUser", fields: [inviter_user_id], references: [id], onDelete: Cascade)
 }
 
 model ContactMessage {
@@ -55,7 +55,7 @@ model ContactMessage {
   message   String
   createdAt DateTime @default(now())
 
-  user      User?    @relation(fields: [user_id], references: [id])
+  user      User?    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model DailyRecord {
@@ -67,7 +67,7 @@ model DailyRecord {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  user             User     @relation(fields: [user_id], references: [id])
+  user             User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model Goal {
@@ -78,7 +78,7 @@ model Goal {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  user       User     @relation(fields: [user_id], references: [id])
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model Todo {
@@ -90,7 +90,7 @@ model Todo {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  user         User     @relation(fields: [user_id], references: [id])
+  user         User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model CommitTime {
@@ -102,7 +102,7 @@ model CommitTime {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  user         User     @relation(fields: [user_id], references: [id])
+  user         User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 enum ColorThemeType {

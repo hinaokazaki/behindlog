@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Noto_Sans_JP, Poppins } from "next/font/google";
 import { ReactNode } from "react";
 import "./globals.css";
+import Header from "./_components/Header";
 
 // google font を有効化
 const notoSansJP = Noto_Sans_JP({ subsets: ["latin"], variable: "--font-jp" });
@@ -20,7 +21,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ja" className={`${notoSansJP.variable} ${poppins.variable}`}>
       <body id="body" className="m-0 p-0">
-        {children}
+        <Header />
+        <main>{children}</main>
       </body>
     </html>
   );

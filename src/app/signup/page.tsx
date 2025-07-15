@@ -4,6 +4,7 @@ import { supabase } from "@/utils/supabase";
 import { ButtonProps, FieldProps } from "../_types/type";
 import { z } from "zod";
 import Link from "next/link";
+import SectionTitle from "../_components/SectionTitle";
 
 const fields: FieldProps[] = [
   {
@@ -54,8 +55,8 @@ export default function Signup() {
   };
 
   return (
-    <div className="m-auto w-[450px] p-1">
-      <p className="text-center text-heading-1">Signup</p>
+    <div className="m-auto my-[84px] w-[450px] p-1">
+      <SectionTitle title="Signup" />
       <Form
         fields={fields}
         buttons={buttons}
@@ -65,7 +66,7 @@ export default function Signup() {
       />
       <Link
         href="/login"
-        className="mt-3 text-center text-form-text text-primary hover:underline"
+        className="mt-3 block text-center text-form-text text-primary hover:underline"
       >
         アカウントをお持ちの方はこちら
       </Link>

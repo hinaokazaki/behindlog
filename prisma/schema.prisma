@@ -13,8 +13,9 @@ datasource db {
 
 model User {
   id                 String   @id              // ← Supabaseのauth.users.id（UUID）
-  name               String
-  colorTheme         ColorThemeType
+  email              String
+  name               String?
+  colorTheme         ColorThemeType?
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 

@@ -16,3 +16,21 @@ export type ButtonProps = {
   disabled?: boolean;
   isLoading?: boolean;
 };
+
+// API
+// User
+export type ProfileData = {
+  id: string;
+  email: string;
+  name: string | null;
+  colorTheme: "ORIGINAL" | "COOL" | "WARM" | "NATURE" | "SUNSHINE" | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+// Goal
+export type GoalData = {
+  id: number;
+  title: string;
+  deadline: Date;
+};

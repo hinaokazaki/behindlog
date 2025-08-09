@@ -34,3 +34,11 @@ export type GoalData = {
   title: string;
   deadline: Date;
 };
+
+// CommitTime
+export type CommitTimeData = {
+  targetTime: number; // 単位: 分
+  startDate: Date;
+  endDate: Date;
+  userId: string;
+};

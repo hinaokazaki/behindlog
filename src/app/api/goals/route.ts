@@ -49,7 +49,7 @@ export const POST = async (request: NextRequest) => {
     const newGoal = await prisma.goal.create({
       data: {
         title,
-        deadline: new Date(deadline), //Daye型に変換
+        deadline: new Date(deadline), //Date型に変換
         userId: user.id,
       },
     });

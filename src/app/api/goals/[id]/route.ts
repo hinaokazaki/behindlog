@@ -57,7 +57,7 @@ export const PATCH = async (
       },
       data: {
         title,
-        deadline,
+        deadline: new Date(deadline), //Date型に変換
       },
     });
 

@@ -38,3 +38,39 @@ export const GET = async (
 };
 
 // PATCH: /committime ユーザー_目標時間更新
+type UpdateCommitTimeRequestBody = {
+  targetTime: number; // 単位: 分
+  startDate: Date;
+  endDate: Date;
+};
+
+export const PATCH = async (
+  request: NextRequest,
+  { params }: { params: { id: string } },
+) => {
+  const { id } = params;
+  try {
+    const user = await getLoggedInUser(request);
+    const body = await request.json();
+    const { targetTime, startDate, endDate } = body;
+    const committime = await prisma.commitTime.update({
+      where: {
+        id: Number(id),
+      },
+      data: {
+        targetTime: Number(targetTime),
+        startDate: new Date(startDate),
+        endDate: new Date(startDate),
+      },
+    });
+
+    return NextResponse.json<{ status: string; committime: CommitTimeData }>(
+      { status: "OK", committime: committime },
+      { status: 200 },
+    );
+  } catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json({ status: error.message }, { status: 400 });
+    }
+  }
+};

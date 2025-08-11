@@ -74,3 +74,28 @@ export const PATCH = async (
     }
   }
 };
+
+// DELETE: /committime ユーザー_目標時間削除
+export const DELETE = async (
+  request: NextRequest,
+  { params }: { params: { id: string } },
+) => {
+  const { id } = params;
+  try {
+    const user = await getLoggedInUser(request);
+    const commitTime = await prisma.commitTime.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+
+    return NextResponse.json<{ status: string }>(
+      { status: "OK" },
+      { status: 200 },
+    );
+  } catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json({ status: error.message }, { status: 400 });
+    }
+  }
+};

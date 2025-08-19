@@ -104,7 +104,7 @@ model Todo {
 
 model CommitTime {
   id           Int     @id @default(autoincrement())
-  userId       String
+  userId       String  @unique
   targetTime   Int     // 単位: 分
   startDate    DateTime
   endDate      DateTime

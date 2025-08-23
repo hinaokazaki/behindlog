@@ -19,8 +19,16 @@ export const POST = async (request: NextRequest) => {
     const { targetTime, startDate, endDate }: CreateCommitTimeRequestBody =
       body;
 
-    const committime = await prisma.commitTime.create({
-      data: {
+    const committime = await prisma.commitTime.upsert({
+      where: {
+        userId: user.id,
+      },
+      update: {
+        targetTime: Number(targetTime),
+        startDate: new Date(startDate), //Date型に変換
+        endDate: new Date(endDate), //Date型に変換
+      },
+      create: {
         targetTime: Number(targetTime),
         startDate: new Date(startDate), //Date型に変換
         endDate: new Date(endDate), //Date型に変換

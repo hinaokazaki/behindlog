@@ -5,6 +5,38 @@ import { z } from "zod/v4";
 
 const prisma = new PrismaClient();
 
+// GET: /records ユーザー_記録取得（特定日）
+export const GET = async (request: NextRequest) => {
+  const date = request.nextUrl.searchParams.get("date");
+  if (!date) {
+    return NextResponse.json({ status: "dateがありません" }, { status: 400 });
+  }
+
+  try {
+    const user = await verifyAuthToken(request);
+    const recordedDate = new Date(`${date}T00:00:00+08:00`);
+    const dailyRecord = await prisma.dailyRecord.findFirst({
+      where: {
+        userId: user.id,
+        recordedDate,
+      },
+    });
+
+    if (!dailyRecord) {
+      return NextResponse.json(
+        { status: "記録を取得できませんでした" },
+        { status: 400 },
+      );
+    }
+
+    return NextResponse.json({ status: "OK", dailyRecord }, { status: 200 });
+  } catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json({ status: error.message }, { status: 400 });
+    }
+  }
+};
+
 // POST: /records ユーザー_記録新規作成
 const TodoItemSchema = z.object({
   id: z.number().int(),
@@ -120,15 +152,18 @@ export const POST = async (request: NextRequest) => {
         }
       }
 
+      const todayStr = toISODate(new Date()); // "YYYY-MM-DD"
+      const recordedDate = new Date(`${todayStr}T00:00:00+08:00`);
+
       // dailyRecord を作成
-      const dailyRecord = await prisma.dailyRecord.create({
+      const dailyRecord = await tx.dailyRecord.create({
         data: {
           user: {
             connect: {
               id: user.id,
             },
           },
-          recordedAt: new Date(),
+          recordedDate,
           totalStudyTime: body.totalStudyTime,
           memo: body.memo,
           todoSnapshot: safeSnapshot,

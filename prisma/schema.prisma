@@ -16,6 +16,7 @@ model User {
   email              String
   name               String?
   colorTheme         ColorThemeType?
+  timezone           String   @default("Asia/Tokyo")
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
@@ -83,7 +84,7 @@ model DailyRecord {
 }
 
 model Goal {
-  id         Int     @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   userId     String
   title      String
   deadline   DateTime
@@ -94,7 +95,7 @@ model Goal {
 }
 
 model Todo {
-  id           Int     @id @default(autoincrement())
+  id           Int      @id @default(autoincrement())
   userId       String
   title        String
   dueDate      DateTime

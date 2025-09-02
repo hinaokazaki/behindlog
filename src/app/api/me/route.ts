@@ -36,11 +36,15 @@ export const GET = async (request: NextRequest) => {
 type CreateProfileRequestBody = {
   id: string; // Supabaseのuser.id
   email: string; // Supabaseのuser.email
+  timezone: String;
 };
 
 export const POST = async (request: NextRequest) => {
   try {
     const user = await verifyAuthToken(request);
+    const body = await request.json();
+    const { timezone } = body;
+
     if (!user.email) {
       return NextResponse.json(
         { status: "メールアドレスが取得できませんでした" },
@@ -48,10 +52,17 @@ export const POST = async (request: NextRequest) => {
       );
     }
 
-    const profile = await prisma.user.create({
-      data: {
+    const profile = await prisma.user.upsert({
+      where: {
+        id: user.id,
+      },
+      update: {
+        timezone,
+      },
+      create: {
         id: user.id,
         email: user.email,
+        timezone,
       },
     });
 
@@ -69,13 +80,15 @@ export const POST = async (request: NextRequest) => {
 type UpdateProfileRequestBody = {
   name: string;
   colorTheme: "ORIGINAL" | "COOL" | "WARM" | "NATURE" | "SUNSHINE";
+  timezone: string;
 };
 
 export const PATCH = async (request: NextRequest) => {
   try {
     const user = await verifyAuthToken(request);
 
-    const { name, colorTheme }: UpdateProfileRequestBody = await request.json();
+    const { name, colorTheme, timezone }: UpdateProfileRequestBody =
+      await request.json();
     const profile = await prisma.user.update({
       where: {
         id: user.id,
@@ -83,6 +96,7 @@ export const PATCH = async (request: NextRequest) => {
       data: {
         name,
         colorTheme,
+        timezone,
       },
     });
 

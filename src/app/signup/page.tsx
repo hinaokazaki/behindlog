@@ -5,6 +5,7 @@ import { ButtonProps, FieldProps } from "../_types/type";
 import { z } from "zod";
 import Link from "next/link";
 import SectionTitle from "../_components/SectionTitle";
+import { useRouter } from "next/navigation";
 
 const fields: FieldProps[] = [
   {
@@ -38,6 +39,8 @@ const defaultValues: SignupFormValues = {
 };
 
 export default function Signup() {
+  const router = useRouter();
+
   const handleSubmit = async (values: SignupFormValues) => {
     const { email, password } = values;
     const { error } = await supabase.auth.signUp({
@@ -51,6 +54,7 @@ export default function Signup() {
       alert("登録に失敗しました");
     } else {
       alert("確認メールを送信しました。");
+      router.replace("/auth/verify-request");
     }
   };
 

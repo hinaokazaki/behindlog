@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import { getLoggedInUser } from "@/utils/auth";
+import { getLoggedInUser, verifyAuthToken } from "@/utils/auth";
 import { v4 as uuidv4 } from "uuid";
 import { Resend } from "resend";
 
@@ -85,4 +85,33 @@ export const POST = async (request: NextRequest) => {
       return NextResponse.json({ status: error.message }, { status: 400 });
     }
   }
+};
+
+// GET /api/friends/invite?token=xxxx ユーザー_招待お知らせ情報取得
+export const GET = async (request: NextRequest) => {
+  const user = await verifyAuthToken(request);
+  const token = request.nextUrl.searchParams.get("token");
+  if (!token) {
+    return NextResponse.json({ error: "token required" }, { status: 400 });
+  }
+
+  const friendShip = await prisma.friendship.findFirst({
+    where: {
+      token,
+    },
+    include: {
+      inviterUser: true,
+    },
+  });
+
+  if (!friendShip) {
+    return NextResponse.json({ error: "invalid token" }, { status: 404 });
+  }
+
+  return NextResponse.json({
+    inviterName: friendShip.inviterUser.name,
+    message: friendShip.message,
+    status: friendShip.status,
+    alreadyRegistered: friendShip.userId2 !== null,
+  });
 };

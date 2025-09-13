@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 import { GoalData } from "@/app/_types/type";
 import { getLoggedInUser, verifyAuthToken } from "@/utils/auth";
-
-const prisma = new PrismaClient();
 
 // GET: /goal ユーザー_目標取得
 export const GET = async (

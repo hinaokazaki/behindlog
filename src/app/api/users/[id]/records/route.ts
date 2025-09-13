@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 import { verifyAuthToken } from "@/utils/auth";
-
-const prisma = new PrismaClient();
 
 // GET: /users/[id]/records/[date] ユーザー_友達の記録取得（特定日）
 

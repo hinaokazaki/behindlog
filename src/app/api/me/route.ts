@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 import { verifyAuthToken } from "@/utils/auth";
 import { ProfileData } from "@/app/_types/type";
-
-const prisma = new PrismaClient();
 
 // GET: /me ユーザー_プロフィール取得
 export const GET = async (request: NextRequest) => {

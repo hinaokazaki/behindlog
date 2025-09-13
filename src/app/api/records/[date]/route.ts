@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient, Prisma } from "@prisma/client";
-import { getLoggedInUser, verifyAuthToken } from "@/utils/auth";
+import { prisma } from "@/lib/prisma";
+import { getLoggedInUser } from "@/utils/auth";
 import { z } from "zod/v4";
-
-const prisma = new PrismaClient();
 
 // PUT: /records:date ユーザー_記録新規作成,取得,更新
 

@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 import { getLoggedInUser, verifyAuthToken } from "@/utils/auth";
 import { TodoData } from "@/app/_types/type";
-
-const prisma = new PrismaClient();
 
 // POST: /todos ユーザー_Todo新規作成
 type CreateTodoRequestBody = {

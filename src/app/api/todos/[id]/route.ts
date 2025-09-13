@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 import { getLoggedInUser, verifyAuthToken } from "@/utils/auth";
 import { TodoData } from "@/app/_types/type";
-
-const prisma = new PrismaClient();
 
 // GET: /todos ユーザー_Todo取得
 export const GET = async (

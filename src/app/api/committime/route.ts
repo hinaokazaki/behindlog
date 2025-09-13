@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
 import { CommitTimeData } from "@/app/_types/type";
-
-const prisma = new PrismaClient();
 
 // POST: /committime ユーザー_目標時間新規作成
 type CreateCommitTimeRequestBody = {

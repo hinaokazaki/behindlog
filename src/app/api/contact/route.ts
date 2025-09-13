@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
-
-const prisma = new PrismaClient();
 
 // POST: /contact ユーザー_お問い合わせ作成
 type CreateContactRequestBody = {

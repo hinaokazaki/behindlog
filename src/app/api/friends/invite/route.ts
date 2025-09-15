@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 import { getLoggedInUser, verifyAuthToken } from "@/utils/auth";
 import { v4 as uuidv4 } from "uuid";
 import { Resend } from "resend";
 
-const prisma = new PrismaClient();
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 async function sendInviteEmail(to: string, token: string) {
-  const inviteUrl = `${process.env.NEXT_PUBLIC_APP_URL}/invite?token=${token}`;
+  const inviteUrl = `${process.env.NEXT_PUBLIC_APP_URL}/invite?inviteToken=${token}`;
 
   await resend.emails.send({
     from: "onboarding@resend.dev",

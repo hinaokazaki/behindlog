@@ -35,7 +35,7 @@ export default function AuthCallback() {
         return;
       }
 
-      // 一度だけ /api/me を upsert（timezone を保存）
+      // 一度だけ /api/me を upsert（timezoneを保存）
       if (!postedRef.current) {
         postedRef.current = true;
         const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
+import { withUserDateParse } from "@/lib/timezone";
 
 // PATCH: /api/friends/:id ユーザー_友達申請承認
 export const PATCH = async (
@@ -12,6 +13,7 @@ export const PATCH = async (
     const user = await getLoggedInUser(request);
     const body = await request.json();
     const { status } = body;
+    const data = withUserDateParse(body, ["respondedAt"], user.timezone);
 
     // status確認
     if (status !== "ACCEPTED" && status !== "DECLINED") {
@@ -38,7 +40,7 @@ export const PATCH = async (
       },
       data: {
         status: status,
-        respondedAt: new Date(),
+        ...data,
       },
     });
 

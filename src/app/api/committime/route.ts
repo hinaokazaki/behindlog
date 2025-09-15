@@ -2,20 +2,19 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
 import { CommitTimeData } from "@/app/_types/type";
+import { withUserDateParse } from "@/lib/timezone";
 
 // POST: /committime ユーザー_目標時間新規作成
-type CreateCommitTimeRequestBody = {
-  targetTime: number; // 単位: 分
-  startDate: string; //Date
-  endDate: string; //Date
-};
-
 export const POST = async (request: NextRequest) => {
   try {
     const user = await getLoggedInUser(request);
     const body = await request.json();
-    const { targetTime, startDate, endDate }: CreateCommitTimeRequestBody =
-      body;
+    const { targetTime } = body;
+    const data = withUserDateParse(
+      body,
+      ["startDate", "endDate"],
+      user.timezone,
+    );
 
     const committime = await prisma.commitTime.upsert({
       where: {
@@ -23,13 +22,11 @@ export const POST = async (request: NextRequest) => {
       },
       update: {
         targetTime: Number(targetTime),
-        startDate: new Date(startDate), //Date型に変換
-        endDate: new Date(endDate), //Date型に変換
+        ...data,
       },
       create: {
         targetTime: Number(targetTime),
-        startDate: new Date(startDate), //Date型に変換
-        endDate: new Date(endDate), //Date型に変換
+        ...data,
         userId: user.id,
       },
     });

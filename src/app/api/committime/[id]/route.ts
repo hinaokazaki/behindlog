@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getLoggedInUser, verifyAuthToken } from "@/utils/auth";
+import { getLoggedInUser } from "@/utils/auth";
 import { CommitTimeData } from "@/app/_types/type";
+import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
 
 // GET: /committime ユーザー_目標時間取得
 export const GET = async (
@@ -10,7 +11,7 @@ export const GET = async (
 ) => {
   const { id } = params;
   try {
-    const user = await verifyAuthToken(request);
+    const user = await getLoggedInUser(request);
     const committime = await prisma.commitTime.findUnique({
       where: {
         id: Number(id),
@@ -24,10 +25,13 @@ export const GET = async (
       );
     }
 
-    return NextResponse.json<{ status: string; committime: CommitTimeData }>(
-      { status: "OK", committime: committime },
-      { status: 200 },
+    const formatted = withUserTimezone(
+      committime,
+      ["startDate", "endDate"],
+      user.timezone,
     );
+
+    return NextResponse.json({ status: "OK", ...formatted }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ status: error.message }, { status: 400 });
@@ -36,12 +40,6 @@ export const GET = async (
 };
 
 // PATCH: /committime ユーザー_目標時間更新
-type UpdateCommitTimeRequestBody = {
-  targetTime: number; // 単位: 分
-  startDate: Date;
-  endDate: Date;
-};
-
 export const PATCH = async (
   request: NextRequest,
   { params }: { params: { id: string } },
@@ -50,15 +48,19 @@ export const PATCH = async (
   try {
     const user = await getLoggedInUser(request);
     const body = await request.json();
-    const { targetTime, startDate, endDate } = body;
+    const { targetTime } = body;
+    const data = withUserDateParse(
+      body,
+      ["startDate", "endDate"],
+      user.timezone,
+    );
     const committime = await prisma.commitTime.update({
       where: {
         id: Number(id),
       },
       data: {
         targetTime: Number(targetTime),
-        startDate: new Date(startDate),
-        endDate: new Date(startDate),
+        ...data,
       },
     });
 
@@ -84,6 +86,7 @@ export const DELETE = async (
     const commitTime = await prisma.commitTime.delete({
       where: {
         id: Number(id),
+        userId: user.id,
       },
     });
 

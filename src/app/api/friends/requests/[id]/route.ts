@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { verifyAuthToken } from "@/utils/auth";
+import { getLoggedInUser } from "@/utils/auth";
 
 // GET: /friends/requests/:id ユーザー_友達招待,申請取得（受けた側）
 export const GET = async (
@@ -10,7 +10,7 @@ export const GET = async (
   const { id } = params;
 
   try {
-    const user = await verifyAuthToken(request);
+    const user = await getLoggedInUser(request);
 
     const invitation = await prisma.friendship.findUnique({
       where: {

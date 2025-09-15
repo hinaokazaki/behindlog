@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { verifyAuthToken } from "@/utils/auth";
+import { getLoggedInUser } from "@/utils/auth";
 
 // GET: /friends ユーザー_友達一覧取得
 export const GET = async (request: NextRequest) => {
   try {
-    const user = await verifyAuthToken(request);
+    const user = await getLoggedInUser(request);
 
     const friendships = await prisma.friendship.findMany({
       where: {

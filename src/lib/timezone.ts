@@ -2,11 +2,11 @@ import { formatUserDate, parseUserDate } from "./date";
 
 // レスポンス用（UTC → ユーザーのタイムゾーン）
 // 単一レコード用
-export function withUserTimezone<T extends Record<string, any>>(
-  record: T,
-  fields: (keyof T)[],
+export function withUserTimezone(
+  record: Record<string, any>,
+  fields: string[],
   timezone: string,
-): T {
+): Record<string, any> {
   const formatted = { ...record };
   for (const field of fields) {
     if (record[field]) {
@@ -17,11 +17,11 @@ export function withUserTimezone<T extends Record<string, any>>(
 }
 
 // 複数レコード用
-export function withUserTimezoneMany<T extends Record<string, any>>(
-  records: T[],
-  fields: (keyof T)[],
+export function withUserTimezoneMany(
+  records: Record<string, any>[],
+  fields: string[],
   timezone: string,
-): T[] {
+): Record<string, any>[] {
   return records.map((r) => withUserTimezone(r, fields, timezone));
 }
 

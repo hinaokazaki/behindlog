@@ -6,7 +6,7 @@ export function parseUserDate(dateStr: string, timezone: string): Date {
 }
 
 // Date(UTC) → "YYYY-MM-DD" (ユーザーのtimezoneに変換)
-export function formatUserDate(date: string, timezone: string): string {
+export function formatUserDate(date: Date, timezone: string): string {
   const zoned = utcToZonedTime(date, timezone);
-  return format(zoned, "yyyy-mm-dd", { timeZone: timezone });
+  return format(zoned, "yyyy-MM-dd", { timeZone: timezone });
 }

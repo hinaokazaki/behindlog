@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-import { verifyAuthToken } from "@/utils/auth";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/prisma";
+import { getLoggedInUser } from "@/utils/auth";
+import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
 
 // GET: /friends/records?month=YYYY-MM ユーザー_記録保持者月別一覧取得(自分と友達両方)
 
 export const GET = async (request: NextRequest) => {
-  const user = await verifyAuthToken(request);
+  const user = await getLoggedInUser(request);
 
   // URLからmonth=YYYY-MMを取得
   const { searchParams } = new URL(request.url);
@@ -30,9 +29,9 @@ export const GET = async (request: NextRequest) => {
   });
 
   // 自分以外の相手のIDを取り出す
-  const friendIds = friendships.map((f) =>
-    f.userId1 === user.id ? f.userId2 : f.userId1,
-  );
+  const friendIds = friendships
+    .map((f) => (f.userId1 === user.id ? f.userId2 : f.userId1))
+    .filter((id): id is string => id !== null);
 
   // 自分と友達の１か月分の記録をまとめて取得
   const records = await prisma.dailyRecord.findMany({
@@ -59,7 +58,12 @@ export const GET = async (request: NextRequest) => {
   // 日付ごとにユーザーをグループ化
   const grouped = records.reduce(
     (acc, record) => {
-      const date = record.recordedDate.toISOString().slice(0, 10);
+      const formatted = withUserTimezone(
+        record,
+        ["recordedDate"],
+        user.timezone,
+      );
+      const date = formatted.recordedDate;
       if (!acc[date]) acc[date] = [];
       acc[date].push(record.user);
       return acc;

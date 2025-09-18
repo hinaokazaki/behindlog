@@ -1,8 +1,6 @@
 import { supabase } from "./supabase";
-import { PrismaClient } from "@prisma/client"; // utils/prisma.ts作成するべき？
+import { prisma } from "@/lib/prisma";
 import { NextRequest } from "next/server";
-
-const prisma = new PrismaClient();
 
 // user.id を使って DB操作（create, update, delete）するばあいに使用する
 export const getLoggedInUser = async (request: NextRequest) => {
@@ -17,18 +15,24 @@ export const getLoggedInUser = async (request: NextRequest) => {
     throw new Error("Unauthorised");
   }
 
+  if (!user.email) {
+    throw new Error("メールアドレスが取得できませんでした");
+  }
+
   // 自動でupsert（ユーザー未登録の場合に作成）
-  await prisma.user.upsert({
+  const dbUser = await prisma.user.upsert({
     where: { id: user.id },
     update: {},
     create: {
       id: user.id,
+      email: user.email,
       name: user.email ?? "no-name",
       colorTheme: "ORIGINAL",
+      timezone: "Asia/Tokyo",
     },
   });
 
-  return user;
+  return dbUser;
 };
 
 // 認証済みかどうかのチェックだけ（DB登録は不要）
@@ -40,6 +44,7 @@ export const verifyAuthToken = async (request: NextRequest) => {
     error,
   } = await supabase.auth.getUser(token);
   if (error || !user) {
+    console.log("Auth Error:", error);
     throw new Error("Unauthorized");
   }
 

@@ -20,10 +20,6 @@ export const friendRequestsSchema = z.object({
   inviter: inviterUserSchema,
 });
 
-export const friendRequestsResponseSchema = z.array(friendRequestsSchema);
-
 //型を作成
 export type FriendRequestResponse = z.infer<typeof friendRequestResponseSchema>;
-export type FriendRequestsResponse = z.infer<
-  typeof friendRequestsResponseSchema
->;
+export type FriendRequestsResponse = z.infer<typeof friendRequestsSchema>;

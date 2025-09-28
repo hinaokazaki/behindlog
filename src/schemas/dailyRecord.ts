@@ -42,4 +42,6 @@ export const dailyRecordResponseSchema = dailyRecordSchema;
 
 // 型を作成
 export type DailyRecord = z.infer<typeof dailyRecordSchema>;
+export type TodoSnapshot = z.infer<typeof todoSnapshotSchema>;
 export type CreateDailyRecord = z.infer<typeof createDailyRecordSchema>;
+export type DailyRecordResponse = z.infer<typeof dailyRecordResponseSchema>;

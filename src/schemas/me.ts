@@ -15,7 +15,6 @@ export const profileSchema = z.object({
 
 // リクエスト用
 export const createProfileRequestSchema = z.object({
-  email: z.string().email(),
   timezone: z.string(),
 });
 

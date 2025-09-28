@@ -21,4 +21,4 @@ export const userRecordResponseSchema = userRecordSchema;
 
 // 型を生成
 export type UserRecord = z.infer<typeof userRecordSchema>;
-export type userRecordResponseSchema = z.infer<typeof userRecordResponseSchema>;
+export type UserRecordResponse = z.infer<typeof userRecordResponseSchema>;

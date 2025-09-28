@@ -32,5 +32,5 @@ export const todosResponseSchema = z.array(todoSchema);
 export type Todo = z.infer<typeof todoSchema>;
 export type CreateTodoRequest = z.infer<typeof createTodoRequestSchema>;
 export type UpdateTodoRequest = z.infer<typeof updateTodoRequestSchema>;
-export type todoResponse = z.infer<typeof todoResponseSchema>;
-export type todosResponse = z.infer<typeof todosResponseSchema>;
+export type TodoResponse = z.infer<typeof todoResponseSchema>;
+export type TodosResponse = z.infer<typeof todosResponseSchema>;

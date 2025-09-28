@@ -1,8 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getLoggedInUser, verifyAuthToken } from "@/utils/auth";
+import { getLoggedInUser } from "@/utils/auth";
 import { v4 as uuidv4 } from "uuid";
 import { Resend } from "resend";
+import {
+  CreateFriendRequest,
+  createFriendRequestSchema,
+  FriendInvite,
+  friendInviteSchema,
+  FriendResponse,
+  friendResponseSchema,
+} from "@/schemas/friend";
+import { withUserTimezone } from "@/lib/timezone";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -22,20 +31,17 @@ async function sendInviteEmail(to: string, token: string) {
 }
 
 // POST: /api/friends/invite ユーザー_友達招待作成
-type CreateFriendRequestBody = {
-  inviteeEmail: string;
-  message: string;
-};
 
 export const POST = async (request: NextRequest) => {
   const user = await getLoggedInUser(request);
-  const body = await request.json();
-  const { inviteeEmail, message }: CreateFriendRequestBody = body;
+  const body: CreateFriendRequest = createFriendRequestSchema.parse(
+    await request.json(),
+  );
 
   try {
     const invitedUser = await prisma.user.findUnique({
       where: {
-        email: inviteeEmail,
+        email: body.inviteeEmail,
       },
     });
 
@@ -45,22 +51,29 @@ export const POST = async (request: NextRequest) => {
           userId1: user.id,
           userId2: invitedUser.id,
           inviterUserId: user.id,
-          inviteeEmail,
-          message,
+          inviteeEmail: body.inviteeEmail,
+          message: body.message,
           status: "PENDING",
         },
       });
 
-      // どっちにしても招待を知らせるメールは送らないといけない？ー後々必要なら追加する
-      return NextResponse.json({ status: "OK", friendShip }, { status: 200 });
+      const safeFriendship: FriendResponse = friendResponseSchema.parse(
+        withUserTimezone(
+          friendShip,
+          ["createdAt", "updatedAt", "respondedAt"],
+          user.timezone,
+        ),
+      );
+
+      return NextResponse.json({ friendShip: safeFriendship }, { status: 200 });
     } else {
       const token = uuidv4();
       const friendShip = await prisma.friendship.create({
         data: {
           userId1: user.id,
           inviterUserId: user.id,
-          inviteeEmail,
-          message,
+          inviteeEmail: body.inviteeEmail,
+          message: body.message,
           token,
           status: "PENDING",
         },
@@ -68,7 +81,7 @@ export const POST = async (request: NextRequest) => {
 
       // tokenを含んだ招待メールを送信する操作
       try {
-        await sendInviteEmail(inviteeEmail, token);
+        await sendInviteEmail(body.inviteeEmail, token);
       } catch (err) {
         console.error("Failed to send email", err);
         return NextResponse.json(
@@ -77,7 +90,15 @@ export const POST = async (request: NextRequest) => {
         );
       }
 
-      return NextResponse.json({ status: "OK", friendShip }, { status: 200 });
+      const safeFriendship: FriendResponse = friendResponseSchema.parse(
+        withUserTimezone(
+          friendShip,
+          ["createdAt", "updatedAt", "respondedAt"],
+          user.timezone,
+        ),
+      );
+
+      return NextResponse.json({ friendShip: safeFriendship }, { status: 200 });
     }
   } catch (error) {
     if (error instanceof Error) {
@@ -88,29 +109,40 @@ export const POST = async (request: NextRequest) => {
 
 // GET /api/friends/invite?token=xxxx ユーザー_招待お知らせ情報取得
 export const GET = async (request: NextRequest) => {
-  const user = await verifyAuthToken(request);
-  const token = request.nextUrl.searchParams.get("token");
-  if (!token) {
-    return NextResponse.json({ error: "token required" }, { status: 400 });
+  try {
+    const user = await getLoggedInUser(request);
+    const token = request.nextUrl.searchParams.get("token");
+    if (!token) {
+      return NextResponse.json({ error: "token required" }, { status: 400 });
+    }
+
+    const friendShip = await prisma.friendship.findFirst({
+      where: {
+        token,
+      },
+      include: {
+        inviterUser: true,
+      },
+    });
+
+    if (!friendShip) {
+      return NextResponse.json({ error: "invalid token" }, { status: 404 });
+    }
+
+    const friendInvite = {
+      inviterName: friendShip.inviterUser.name,
+      message: friendShip.message,
+      status: friendShip.status,
+      alreadyRegistered: friendShip.userId2 !== null,
+    };
+
+    const safeFriendInvite: FriendInvite =
+      friendInviteSchema.parse(friendInvite);
+
+    return NextResponse.json({ safeFriendInvite }, { status: 200 });
+  } catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json({ status: error.message }, { status: 400 });
+    }
   }
-
-  const friendShip = await prisma.friendship.findFirst({
-    where: {
-      token,
-    },
-    include: {
-      inviterUser: true,
-    },
-  });
-
-  if (!friendShip) {
-    return NextResponse.json({ error: "invalid token" }, { status: 404 });
-  }
-
-  return NextResponse.json({
-    inviterName: friendShip.inviterUser.name,
-    message: friendShip.message,
-    status: friendShip.status,
-    alreadyRegistered: friendShip.userId2 !== null,
-  });
 };

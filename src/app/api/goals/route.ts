@@ -7,6 +7,12 @@ import {
   withUserTimezone,
   withUserTimezoneMany,
 } from "@/lib/timezone";
+import {
+  CreateGoalRequest,
+  createGoalRequestSchema,
+  GoalsResponse,
+  goalsResponseSchema,
+} from "@/schemas/goal";
 
 // GET: /goals ユーザー_目標一覧取得
 export const GET = async (request: NextRequest) => {
@@ -18,12 +24,15 @@ export const GET = async (request: NextRequest) => {
       },
     });
 
-    const formatted = withUserTimezoneMany(goals, ["deadline"], user.timezone);
-
-    return NextResponse.json(
-      { status: "OK", goals: formatted },
-      { status: 200 },
+    const safegoals: GoalsResponse = goalsResponseSchema.parse(
+      withUserTimezoneMany(
+        goals,
+        ["deadline", "createdAt", "updatedAt"],
+        user.timezone,
+      ),
     );
+
+    return NextResponse.json({ goals: safegoals }, { status: 200 });
   } catch (error) {
     if (error instanceof Error)
       return NextResponse.json({ status: error.message }, { status: 400 });
@@ -35,29 +44,27 @@ export const POST = async (request: NextRequest) => {
   try {
     // tokenの確認
     const user = await getLoggedInUser(request);
+    const body: CreateGoalRequest = createGoalRequestSchema.parse(
+      await request.json(),
+    );
+    const parsed = withUserDateParse(body, ["deadline"], user.timezone);
 
-    const body = await request.json();
-    const { title } = body;
-    const data = withUserDateParse(body, ["deadline"], user.timezone);
-
-    const newGoal = await prisma.goal.create({
+    const goal = await prisma.goal.create({
       data: {
-        title,
+        ...parsed,
         userId: user.id,
-        ...data,
       },
     });
 
-    const formatted = withUserTimezone(
-      newGoal,
-      ["deadline"],
-      user.timezone,
-    ) as GoalData;
+    const safegoal: GoalsResponse = goalsResponseSchema.parse(
+      withUserTimezone(
+        goal,
+        ["deadline", "createdAt", "updatedAt"],
+        user.timezone,
+      ),
+    );
 
-    return NextResponse.json<{ status: string; goal: GoalData }>({
-      status: "OK",
-      goal: formatted,
-    });
+    return NextResponse.json({ goal: safegoal }, { status: 200 });
   } catch (error) {
     if (error instanceof Error)
       return NextResponse.json({ status: error.message }, { status: 400 });

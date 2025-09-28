@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
 import { withUserTimezone } from "@/lib/timezone";
+import {
+  CommittimeTotalStudyTime,
+  committimeTotalStudyTimeSchema,
+} from "@/schemas/committime";
 
 // GET: /committime/:id/summary ユーザー_合計学習時間取得
 export const GET = async (
@@ -15,6 +19,7 @@ export const GET = async (
     const committime = await prisma.commitTime.findUnique({
       where: {
         id: Number(id),
+        userId: user.id,
       },
     });
 
@@ -45,13 +50,12 @@ export const GET = async (
       endDate: committime.endDate,
     };
 
-    const formatted = withUserTimezone(
-      result,
-      ["startDate", "endDate"],
-      user.timezone,
-    );
+    const safeResult: CommittimeTotalStudyTime =
+      committimeTotalStudyTimeSchema.parse(
+        withUserTimezone(result, ["startDate", "endDate"], user.timezone),
+      );
 
-    return NextResponse.json({ status: "OK", ...formatted }, { status: 200 });
+    return NextResponse.json({ committime: safeResult }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ status: error.message }, { status: 400 });

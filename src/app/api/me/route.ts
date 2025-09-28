@@ -1,12 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { verifyAuthToken } from "@/utils/auth";
-import { ProfileData } from "@/app/_types/type";
+import { getLoggedInUser } from "@/utils/auth";
+import {
+  CreateProfileRequest,
+  createProfileRequestSchema,
+  ProfileResponse,
+  profileResponseSchema,
+  UpdateProfileRequest,
+  updateProfileRequestSchema,
+} from "@/schemas/me";
+import { withUserTimezone } from "@/lib/timezone";
 
 // GET: /me ユーザー_プロフィール取得
 export const GET = async (request: NextRequest) => {
   try {
-    const user = await verifyAuthToken(request);
+    const user = await getLoggedInUser(request);
     const profile = await prisma.user.findUnique({
       where: {
         id: user.id,
@@ -20,10 +28,11 @@ export const GET = async (request: NextRequest) => {
       );
     }
 
-    return NextResponse.json<{ status: string; user: ProfileData }>(
-      { status: "OK", user: profile },
-      { status: 200 },
+    const safeProfile: ProfileResponse = profileResponseSchema.parse(
+      withUserTimezone(profile, ["createdAt", "updatedAt"], user.timezone),
     );
+
+    return NextResponse.json({ user: safeProfile }, { status: 200 });
   } catch (error) {
     if (error instanceof Error)
       return NextResponse.json({ status: error.message }, { status: 400 });
@@ -31,17 +40,13 @@ export const GET = async (request: NextRequest) => {
 };
 
 // POST: /me ユーザー_プロフィール新規作成
-type CreateProfileRequestBody = {
-  id: string; // Supabaseのuser.id
-  email: string; // Supabaseのuser.email
-  timezone: String;
-};
 
 export const POST = async (request: NextRequest) => {
   try {
-    const user = await verifyAuthToken(request);
-    const body = await request.json();
-    const { timezone } = body;
+    const user = await getLoggedInUser(request);
+    const body: CreateProfileRequest = createProfileRequestSchema.parse(
+      await request.json(),
+    );
 
     if (!user.email) {
       return NextResponse.json(
@@ -55,19 +60,20 @@ export const POST = async (request: NextRequest) => {
         id: user.id,
       },
       update: {
-        timezone,
+        timezone: body.timezone,
       },
       create: {
         id: user.id,
         email: user.email,
-        timezone,
+        timezone: body.timezone,
       },
     });
 
-    return NextResponse.json<{ status: string; user: ProfileData }>({
-      status: "OK",
-      user: profile,
-    });
+    const safeProfile: ProfileResponse = profileResponseSchema.parse(
+      withUserTimezone(profile, ["createdAt", "updatedAt"], user.timezone),
+    );
+
+    return NextResponse.json({ user: safeProfile }, { status: 200 });
   } catch (error) {
     if (error instanceof Error)
       return NextResponse.json({ status: error.message }, { status: 400 });
@@ -75,33 +81,26 @@ export const POST = async (request: NextRequest) => {
 };
 
 // PATCH: /me ユーザー_プロフィール更新
-type UpdateProfileRequestBody = {
-  name: string;
-  colorTheme: "ORIGINAL" | "COOL" | "WARM" | "NATURE" | "SUNSHINE";
-  timezone: string;
-};
 
 export const PATCH = async (request: NextRequest) => {
   try {
-    const user = await verifyAuthToken(request);
+    const user = await getLoggedInUser(request);
+    const body: UpdateProfileRequest = updateProfileRequestSchema.parse(
+      await request.json(),
+    );
 
-    const { name, colorTheme, timezone }: UpdateProfileRequestBody =
-      await request.json();
     const profile = await prisma.user.update({
       where: {
         id: user.id,
       },
-      data: {
-        name,
-        colorTheme,
-        timezone,
-      },
+      data: body,
     });
 
-    return NextResponse.json<{ status: string; user: ProfileData }>(
-      { status: "OK", user: profile },
-      { status: 200 },
+    const safeProfile: ProfileResponse = profileResponseSchema.parse(
+      withUserTimezone(profile, ["createdAt", "updatedAt"], user.timezone),
     );
+
+    return NextResponse.json({ user: safeProfile }, { status: 200 });
   } catch (error) {
     if (error instanceof Error)
       return NextResponse.json({ status: error.message }, { status: 400 });

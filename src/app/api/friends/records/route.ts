@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
 import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
+import {
+  MonthlyRecordsResponse,
+  monthlyRecordsResponseSchema,
+} from "@/schemas/monthlyRecords";
 
 // GET: /friends/records?month=YYYY-MM ユーザー_記録保持者月別一覧取得(自分と友達両方)
 
@@ -71,11 +75,13 @@ export const GET = async (request: NextRequest) => {
     {} as Record<string, { id: string; name: string | null }[]>,
   );
 
-  return NextResponse.json({
+  const response: MonthlyRecordsResponse = monthlyRecordsResponseSchema.parse({
     month,
     records: Object.entries(grouped).map(([date, users]) => ({
       date,
       users,
     })),
   });
+
+  return NextResponse.json(response, { status: 200 });
 };

@@ -1,7 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getLoggedInUser, verifyAuthToken } from "@/utils/auth";
-import { TodoData } from "@/app/_types/type";
+import { getLoggedInUser } from "@/utils/auth";
+import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
+import {
+  Todo,
+  TodoResponse,
+  todoResponseSchema,
+  todoSchema,
+  UpdateTodoRequest,
+  updateTodoRequestSchema,
+} from "@/schemas/todo";
 
 // GET: /todos ユーザー_Todo取得
 export const GET = async (
@@ -10,10 +18,11 @@ export const GET = async (
 ) => {
   const { id } = params;
   try {
-    const user = await verifyAuthToken(request);
+    const user = await getLoggedInUser(request);
     const todo = await prisma.todo.findUnique({
       where: {
         id: Number(id),
+        userId: user.id,
       },
     });
 
@@ -24,10 +33,15 @@ export const GET = async (
       );
     }
 
-    return NextResponse.json<{ status: string; todo: TodoData }>(
-      { status: "OK", todo: todo },
-      { status: 200 },
+    const safeTodo: TodoResponse = todoResponseSchema.parse(
+      withUserTimezone(
+        todo,
+        ["dueDate", "createdAt", "updatedAt"],
+        user.timezone,
+      ),
     );
+
+    return NextResponse.json({ todo: safeTodo }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ status: error.message }, { status: 400 });
@@ -36,11 +50,6 @@ export const GET = async (
 };
 
 // PATCH: /todos ユーザー_Todo更新
-type UpdateTodoRequestBody = {
-  title: string;
-  dueDate: Date;
-  isCompleted: boolean;
-};
 
 export const PATCH = async (
   request: NextRequest,
@@ -49,24 +58,28 @@ export const PATCH = async (
   const { id } = params;
   try {
     const user = await getLoggedInUser(request);
-    const body = await request.json();
-    const { title, dueDate, isCompleted }: UpdateTodoRequestBody = body;
+    const body: UpdateTodoRequest = updateTodoRequestSchema.parse(
+      await request.json(),
+    );
+    const parsed = withUserDateParse(body, ["dueDate"], user.timezone);
 
     const todo = await prisma.todo.update({
       where: {
         id: Number(id),
+        userId: user.id,
       },
-      data: {
-        title,
-        dueDate: new Date(dueDate),
-        isCompleted,
-      },
+      data: parsed,
     });
 
-    return NextResponse.json<{ status: string; todo: TodoData }>(
-      { status: "OK", todo: todo },
-      { status: 200 },
+    const safeTodo: Todo = todoResponseSchema.parse(
+      withUserTimezone(
+        todo,
+        ["dueDate", "createdAt", "updatedAt"],
+        user.timezone,
+      ),
     );
+
+    return NextResponse.json({ todo: safeTodo }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ status: error.message }, { status: 400 });
@@ -85,6 +98,7 @@ export const DELETE = async (
     const todo = await prisma.todo.delete({
       where: {
         id: Number(id),
+        userId: user.id,
       },
     });
 

@@ -1,11 +1,15 @@
 import { NextResponse, NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { verifyAuthToken } from "@/utils/auth";
+import { getLoggedInUser } from "@/utils/auth";
+import {
+  FriendRequestsResponse,
+  friendRequestsSchema,
+} from "@/schemas/friendRequest";
 
 // GET: /friends/requests ユーザー_友達一覧取得（受けた側）
 export const GET = async (request: NextRequest) => {
   try {
-    const user = await verifyAuthToken(request);
+    const user = await getLoggedInUser(request);
 
     const friendships = await prisma.friendship.findMany({
       where: {
@@ -29,10 +33,10 @@ export const GET = async (request: NextRequest) => {
       inviter: f.user1,
     }));
 
-    return NextResponse.json(
-      { status: "OK", invitations: result },
-      { status: 200 },
-    );
+    const safeResult: FriendRequestsResponse =
+      friendRequestsSchema.parse(result);
+
+    return NextResponse.json({ invitations: safeResult }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ status: error.message }, { status: 400 });

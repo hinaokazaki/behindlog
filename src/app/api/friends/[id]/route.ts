@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
-import { withUserDateParse } from "@/lib/timezone";
+import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
+import {
+  FriendResponse,
+  friendResponseSchema,
+  UpdateFriendRequest,
+  updateFriendRequestSchema,
+} from "@/schemas/friend";
 
 // PATCH: /api/friends/:id ユーザー_友達申請承認
 export const PATCH = async (
@@ -11,12 +17,13 @@ export const PATCH = async (
   const { id } = params;
   try {
     const user = await getLoggedInUser(request);
-    const body = await request.json();
-    const { status } = body;
-    const data = withUserDateParse(body, ["respondedAt"], user.timezone);
+    const body: UpdateFriendRequest = updateFriendRequestSchema.parse(
+      await request.json(),
+    );
+    const parsed = withUserDateParse(body, ["respondedAt"], user.timezone);
 
     // status確認
-    if (status !== "ACCEPTED" && status !== "DECLINED") {
+    if (parsed.status !== "ACCEPTED" && parsed.status !== "DECLINED") {
       return NextResponse.json({ error: "invalid status" }, { status: 400 });
     }
 
@@ -38,13 +45,18 @@ export const PATCH = async (
       where: {
         id: Number(id),
       },
-      data: {
-        status: status,
-        ...data,
-      },
+      data: parsed,
     });
 
-    return NextResponse.json({ status: "OK", friendship }, { status: 200 });
+    const safeFriendship: FriendResponse = friendResponseSchema.parse(
+      withUserTimezone(
+        friendship,
+        ["createdAt", "updatedAt", "respondedAt"],
+        user.timezone,
+      ),
+    );
+
+    return NextResponse.json({ friendship: safeFriendship }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ status: error.message }, { status: 400 });
@@ -79,7 +91,7 @@ export const DELETE = async (
       },
     });
 
-    return NextResponse.json({ status: "OK", friendship }, { status: 200 });
+    return NextResponse.json({ status: "OK" }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ status: error.message }, { status: 400 });

@@ -2,27 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
 import { z } from "zod/v4";
+import {
+  createDailyRecordSchema,
+  DailyRecordResponse,
+  dailyRecordResponseSchema,
+  TodoSnapshot,
+  todoSnapshotSchema,
+} from "@/schemas/dailyRecord";
+import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
 
 // PUT: /records:date ユーザー_記録新規作成,取得,更新
-
-const TodoItemSchema = z.object({
-  id: z.number().int(),
-  title: z.string(),
-  isCompleted: z.boolean(),
-  dueDate: z.iso.datetime().nullable().optional(),
-});
-
-export const TodoSnapshotSchema = z.object({
-  date: z.iso.date(),
-  items: z.array(TodoItemSchema),
-});
-
-const CreateDailyRecordSchema = z.object({
-  totalStudyTime: z.number().int().nonnegative(),
-  memo: z.string(),
-  todoSnapshot: TodoSnapshotSchema.optional().nullable(),
-  applyTodoUpdates: z.boolean().optional(), //  フロント側でtodoに変更があったかを判断するためのフラグ
-});
 
 const toISODate = (d: Date) => d.toISOString().slice(0, 10); // "YYYY-MM-DD"
 
@@ -32,16 +21,17 @@ export const PUT = async (
 ) => {
   try {
     const user = await getLoggedInUser(request);
-    const body = CreateDailyRecordSchema.parse(await request.json());
-    const recordedDate = new Date(`${params.date}T00:00:00`);
+    const body = createDailyRecordSchema.parse(await request.json());
+    const { recordedDate } = withUserDateParse(
+      { recordedDate: params.date },
+      ["recordedDate"],
+      user.timezone,
+    );
 
     // todoのsnapshot
     // requestにsnapshotが含まれていなかった場合、サーバ側でsnapshotを作成
     let snapshot = body.todoSnapshot ?? null;
     if (snapshot === null || snapshot === undefined) {
-      const today = new Date();
-      const dateOnly = toISODate(today);
-
       const todos = await prisma.todo.findMany({
         where: {
           userId: user.id,
@@ -58,7 +48,7 @@ export const PUT = async (
       });
 
       snapshot = {
-        date: dateOnly,
+        date: params.date,
         items: todos.map((todo) => ({
           id: todo.id,
           title: todo.title,
@@ -69,7 +59,7 @@ export const PUT = async (
     }
 
     // サーバ側での型崩れ検知のための実行時検証
-    const safeSnapshot = TodoSnapshotSchema.parse(snapshot);
+    const safeSnapshot: TodoSnapshot = todoSnapshotSchema.parse(snapshot);
 
     // committimeのsnapshot
     const committime = await prisma.commitTime.findUnique({
@@ -163,10 +153,22 @@ export const PUT = async (
       return dailyRecord;
     });
 
-    return NextResponse.json(
-      { status: "OK", dailyRecord: dailyRecordPostResult },
-      { status: 200 },
-    );
+    const safeDailyRecord: DailyRecordResponse =
+      dailyRecordResponseSchema.parse(
+        withUserTimezone(
+          dailyRecordPostResult,
+          [
+            "createdAt",
+            "updatedAt",
+            "recordedDate",
+            "commitStartDate",
+            "commitEndDate",
+          ],
+          user.timezone,
+        ),
+      );
+
+    return NextResponse.json({ dailyRecord: safeDailyRecord }, { status: 200 });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(

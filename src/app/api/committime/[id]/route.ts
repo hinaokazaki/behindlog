@@ -66,6 +66,7 @@ export const PATCH = async (
     const committime = await prisma.commitTime.update({
       where: {
         id: Number(id),
+        userId: user.id,
       },
       data: parsed,
     });

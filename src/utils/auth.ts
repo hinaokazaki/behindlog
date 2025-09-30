@@ -19,18 +19,14 @@ export const getLoggedInUser = async (request: NextRequest) => {
     throw new Error("メールアドレスが取得できませんでした");
   }
 
-  // 自動でupsert（ユーザー未登録の場合に作成）
-  const dbUser = await prisma.user.upsert({
+  // DBにユーザーがある前提（callbackでupsert済み）
+  const dbUser = await prisma.user.findUnique({
     where: { id: user.id },
-    update: {},
-    create: {
-      id: user.id,
-      email: user.email,
-      name: user.email ?? "no-name",
-      colorTheme: "ORIGINAL",
-      timezone: "Asia/Tokyo",
-    },
   });
+
+  if (!dbUser) {
+    throw new Error("ユーザーがDBに存在しません");
+  }
 
   return dbUser;
 };

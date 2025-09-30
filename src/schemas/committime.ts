@@ -11,7 +11,7 @@ export const committimeSchema = z.object({
   updatedAt: z.string(),
 });
 
-export const committimeTotalStudyTimeSchema = z.object({
+export const totalStudyTimeSchema = z.object({
   committimeId: z.number(),
   totalStudyTime: z.number(),
   startDate: z.string(),
@@ -32,16 +32,17 @@ export const updateCommittimeRequestSchema = z.object({
 });
 
 // レスポンス用
-export const committimeResponseSchema = committimeSchema;
+export const committimeResponseSchema = z.object({
+  committime: committimeSchema,
+});
 
-export const committimeTotalStudyTimeResponseSchema =
-  committimeTotalStudyTimeSchema;
+export const totalStudyTimeResponseSchema = z.object({
+  totalStudyTime: totalStudyTimeSchema,
+});
 
 // 型を生成
 export type Committime = z.infer<typeof committimeSchema>;
-export type CommittimeTotalStudyTime = z.infer<
-  typeof committimeTotalStudyTimeSchema
->;
+export type TotalStudyTime = z.infer<typeof totalStudyTimeSchema>;
 export type CreateCommittimeRequest = z.infer<
   typeof createCommittimeRequestSchema
 >;
@@ -49,6 +50,6 @@ export type UpdateCommittimeRequest = z.infer<
   typeof updateCommittimeRequestSchema
 >;
 export type CommittimeResponse = z.infer<typeof committimeResponseSchema>;
-export type CommittimeTotalStudyTimeResponse = z.infer<
-  typeof committimeTotalStudyTimeResponseSchema
+export type TotalStudyTimeResponse = z.infer<
+  typeof totalStudyTimeResponseSchema
 >;

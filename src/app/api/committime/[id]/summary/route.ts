@@ -3,9 +3,11 @@ import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
 import { withUserTimezone } from "@/lib/timezone";
 import {
-  CommittimeTotalStudyTime,
-  committimeTotalStudyTimeSchema,
+  TotalStudyTime,
+  TotalStudyTimeResponse,
+  totalStudyTimeSchema,
 } from "@/schemas/committime";
+import { ErrorResponse } from "@/schemas/common";
 
 // GET: /committime/:id/summary ユーザー_合計学習時間取得
 export const GET = async (
@@ -50,15 +52,20 @@ export const GET = async (
       endDate: committime.endDate,
     };
 
-    const safeResult: CommittimeTotalStudyTime =
-      committimeTotalStudyTimeSchema.parse(
-        withUserTimezone(result, ["startDate", "endDate"], user.timezone),
-      );
+    const safeResult: TotalStudyTime = totalStudyTimeSchema.parse(
+      withUserTimezone(result, ["startDate", "endDate"], user.timezone),
+    );
 
-    return NextResponse.json({ committime: safeResult }, { status: 200 });
+    return NextResponse.json<TotalStudyTimeResponse>(
+      { totalStudyTime: safeResult },
+      { status: 200 },
+    );
   } catch (error) {
     if (error instanceof Error) {
-      return NextResponse.json({ status: error.message }, { status: 400 });
+      return NextResponse.json<ErrorResponse>(
+        { error: error.message },
+        { status: 400 },
+      );
     }
   }
 };

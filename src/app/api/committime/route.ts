@@ -3,11 +3,13 @@ import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
 import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
 import {
+  Committime,
   CommittimeResponse,
-  committimeResponseSchema,
+  committimeSchema,
   CreateCommittimeRequest,
   createCommittimeRequestSchema,
 } from "@/schemas/committime";
+import { ErrorResponse } from "@/schemas/common";
 
 // POST: /committime ユーザー_目標時間新規作成
 export const POST = async (request: NextRequest) => {
@@ -32,7 +34,7 @@ export const POST = async (request: NextRequest) => {
       },
     });
 
-    const safeCommittime: CommittimeResponse = committimeResponseSchema.parse(
+    const safeCommittime: Committime = committimeSchema.parse(
       withUserTimezone(
         committime,
         ["createdAt", "updatedAt", "startDate", "endDate"],
@@ -40,9 +42,15 @@ export const POST = async (request: NextRequest) => {
       ),
     );
 
-    return NextResponse.json({ committime: safeCommittime }, { status: 200 });
+    return NextResponse.json<CommittimeResponse>(
+      { committime: safeCommittime },
+      { status: 200 },
+    );
   } catch (error) {
     if (error instanceof Error)
-      return NextResponse.json({ status: error.message }, { status: 400 });
+      return NextResponse.json<ErrorResponse>(
+        { error: error.message },
+        { status: 400 },
+      );
   }
 };

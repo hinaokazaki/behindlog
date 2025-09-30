@@ -3,11 +3,13 @@ import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
 import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
 import {
+  Committime,
   CommittimeResponse,
-  committimeResponseSchema,
+  committimeSchema,
   UpdateCommittimeRequest,
   updateCommittimeRequestSchema,
 } from "@/schemas/committime";
+import { StatusResponse, ErrorResponse } from "@/schemas/common";
 
 // GET: /committime ユーザー_目標時間取得
 export const GET = async (
@@ -31,7 +33,7 @@ export const GET = async (
       );
     }
 
-    const safeCommittime: CommittimeResponse = committimeResponseSchema.parse(
+    const safeCommittime: Committime = committimeSchema.parse(
       withUserTimezone(
         committime,
         ["createdAt", "updatedAt", "startDate", "endDate"],
@@ -39,10 +41,16 @@ export const GET = async (
       ),
     );
 
-    return NextResponse.json({ committime: safeCommittime }, { status: 200 });
+    return NextResponse.json<CommittimeResponse>(
+      { committime: safeCommittime },
+      { status: 200 },
+    );
   } catch (error) {
     if (error instanceof Error) {
-      return NextResponse.json({ status: error.message }, { status: 400 });
+      return NextResponse.json<ErrorResponse>(
+        { error: error.message },
+        { status: 400 },
+      );
     }
   }
 };
@@ -71,7 +79,7 @@ export const PATCH = async (
       data: parsed,
     });
 
-    const safeCommittime: CommittimeResponse = committimeResponseSchema.parse(
+    const safeCommittime: Committime = committimeSchema.parse(
       withUserTimezone(
         committime,
         ["createdAt", "updatedAt", "startDate", "endDate"],
@@ -79,10 +87,16 @@ export const PATCH = async (
       ),
     );
 
-    return NextResponse.json({ committime: safeCommittime }, { status: 200 });
+    return NextResponse.json<CommittimeResponse>(
+      { committime: safeCommittime },
+      { status: 200 },
+    );
   } catch (error) {
     if (error instanceof Error) {
-      return NextResponse.json({ status: error.message }, { status: 400 });
+      return NextResponse.json<ErrorResponse>(
+        { error: error.message },
+        { status: 400 },
+      );
     }
   }
 };
@@ -102,13 +116,13 @@ export const DELETE = async (
       },
     });
 
-    return NextResponse.json<{ status: string }>(
-      { status: "OK" },
-      { status: 200 },
-    );
+    return NextResponse.json<StatusResponse>({ status: "OK" }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
-      return NextResponse.json({ status: error.message }, { status: 400 });
+      return NextResponse.json<ErrorResponse>(
+        { error: error.message },
+        { status: 400 },
+      );
     }
   }
 };

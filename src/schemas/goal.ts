@@ -22,12 +22,19 @@ export const updateGoalRequestSchema = z.object({
 });
 
 // レスポンス用
-export const goalResponseSchema = goalSchema;
+export const goalResponseSchema = z.object({
+  goal: goalSchema,
+});
 
-export const goalsResponseSchema = z.array(goalSchema);
+export const goalsSchema = z.array(goalSchema);
+
+export const goalsResponseSchema = z.object({
+  goals: z.array(goalSchema),
+});
 
 // 型を生成
 export type Goal = z.infer<typeof goalSchema>;
+export type Goals = z.infer<typeof goalsSchema>;
 export type CreateGoalRequest = z.infer<typeof createGoalRequestSchema>;
 export type updateGoalRequest = z.infer<typeof updateGoalRequestSchema>;
 export type GoalResponse = z.infer<typeof goalResponseSchema>;

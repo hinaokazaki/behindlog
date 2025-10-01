@@ -1,4 +1,3 @@
-import { GoalData } from "@/app/_types/type";
 import { getLoggedInUser } from "@/utils/auth";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
@@ -8,11 +7,16 @@ import {
   withUserTimezoneMany,
 } from "@/lib/timezone";
 import {
+  Goal,
   CreateGoalRequest,
   createGoalRequestSchema,
+  Goals,
+  goalSchema,
   GoalsResponse,
-  goalsResponseSchema,
+  goalsSchema,
+  GoalResponse,
 } from "@/schemas/goal";
+import { ErrorResponse } from "@/schemas/common";
 
 // GET: /goals ユーザー_目標一覧取得
 export const GET = async (request: NextRequest) => {
@@ -24,7 +28,7 @@ export const GET = async (request: NextRequest) => {
       },
     });
 
-    const safegoals: GoalsResponse = goalsResponseSchema.parse(
+    const safegoals: Goals = goalsSchema.parse(
       withUserTimezoneMany(
         goals,
         ["deadline", "createdAt", "updatedAt"],
@@ -32,10 +36,16 @@ export const GET = async (request: NextRequest) => {
       ),
     );
 
-    return NextResponse.json({ goals: safegoals }, { status: 200 });
+    return NextResponse.json<GoalsResponse>(
+      { goals: safegoals },
+      { status: 200 },
+    );
   } catch (error) {
     if (error instanceof Error)
-      return NextResponse.json({ status: error.message }, { status: 400 });
+      return NextResponse.json<ErrorResponse>(
+        { error: error.message },
+        { status: 400 },
+      );
   }
 };
 
@@ -56,7 +66,7 @@ export const POST = async (request: NextRequest) => {
       },
     });
 
-    const safegoal: GoalsResponse = goalsResponseSchema.parse(
+    const safeGoal: Goal = goalSchema.parse(
       withUserTimezone(
         goal,
         ["deadline", "createdAt", "updatedAt"],
@@ -64,9 +74,12 @@ export const POST = async (request: NextRequest) => {
       ),
     );
 
-    return NextResponse.json({ goal: safegoal }, { status: 200 });
+    return NextResponse.json<GoalResponse>({ goal: safeGoal }, { status: 200 });
   } catch (error) {
     if (error instanceof Error)
-      return NextResponse.json({ status: error.message }, { status: 400 });
+      return NextResponse.json<ErrorResponse>(
+        { error: error.message },
+        { status: 400 },
+      );
   }
 };

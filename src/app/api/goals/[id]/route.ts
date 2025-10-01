@@ -3,11 +3,13 @@ import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
 import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
 import {
+  Goal,
   GoalResponse,
-  goalResponseSchema,
+  goalSchema,
   updateGoalRequest,
   updateGoalRequestSchema,
 } from "@/schemas/goal";
+import { ErrorResponse, StatusResponse } from "@/schemas/common";
 
 // GET: /goal ユーザー_目標取得
 export const GET = async (
@@ -31,7 +33,7 @@ export const GET = async (
       );
     }
 
-    const safeGoal: GoalResponse = goalResponseSchema.parse(
+    const safeGoal: Goal = goalSchema.parse(
       withUserTimezone(
         goal,
         ["deadline", "createdAt", "updatedAt"],
@@ -39,10 +41,13 @@ export const GET = async (
       ),
     );
 
-    return NextResponse.json({ goal: safeGoal }, { status: 200 });
+    return NextResponse.json<GoalResponse>({ goal: safeGoal }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
-      return NextResponse.json({ status: error.message }, { status: 400 });
+      return NextResponse.json<ErrorResponse>(
+        { error: error.message },
+        { status: 400 },
+      );
     }
   }
 };
@@ -68,7 +73,7 @@ export const PATCH = async (
       data: parsed,
     });
 
-    const safeGoal: GoalResponse = goalResponseSchema.parse(
+    const safeGoal: Goal = goalSchema.parse(
       withUserTimezone(
         goal,
         ["deadline", "createdAt", "updatedAt"],
@@ -76,10 +81,13 @@ export const PATCH = async (
       ),
     );
 
-    return NextResponse.json({ goal: safeGoal }, { status: 200 });
+    return NextResponse.json<GoalResponse>({ goal: safeGoal }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
-      return NextResponse.json({ status: error.message }, { status: 400 });
+      return NextResponse.json<ErrorResponse>(
+        { error: error.message },
+        { status: 400 },
+      );
     }
   }
 };
@@ -99,13 +107,13 @@ export const DELETE = async (
       },
     });
 
-    return NextResponse.json<{ status: string }>(
-      { status: "OK" },
-      { status: 200 },
-    );
+    return NextResponse.json<StatusResponse>({ status: "OK" }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
-      return NextResponse.json({ status: error.message }, { status: 400 });
+      return NextResponse.json<ErrorResponse>(
+        { error: error.message },
+        { status: 400 },
+      );
     }
   }
 };

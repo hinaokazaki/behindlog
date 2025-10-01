@@ -27,23 +27,10 @@ export const PATCH = async (
       return NextResponse.json({ error: "invalid status" }, { status: 400 });
     }
 
-    // userId2確認
-    const checkFriendshipForUserId2 = await prisma.friendship.findUnique({
-      where: {
-        id: Number(id),
-      },
-    });
-
-    if (
-      !checkFriendshipForUserId2 ||
-      checkFriendshipForUserId2.userId2 !== user.id
-    ) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
-    }
-
     const friendship = await prisma.friendship.update({
       where: {
         id: Number(id),
+        userId2: user.id,
       },
       data: parsed,
     });

@@ -4,12 +4,15 @@ import { getLoggedInUser } from "@/utils/auth";
 import {
   CreateProfileRequest,
   createProfileRequestSchema,
+  Profile,
   ProfileResponse,
   profileResponseSchema,
+  profileSchema,
   UpdateProfileRequest,
   updateProfileRequestSchema,
 } from "@/schemas/me";
 import { withUserTimezone } from "@/lib/timezone";
+import { ErrorResponse } from "@/schemas/common";
 
 // GET: /me ユーザー_プロフィール取得
 export const GET = async (request: NextRequest) => {
@@ -28,14 +31,20 @@ export const GET = async (request: NextRequest) => {
       );
     }
 
-    const safeProfile: ProfileResponse = profileResponseSchema.parse(
+    const safeProfile: Profile = profileSchema.parse(
       withUserTimezone(profile, ["createdAt", "updatedAt"], user.timezone),
     );
 
-    return NextResponse.json({ user: safeProfile }, { status: 200 });
+    return NextResponse.json<ProfileResponse>(
+      { profile: safeProfile },
+      { status: 200 },
+    );
   } catch (error) {
     if (error instanceof Error)
-      return NextResponse.json({ status: error.message }, { status: 400 });
+      return NextResponse.json<ErrorResponse>(
+        { error: error.message },
+        { status: 400 },
+      );
   }
 };
 
@@ -69,14 +78,20 @@ export const POST = async (request: NextRequest) => {
       },
     });
 
-    const safeProfile: ProfileResponse = profileResponseSchema.parse(
+    const safeProfile: Profile = profileSchema.parse(
       withUserTimezone(profile, ["createdAt", "updatedAt"], user.timezone),
     );
 
-    return NextResponse.json({ user: safeProfile }, { status: 200 });
+    return NextResponse.json<ProfileResponse>(
+      { profile: safeProfile },
+      { status: 200 },
+    );
   } catch (error) {
     if (error instanceof Error)
-      return NextResponse.json({ status: error.message }, { status: 400 });
+      return NextResponse.json<ErrorResponse>(
+        { error: error.message },
+        { status: 400 },
+      );
   }
 };
 
@@ -96,13 +111,19 @@ export const PATCH = async (request: NextRequest) => {
       data: body,
     });
 
-    const safeProfile: ProfileResponse = profileResponseSchema.parse(
+    const safeProfile: Profile = profileSchema.parse(
       withUserTimezone(profile, ["createdAt", "updatedAt"], user.timezone),
     );
 
-    return NextResponse.json({ user: safeProfile }, { status: 200 });
+    return NextResponse.json<ProfileResponse>(
+      { profile: safeProfile },
+      { status: 200 },
+    );
   } catch (error) {
     if (error instanceof Error)
-      return NextResponse.json({ status: error.message }, { status: 400 });
+      return NextResponse.json<ErrorResponse>(
+        { error: error.message },
+        { status: 400 },
+      );
   }
 };

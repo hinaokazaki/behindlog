@@ -27,7 +27,9 @@ export const updateProfileRequestSchema = z.object({
 });
 
 // レスポンス用
-export const profileResponseSchema = profileSchema;
+export const profileResponseSchema = z.object({
+  profile: profileSchema,
+});
 
 // 型を生成
 export type Profile = z.infer<typeof profileSchema>;

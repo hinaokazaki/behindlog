@@ -5,15 +5,18 @@ import {
   CreateTodoRequest,
   createTodoRequestSchema,
   Todo,
-  todoResponseSchema,
+  TodoResponse,
+  Todos,
+  todoSchema,
   TodosResponse,
-  todosResponseSchema,
+  todosSchema,
 } from "@/schemas/todo";
 import {
   withUserDateParse,
   withUserTimezone,
   withUserTimezoneMany,
 } from "@/lib/timezone";
+import { ErrorResponse } from "@/schemas/common";
 
 // POST: /todos ユーザー_Todo新規作成
 
@@ -33,18 +36,21 @@ export const POST = async (request: NextRequest) => {
       },
     });
 
-    const safeTodo: Todo = todoResponseSchema.parse(
+    const safeTodo: Todo = todoSchema.parse(
       withUserTimezone(
         todo,
-        ["createdAt", "dueDate", "updatedAt"],
+        ["dueDate", "createdAt", "updatedAt"],
         user.timezone,
       ),
     );
 
-    return NextResponse.json({ todo: safeTodo }, { status: 200 });
+    return NextResponse.json<TodoResponse>({ todo: safeTodo }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
-      return NextResponse.json({ status: error.message }, { status: 400 });
+      return NextResponse.json<ErrorResponse>(
+        { error: error.message },
+        { status: 400 },
+      );
     }
   }
 };
@@ -59,7 +65,7 @@ export const GET = async (request: NextRequest) => {
       },
     });
 
-    const safeTodos: TodosResponse = todosResponseSchema.parse(
+    const safeTodos: Todos = todosSchema.parse(
       withUserTimezoneMany(
         todos,
         ["createdAt", "updatedAt", "dueDate"],
@@ -67,10 +73,16 @@ export const GET = async (request: NextRequest) => {
       ),
     );
 
-    return NextResponse.json({ todo: safeTodos }, { status: 200 });
+    return NextResponse.json<TodosResponse>(
+      { todos: safeTodos },
+      { status: 200 },
+    );
   } catch (error) {
     if (error instanceof Error) {
-      return NextResponse.json({ status: error.message }, { status: 400 });
+      return NextResponse.json<ErrorResponse>(
+        { error: error.message },
+        { status: 400 },
+      );
     }
   }
 };

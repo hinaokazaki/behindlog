@@ -5,11 +5,11 @@ import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
 import {
   Todo,
   TodoResponse,
-  todoResponseSchema,
   todoSchema,
   UpdateTodoRequest,
   updateTodoRequestSchema,
 } from "@/schemas/todo";
+import { ErrorResponse, StatusResponse } from "@/schemas/common";
 
 // GET: /todos ユーザー_Todo取得
 export const GET = async (
@@ -33,7 +33,7 @@ export const GET = async (
       );
     }
 
-    const safeTodo: TodoResponse = todoResponseSchema.parse(
+    const safeTodo: Todo = todoSchema.parse(
       withUserTimezone(
         todo,
         ["dueDate", "createdAt", "updatedAt"],
@@ -41,10 +41,13 @@ export const GET = async (
       ),
     );
 
-    return NextResponse.json({ todo: safeTodo }, { status: 200 });
+    return NextResponse.json<TodoResponse>({ todo: safeTodo }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
-      return NextResponse.json({ status: error.message }, { status: 400 });
+      return NextResponse.json<ErrorResponse>(
+        { error: error.message },
+        { status: 400 },
+      );
     }
   }
 };
@@ -71,7 +74,7 @@ export const PATCH = async (
       data: parsed,
     });
 
-    const safeTodo: Todo = todoResponseSchema.parse(
+    const safeTodo: Todo = todoSchema.parse(
       withUserTimezone(
         todo,
         ["dueDate", "createdAt", "updatedAt"],
@@ -79,10 +82,13 @@ export const PATCH = async (
       ),
     );
 
-    return NextResponse.json({ todo: safeTodo }, { status: 200 });
+    return NextResponse.json<TodoResponse>({ todo: safeTodo }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
-      return NextResponse.json({ status: error.message }, { status: 400 });
+      return NextResponse.json<ErrorResponse>(
+        { error: error.message },
+        { status: 400 },
+      );
     }
   }
 };
@@ -102,13 +108,13 @@ export const DELETE = async (
       },
     });
 
-    return NextResponse.json<{ status: string }>(
-      { status: "OK" },
-      { status: 200 },
-    );
+    return NextResponse.json<StatusResponse>({ status: "OK" }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
-      return NextResponse.json({ status: error.message }, { status: 400 });
+      return NextResponse.json<ErrorResponse>(
+        { error: error.message },
+        { status: 400 },
+      );
     }
   }
 };

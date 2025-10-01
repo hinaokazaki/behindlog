@@ -11,6 +11,10 @@ export const todoSchema = z.object({
   updatedAt: z.string(),
 });
 
+export const todosSchema = z.object({
+  todos: z.array(todoSchema),
+});
+
 // リクエスト用
 export const createTodoRequestSchema = z.object({
   title: z.string().min(1),
@@ -24,12 +28,17 @@ export const updateTodoRequestSchema = z.object({
 });
 
 // レスポンス用
-export const todoResponseSchema = todoSchema;
+export const todoResponseSchema = z.object({
+  todo: todoSchema,
+});
 
-export const todosResponseSchema = z.array(todoSchema);
+export const todosResponseSchema = z.object({
+  todos: todosSchema,
+});
 
 // 型を生成
 export type Todo = z.infer<typeof todoSchema>;
+export type Todos = z.infer<typeof todosSchema>;
 export type CreateTodoRequest = z.infer<typeof createTodoRequestSchema>;
 export type UpdateTodoRequest = z.infer<typeof updateTodoRequestSchema>;
 export type TodoResponse = z.infer<typeof todoResponseSchema>;

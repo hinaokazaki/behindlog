@@ -17,7 +17,9 @@ export const userRecordSchema = z.object({
 });
 
 // レスポンス用
-export const userRecordResponseSchema = userRecordSchema;
+export const userRecordResponseSchema = z.object({
+  dailyRecord: userRecordSchema,
+});
 
 // 型を生成
 export type UserRecord = z.infer<typeof userRecordSchema>;

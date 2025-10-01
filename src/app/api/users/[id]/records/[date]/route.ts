@@ -2,10 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
 import {
+  UserRecord,
   UserRecordResponse,
-  userRecordResponseSchema,
+  userRecordSchema,
 } from "@/schemas/userRecord";
 import { withUserTimezone } from "@/lib/timezone";
+import { ErrorResponse } from "@/schemas/common";
 
 // GET: /users/[id]/records/[date] ユーザー_友達の記録取得（特定日）
 
@@ -46,7 +48,7 @@ export const GET = async (
       );
     }
 
-    const safeDailyRecord: UserRecordResponse = userRecordResponseSchema.parse(
+    const safeDailyRecord: UserRecord = userRecordSchema.parse(
       withUserTimezone(
         record,
         [
@@ -60,9 +62,15 @@ export const GET = async (
       ),
     );
 
-    return NextResponse.json({ DailyRecord: safeDailyRecord }, { status: 200 });
+    return NextResponse.json<UserRecordResponse>(
+      { dailyRecord: safeDailyRecord },
+      { status: 200 },
+    );
   } catch (error) {
     if (error instanceof Error)
-      return NextResponse.json({ status: error.message }, { status: 400 });
+      return NextResponse.json<ErrorResponse>(
+        { error: error.message },
+        { status: 400 },
+      );
   }
 };

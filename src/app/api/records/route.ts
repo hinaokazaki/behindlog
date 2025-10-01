@@ -2,10 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
 import {
+  DailyRecord,
   DailyRecordResponse,
-  dailyRecordResponseSchema,
+  dailyRecordSchema,
 } from "@/schemas/dailyRecord";
 import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
+import { ErrorResponse } from "@/schemas/common";
 
 // GET: /records ユーザー_記録取得（特定日）
 export const GET = async (request: NextRequest) => {
@@ -38,25 +40,30 @@ export const GET = async (request: NextRequest) => {
       );
     }
 
-    const safeDailyRecord: DailyRecordResponse =
-      dailyRecordResponseSchema.parse(
-        withUserTimezone(
-          dailyRecord,
-          [
-            "createdAt",
-            "updatedAt",
-            "recordedDate",
-            "commitStartDate",
-            "commitEndDate",
-          ],
-          user.timezone,
-        ),
-      );
+    const safeDailyRecord: DailyRecord = dailyRecordSchema.parse(
+      withUserTimezone(
+        dailyRecord,
+        [
+          "createdAt",
+          "updatedAt",
+          "recordedDate",
+          "commitStartDate",
+          "commitEndDate",
+        ],
+        user.timezone,
+      ),
+    );
 
-    return NextResponse.json({ dailyRecord: safeDailyRecord }, { status: 200 });
+    return NextResponse.json<DailyRecordResponse>(
+      { dailyRecord: safeDailyRecord },
+      { status: 200 },
+    );
   } catch (error) {
     if (error instanceof Error) {
-      return NextResponse.json({ status: error.message }, { status: 400 });
+      return NextResponse.json<ErrorResponse>(
+        { error: error.message },
+        { status: 400 },
+      );
     }
   }
 };

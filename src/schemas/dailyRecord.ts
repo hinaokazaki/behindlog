@@ -38,7 +38,10 @@ export const createDailyRecordSchema = z.object({
 });
 
 // レスポンス用
-export const dailyRecordResponseSchema = dailyRecordSchema;
+export const dailyRecordResponseSchema = z.object({
+  dailyRecord: dailyRecordSchema,
+});
+export const safeDailyRecordSchema = dailyRecordSchema;
 
 // 型を作成
 export type DailyRecord = z.infer<typeof dailyRecordSchema>;

@@ -3,13 +3,15 @@ import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
 import { z } from "zod/v4";
 import {
+  DailyRecord,
   createDailyRecordSchema,
   DailyRecordResponse,
-  dailyRecordResponseSchema,
+  dailyRecordSchema,
   TodoSnapshot,
   todoSnapshotSchema,
 } from "@/schemas/dailyRecord";
 import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
+import { ValidationErrorResponse } from "@/schemas/common";
 
 // PUT: /records:date ユーザー_記録新規作成,取得,更新
 
@@ -153,30 +155,41 @@ export const PUT = async (
       return dailyRecord;
     });
 
-    const safeDailyRecord: DailyRecordResponse =
-      dailyRecordResponseSchema.parse(
-        withUserTimezone(
-          dailyRecordPostResult,
-          [
-            "createdAt",
-            "updatedAt",
-            "recordedDate",
-            "commitStartDate",
-            "commitEndDate",
-          ],
-          user.timezone,
-        ),
-      );
+    const safeDailyRecord: DailyRecord = dailyRecordSchema.parse(
+      withUserTimezone(
+        dailyRecordPostResult,
+        [
+          "createdAt",
+          "updatedAt",
+          "recordedDate",
+          "commitStartDate",
+          "commitEndDate",
+        ],
+        user.timezone,
+      ),
+    );
 
-    return NextResponse.json({ dailyRecord: safeDailyRecord }, { status: 200 });
+    return NextResponse.json<DailyRecordResponse>(
+      { dailyRecord: safeDailyRecord },
+      { status: 200 },
+    );
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { status: "VALIDATION_ERROR", issues: error.issues },
+      return NextResponse.json<ValidationErrorResponse>(
+        {
+          status: "VALIDATION_ERROR",
+          issues: error.issues.map((i) => ({
+            path: i.path.join("."),
+            message: i.message,
+          })),
+        },
         { status: 422 },
       );
     }
     const message = error instanceof Error ? error.message : "Unexpected error";
-    return NextResponse.json({ status: "ERROR", message }, { status: 400 });
+    return NextResponse.json<{ status: string; message: string }>(
+      { status: "ERROR", message },
+      { status: 400 },
+    );
   }
 };

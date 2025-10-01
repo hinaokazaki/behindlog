@@ -46,6 +46,8 @@ model Friendship {
   user1           User     @relation("User1", fields: [userId1], references: [id], onDelete: Cascade)
   user2           User?    @relation("User2", fields: [userId2], references: [id], onDelete: Cascade)
   inviterUser     User     @relation("InviterUser", fields: [inviterUserId], references: [id], onDelete: Cascade)
+
+   @@unique([userId1, userId2])
 }
 
 model ContactMessage {

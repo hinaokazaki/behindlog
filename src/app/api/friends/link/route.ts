@@ -3,8 +3,9 @@ import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { getLoggedInUser } from "@/utils/auth";
 import {
+  Friend,
   FriendResponse,
-  friendResponseSchema,
+  friendSchema,
   ReceiveFriendRequest,
   receiveFriendRequestSchema,
 } from "@/schemas/friend";
@@ -25,7 +26,7 @@ export const PATCH = async (request: NextRequest) => {
       );
     }
 
-    const friendShip = await prisma.friendship.update({
+    const friendship = await prisma.friendship.update({
       where: {
         token: body.inviteToken,
       },
@@ -34,23 +35,29 @@ export const PATCH = async (request: NextRequest) => {
       },
     });
 
-    const safeFriendship: FriendResponse = friendResponseSchema.parse(
+    const safeFriendship: Friend = friendSchema.parse(
       withUserTimezone(
-        friendShip,
+        friendship,
         ["createdAt", "updatedAt", "respondedAt"],
         user.timezone,
       ),
     );
 
-    return NextResponse.json({ friendShip: safeFriendship }, { status: 200 });
+    return NextResponse.json<FriendResponse>(
+      { friendship: safeFriendship },
+      { status: 200 },
+    );
   } catch (error) {
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&
       error.code === "P2025"
     ) {
-      return NextResponse.json({ error: "Invite not found" }, { status: 404 });
+      return NextResponse.json<{ error: string }>(
+        { error: "Invite not found" },
+        { status: 404 },
+      );
     }
-    return NextResponse.json(
+    return NextResponse.json<{ error: string }>(
       { error: "Failed to link friendship" },
       { status: 500 },
     );

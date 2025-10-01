@@ -3,11 +3,13 @@ import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
 import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
 import {
+  Friend,
   FriendResponse,
-  friendResponseSchema,
+  friendSchema,
   UpdateFriendRequest,
   updateFriendRequestSchema,
 } from "@/schemas/friend";
+import { ErrorResponse, StatusResponse } from "@/schemas/common";
 
 // PATCH: /api/friends/:id ユーザー_友達申請承認
 export const PATCH = async (
@@ -35,7 +37,7 @@ export const PATCH = async (
       data: parsed,
     });
 
-    const safeFriendship: FriendResponse = friendResponseSchema.parse(
+    const safeFriendship: Friend = friendSchema.parse(
       withUserTimezone(
         friendship,
         ["createdAt", "updatedAt", "respondedAt"],
@@ -43,10 +45,16 @@ export const PATCH = async (
       ),
     );
 
-    return NextResponse.json({ friendship: safeFriendship }, { status: 200 });
+    return NextResponse.json<FriendResponse>(
+      { friendship: safeFriendship },
+      { status: 200 },
+    );
   } catch (error) {
     if (error instanceof Error) {
-      return NextResponse.json({ status: error.message }, { status: 400 });
+      return NextResponse.json<ErrorResponse>(
+        { error: error.message },
+        { status: 400 },
+      );
     }
   }
 };
@@ -75,13 +83,17 @@ export const DELETE = async (
     const friendship = await prisma.friendship.delete({
       where: {
         id: Number(id),
+        OR: [{ userId2: user.id }, { userId1: user.id }],
       },
     });
 
-    return NextResponse.json({ status: "OK" }, { status: 200 });
+    return NextResponse.json<StatusResponse>({ status: "OK" }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
-      return NextResponse.json({ status: error.message }, { status: 400 });
+      return NextResponse.json<ErrorResponse>(
+        { error: error.message },
+        { status: 400 },
+      );
     }
   }
 };

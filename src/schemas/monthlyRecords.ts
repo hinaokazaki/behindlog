@@ -13,14 +13,19 @@ export const usersDailyRecordSchema = z.object({
 });
 
 // レスポンス全体
-export const monthlyRecordsResponseSchema = z.object({
+export const monthlyRecordsSchema = z.object({
   month: z.string(),
   record: z.array(usersDailyRecordSchema),
+});
+
+export const monthlyRecordsResponseSchema = z.object({
+  monthlyRecords: monthlyRecordsSchema,
 });
 
 // 型を生成
 export type UserSummary = z.infer<typeof userSummarySchema>;
 export type UsersDailyRecord = z.infer<typeof usersDailyRecordSchema>;
+export type MonthlyRecords = z.infer<typeof monthlyRecordsSchema>;
 export type MonthlyRecordsResponse = z.infer<
   typeof monthlyRecordsResponseSchema
 >;

@@ -8,11 +8,15 @@ export const inviterUserSchema = z.object({
 });
 
 // レスポンス用
-export const friendRequestResponseSchema = z.object({
+export const friendRequestSchema = z.object({
   id: z.number(),
   status: z.enum(["PENDING", "ACCEPTED", "DECLINED"]),
   message: z.string(),
   inviter: inviterUserSchema,
+});
+
+export const friendRequestResponseSchema = z.object({
+  invitation: friendRequestSchema,
 });
 
 export const friendRequestsSchema = z.object({
@@ -20,6 +24,14 @@ export const friendRequestsSchema = z.object({
   inviter: inviterUserSchema,
 });
 
+export const friendRequestsResponseSchema = z.object({
+  invitations: friendRequestsSchema,
+});
+
 //型を作成
+export type FriendRequest = z.infer<typeof friendRequestSchema>;
 export type FriendRequestResponse = z.infer<typeof friendRequestResponseSchema>;
-export type FriendRequestsResponse = z.infer<typeof friendRequestsSchema>;
+export type FriendRequests = z.infer<typeof friendRequestsSchema>;
+export type FriendRequestsResponse = z.infer<
+  typeof friendRequestsResponseSchema
+>;

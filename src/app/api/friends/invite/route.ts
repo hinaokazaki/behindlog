@@ -6,12 +6,15 @@ import { Resend } from "resend";
 import {
   CreateFriendRequest,
   createFriendRequestSchema,
+  Friend,
   FriendInvite,
+  FriendInviteResponse,
   friendInviteSchema,
   FriendResponse,
-  friendResponseSchema,
+  friendSchema,
 } from "@/schemas/friend";
 import { withUserTimezone } from "@/lib/timezone";
+import { ErrorResponse } from "@/schemas/common";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -46,7 +49,7 @@ export const POST = async (request: NextRequest) => {
     });
 
     if (invitedUser) {
-      const friendShip = await prisma.friendship.create({
+      const friendship = await prisma.friendship.create({
         data: {
           userId1: user.id,
           userId2: invitedUser.id,
@@ -57,18 +60,21 @@ export const POST = async (request: NextRequest) => {
         },
       });
 
-      const safeFriendship: FriendResponse = friendResponseSchema.parse(
+      const safeFriendship: Friend = friendSchema.parse(
         withUserTimezone(
-          friendShip,
+          friendship,
           ["createdAt", "updatedAt", "respondedAt"],
           user.timezone,
         ),
       );
 
-      return NextResponse.json({ friendShip: safeFriendship }, { status: 200 });
+      return NextResponse.json<FriendResponse>(
+        { friendship: safeFriendship },
+        { status: 200 },
+      );
     } else {
       const token = uuidv4();
-      const friendShip = await prisma.friendship.create({
+      const friendship = await prisma.friendship.create({
         data: {
           userId1: user.id,
           inviterUserId: user.id,
@@ -90,19 +96,25 @@ export const POST = async (request: NextRequest) => {
         );
       }
 
-      const safeFriendship: FriendResponse = friendResponseSchema.parse(
+      const safeFriendship: Friend = friendSchema.parse(
         withUserTimezone(
-          friendShip,
+          friendship,
           ["createdAt", "updatedAt", "respondedAt"],
           user.timezone,
         ),
       );
 
-      return NextResponse.json({ friendShip: safeFriendship }, { status: 200 });
+      return NextResponse.json<FriendResponse>(
+        { friendship: safeFriendship },
+        { status: 200 },
+      );
     }
   } catch (error) {
     if (error instanceof Error) {
-      return NextResponse.json({ status: error.message }, { status: 400 });
+      return NextResponse.json<ErrorResponse>(
+        { error: error.message },
+        { status: 400 },
+      );
     }
   }
 };
@@ -139,10 +151,16 @@ export const GET = async (request: NextRequest) => {
     const safeFriendInvite: FriendInvite =
       friendInviteSchema.parse(friendInvite);
 
-    return NextResponse.json({ safeFriendInvite }, { status: 200 });
+    return NextResponse.json<FriendInviteResponse>(
+      { friendInvite: safeFriendInvite },
+      { status: 200 },
+    );
   } catch (error) {
     if (error instanceof Error) {
-      return NextResponse.json({ status: error.message }, { status: 400 });
+      return NextResponse.json<ErrorResponse>(
+        { error: error.message },
+        { status: 400 },
+      );
     }
   }
 };

@@ -99,7 +99,7 @@ export default function AdminLayout({
             <span className="font-bold">編集</span>
           </Link>
         </div>
-        <div className="fixed bottom-0 mb-12">
+        <div className="fixed bottom-0 mb-12 w-[280px]">
           <Link
             href=""
             className={`flex items-center gap-2 px-14 py-3 text-body text-primary hover:bg-background ${isSelected("/admin/me") && "bg-background}"}`}

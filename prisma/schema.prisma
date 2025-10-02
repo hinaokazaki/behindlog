@@ -3,7 +3,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -14,8 +13,10 @@ datasource db {
 
 model User {
   id                 String   @id              // ← Supabaseのauth.users.id（UUID）
-  name               String
-  colorTheme         ColorThemeType
+  email              String   @unique
+  name               String?
+  colorTheme         ColorThemeType?
+  timezone           String   @default("Asia/Tokyo")
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
@@ -32,19 +33,21 @@ model User {
 model Friendship {
   id              Int      @id @default(autoincrement())
   userId1         String
-  userId2         String
+  userId2         String?
   inviterUserId   String
   inviteeEmail    String
   message         String
   status          InvitationStatus
-  token           String   @default(uuid())
+  token           String?  @unique
   respondedAt     DateTime?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
   user1           User     @relation("User1", fields: [userId1], references: [id], onDelete: Cascade)
-  user2           User     @relation("User2", fields: [userId2], references: [id], onDelete: Cascade)
+  user2           User?    @relation("User2", fields: [userId2], references: [id], onDelete: Cascade)
   inviterUser     User     @relation("InviterUser", fields: [inviterUserId], references: [id], onDelete: Cascade)
+
+  @@unique([userId1, userId2])
 }
 
 model ContactMessage {
@@ -59,19 +62,31 @@ model ContactMessage {
 }
 
 model DailyRecord {
-  id               Int      @id @default(autoincrement())
+  id               Int        @id @default(autoincrement())
   userId           String
-  recordedAt       DateTime
+  recordedDate     DateTime   @db.Date 
   totalStudyTime   Int
   memo             String
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
 
-  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  todoSnapshot     Json?
+
+  commitTargetTime Int?
+  commitStartDate  DateTime?
+  commitEndDate    DateTime?
+  commitTimeId     Int?
+
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  user             User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  commitTime       CommitTime? @relation(fields: [commitTimeId], references: [id])
+
+  @@unique([userId, recordedDate]) 
+  @@index([userId, recordedDate])
 }
 
 model Goal {
-  id         Int     @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   userId     String
   title      String
   deadline   DateTime
@@ -82,11 +97,11 @@ model Goal {
 }
 
 model Todo {
-  id           Int     @id @default(autoincrement())
+  id           Int      @id @default(autoincrement())
   userId       String
   title        String
   dueDate      DateTime
-  isCompleted  Boolean
+  isCompleted  Boolean  @default(false)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -95,7 +110,7 @@ model Todo {
 
 model CommitTime {
   id           Int     @id @default(autoincrement())
-  userId       String
+  userId       String  @unique
   targetTime   Int     // 単位: 分
   startDate    DateTime
   endDate      DateTime
@@ -103,6 +118,7 @@ model CommitTime {
   updatedAt    DateTime @updatedAt
 
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dailyRecords DailyRecord[]
 }
 
 enum ColorThemeType {

@@ -75,6 +75,8 @@ export const POST = async (request: NextRequest) => {
         id: user.id,
         email: user.email,
         timezone: body.timezone,
+        colorTheme: "ORIGINAL",
+        name: "No name",
       },
     });
 

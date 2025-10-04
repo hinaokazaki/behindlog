@@ -1,9 +1,15 @@
+export type Option = {
+  value: string;
+  label: string;
+};
+
 export type FieldProps = {
   name: string;
   title: string;
-  type: "text" | "email" | "password" | "textarea";
+  type: "text" | "textarea" | "select" | "date" | "email" | "password";
   inputProps?: React.InputHTMLAttributes<HTMLInputElement> &
     React.TextareaHTMLAttributes<HTMLTextAreaElement>;
+  options?: Option[];
 };
 
 export type ButtonProps = {

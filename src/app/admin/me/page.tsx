@@ -4,11 +4,12 @@ import { ButtonProps, FieldProps } from "@/app/_types/type";
 import SectionTitle from "@/app/_components/SectionTitle";
 import { themeOptions } from "@/constants/themeOptions";
 import moment from "moment-timezone";
-import { Profile } from "@/schemas/me";
+import { Profile, ProfileResponse } from "@/schemas/me";
 import useFetch from "../_hooks/useFetch";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 import Loading from "@/app/_components/Loading";
 import { profileFormSchema, ProfileFormValues } from "@/schemas/profileForm";
+import { apiReq } from "@/app/_lib/api";
 
 export default function ProfilePage() {
   const { token } = useSupabaseSession();
@@ -67,21 +68,14 @@ export default function ProfilePage() {
     };
 
     try {
-      const res = await fetch("/api/me", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(normalizedData),
-      });
-
-      if (res.ok) {
-        alert("プロフィールを更新しました");
-        console.log(data);
-      } else {
-        throw new Error();
-      }
+      const res = await apiReq<ProfileResponse>(
+        "api/me",
+        "PATCH",
+        normalizedData,
+        token,
+      );
+      alert("プロフィールを更新しました");
+      console.log(res.profile);
     } catch (error) {
       console.error("プロフィールの更新に失敗しました", error);
     }

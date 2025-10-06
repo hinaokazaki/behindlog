@@ -1,13 +1,11 @@
 import { supabase } from "@/utils/supabase";
 import { Session } from "@supabase/supabase-js";
 import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
 
 export const useSupabaseSession = () => {
   const [session, setSession] = useState<Session | null | undefined>(undefined);
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsloading] = useState(true);
-  const pathName = usePathname();
 
   useEffect(() => {
     const fetcher = async () => {
@@ -20,7 +18,7 @@ export const useSupabaseSession = () => {
     };
 
     fetcher();
-  }, [pathName]);
+  }, []);
 
   return { session, isLoading, token };
 };

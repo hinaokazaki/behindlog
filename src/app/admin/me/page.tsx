@@ -6,13 +6,12 @@ import { themeOptions } from "@/constants/themeOptions";
 import moment from "moment-timezone";
 import { Profile, ProfileResponse } from "@/schemas/me";
 import useFetch from "../_hooks/useFetch";
-import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 import Loading from "@/app/_components/Loading";
 import { profileFormSchema, ProfileFormValues } from "@/schemas/profileForm";
-import { apiReq } from "@/app/_lib/api";
+import { useApi } from "@/app/_hooks/useApi";
 
 export default function ProfilePage() {
-  const { token } = useSupabaseSession();
+  const { callApi } = useApi();
 
   const timezoneOptions = moment.tz
     .names()
@@ -58,21 +57,18 @@ export default function ProfilePage() {
 
   // PATCH 更新処理
   const handleUpdate = async (data: ProfileFormValues) => {
-    if (!token) return;
-
     // API用にnullを許容する形に変換（バックエンド用スキーマと整合）
     const normalizedData = {
-      name: data.name || null,
-      colorTheme: data.colorTheme || null,
+      name: data.name.trim() ? data.name : null,
+      colorTheme: data.colorTheme ? data.colorTheme : null,
       timezone: data.timezone,
     };
 
     try {
-      const res = await apiReq<ProfileResponse>(
-        "api/me",
+      const res = await callApi<ProfileResponse>(
+        "/api/me",
         "PATCH",
         normalizedData,
-        token,
       );
       alert("プロフィールを更新しました");
       console.log(res.profile);

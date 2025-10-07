@@ -1,9 +1,10 @@
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export const useRouteGuard = () => {
   const router = useRouter();
+  const pathName = usePathname();
   const { session } = useSupabaseSession();
 
   useEffect(() => {
@@ -16,5 +17,5 @@ export const useRouteGuard = () => {
     };
 
     fetcher();
-  }, [router, session]);
+  }, [router, session, pathName]);
 };

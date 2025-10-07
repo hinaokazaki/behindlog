@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { useSupabaseSession } from "./useSupabaseSession";
-import { apiReq } from "../_lib/api";
 
 export const useApi = () => {
   const { token } = useSupabaseSession();
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
   const callApi = async <T>(
@@ -15,16 +14,26 @@ export const useApi = () => {
     if (!token) throw new Error("No token available");
 
     try {
-      setLoading(true);
-      const result = await apiReq<T>(url, method, body, token);
-      return result;
+      setIsLoading(true);
+
+      const res = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+        body: body ? JSON.stringify(body) : undefined,
+      });
+
+      if (!res.ok) throw new Error("API Error");
+      return (await res.json()) as T;
     } catch (error) {
       setError(error as Error);
       throw error;
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
-  return { callApi, loading, error };
+  return { callApi, isLoading, error };
 };

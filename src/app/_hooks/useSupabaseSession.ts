@@ -3,22 +3,18 @@ import { Session } from "@supabase/supabase-js";
 import { useState, useEffect } from "react";
 
 export const useSupabaseSession = () => {
-  const [session, setSession] = useState<Session | null | undefined>(undefined);
+  const [session, setSession] = useState<Session | null>(null);
   const [token, setToken] = useState<string | null>(null);
-  const [isLoading, setIsloading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetcher = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      setSession(session);
-      setToken(session?.access_token || null);
-      setIsloading(false);
-    };
-
-    fetcher();
+    (async () => {
+      const { data } = await supabase.auth.getSession();
+      setSession(data.session);
+      setToken(data.session?.access_token || null);
+      setIsLoading(false);
+    })();
   }, []);
 
-  return { session, isLoading, token };
+  return { session, token, isLoading };
 };

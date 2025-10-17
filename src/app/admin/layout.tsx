@@ -101,7 +101,7 @@ export default function AdminLayout({
         </div>
         <div className="fixed bottom-0 mb-12 w-[280px]">
           <Link
-            href=""
+            href="/contact"
             className={`flex items-center gap-2 px-14 py-3 text-body text-primary hover:bg-background ${isSelected("/admin/me") && "bg-background}"}`}
           >
             <Image

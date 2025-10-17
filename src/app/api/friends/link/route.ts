@@ -11,7 +11,7 @@ import {
 } from "@/schemas/friend";
 import { withUserTimezone } from "@/lib/timezone";
 
-// PATCH: /api/friends/invite ユーザー_友達招待による新規登録後のユーザー確定
+// PATCH: /api/friends/link ユーザー_友達招待による新規登録後のユーザー確定
 export const PATCH = async (request: NextRequest) => {
   try {
     const user = await getLoggedInUser(request);

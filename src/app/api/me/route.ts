@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getLoggedInUser } from "@/utils/auth";
+import { getLoggedInUser, verifyAuthToken } from "@/utils/auth";
 import {
   CreateProfileRequest,
   createProfileRequestSchema,
   Profile,
   ProfileResponse,
-  profileResponseSchema,
   profileSchema,
   UpdateProfileRequest,
   updateProfileRequestSchema,
@@ -49,10 +48,9 @@ export const GET = async (request: NextRequest) => {
 };
 
 // POST: /me ユーザー_プロフィール新規作成
-
 export const POST = async (request: NextRequest) => {
   try {
-    const user = await getLoggedInUser(request);
+    const user = await verifyAuthToken(request);
     const body: CreateProfileRequest = createProfileRequestSchema.parse(
       await request.json(),
     );
@@ -81,7 +79,7 @@ export const POST = async (request: NextRequest) => {
     });
 
     const safeProfile: Profile = profileSchema.parse(
-      withUserTimezone(profile, ["createdAt", "updatedAt"], user.timezone),
+      withUserTimezone(profile, ["createdAt", "updatedAt"], body.timezone),
     );
 
     return NextResponse.json<ProfileResponse>(
@@ -89,6 +87,7 @@ export const POST = async (request: NextRequest) => {
       { status: 200 },
     );
   } catch (error) {
+    console.error("POST /api/me failed:", error);
     if (error instanceof Error)
       return NextResponse.json<ErrorResponse>(
         { error: error.message },
@@ -98,7 +97,6 @@ export const POST = async (request: NextRequest) => {
 };
 
 // PATCH: /me ユーザー_プロフィール更新
-
 export const PATCH = async (request: NextRequest) => {
   try {
     const user = await getLoggedInUser(request);

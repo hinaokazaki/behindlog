@@ -4,14 +4,19 @@ import { NextRequest } from "next/server";
 
 // user.id を使って DB操作（create, update, delete）するばあいに使用する
 export const getLoggedInUser = async (request: NextRequest) => {
-  const token =
-    request.headers.get("Authorization")?.replace("Bearer ", "") ?? "";
+  const authHeader =
+    request.headers.get("authorization") ||
+    request.headers.get("Authorization");
+  const token = authHeader?.replace("Bearer ", "") ?? "";
+  if (!token) throw new Error("No token provided");
+
   const {
     data: { user },
     error,
   } = await supabase.auth.getUser(token);
 
   if (error || !user) {
+    console.error("Auth error:", error);
     throw new Error("Unauthorised");
   }
 
@@ -33,8 +38,12 @@ export const getLoggedInUser = async (request: NextRequest) => {
 
 // 認証済みかどうかのチェックだけ（DB登録は不要）
 export const verifyAuthToken = async (request: NextRequest) => {
-  const token =
-    request.headers.get("Authorization")?.replace("Bearer ", "") ?? "";
+  const authHeader =
+    request.headers.get("authorization") ||
+    request.headers.get("Authorization");
+  const token = authHeader?.replace("Bearer ", "") ?? "";
+  if (!token) throw new Error("No token provided");
+
   const {
     data: { user },
     error,

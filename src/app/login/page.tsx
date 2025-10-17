@@ -52,7 +52,7 @@ export default function Login() {
       alert("ログインに失敗しました");
     } else {
       alert("ログインしました");
-      router.replace("/test");
+      router.replace("/admin");
     }
   };
 

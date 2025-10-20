@@ -34,7 +34,6 @@ export default function AuthCallback() {
             token_hash: optToken,
           });
           if (error) throw error;
-          await new Promise((r) => setTimeout(r, 500)); // 反映待ち
         }
 
         // セッションを取得（exchange 後なら入っている）

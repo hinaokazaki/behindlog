@@ -20,7 +20,7 @@ export const useApi = () => {
         method,
         headers: {
           "Content-Type": "application/json",
-          authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
         body: body ? JSON.stringify(body) : undefined,
       });

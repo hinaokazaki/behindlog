@@ -4,12 +4,6 @@ import { NextRequest } from "next/server";
 
 // user.id を使って DB操作（create, update, delete）するばあいに使用する
 export const getLoggedInUser = async (request: NextRequest) => {
-  // const authHeader =
-  //   request.headers.get("authorization") ||
-  //   request.headers.get("Authorization");
-  // const token = authHeader?.replace("Bearer ", "") ?? "";
-  // if (!token) throw new Error("No token provided");
-
   const token =
     request.headers.get("Authorization")?.replace("Bearer ", "") ?? "";
   if (!token) throw new Error("No token provided");

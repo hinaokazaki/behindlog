@@ -5,7 +5,7 @@ import { ButtonProps, FieldProps } from "../_types/type";
 import { z } from "zod";
 import Link from "next/link";
 import SectionTitle from "../_components/SectionTitle";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const fields: FieldProps[] = [
   {
@@ -40,6 +40,8 @@ const defaultValues: SignupFormValues = {
 
 export default function Signup() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const inviteToken = searchParams.get("inviteToken");
 
   const handleSubmit = async (values: SignupFormValues) => {
     const { email, password } = values;
@@ -47,9 +49,12 @@ export default function Signup() {
       email,
       password,
       options: {
-        emailRedirectTo: process.env.NEXT_PUBLIC_REDIRECT_URL,
+        emailRedirectTo: inviteToken
+          ? `${process.env.NEXT_PUBLIC_REDIRECT_URL}?inviteToken=${inviteToken}`
+          : process.env.NEXT_PUBLIC_REDIRECT_URL,
       },
     });
+
     if (error) {
       alert("登録に失敗しました");
     } else {

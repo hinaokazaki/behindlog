@@ -2,11 +2,12 @@
 import useSWR from "swr";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 
-const useFetch = <T = any>(url: string) => {
-  const { token } = useSupabaseSession();
+const useFetch = <T = any>(url: string | null) => {
+  const { token, isLoading: sessionLoading } = useSupabaseSession();
 
   const fetcher = async (): Promise<T> => {
-    const res = await fetch(url, {
+    if (!token) throw new Error("No token available");
+    const res = await fetch(url as string, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -17,11 +18,17 @@ const useFetch = <T = any>(url: string) => {
     return res.json();
   };
 
-  const { data, error, isLoading } = useSWR<T>(token ? url : null, fetcher);
+  // SWRのキーをtoken確定後に限定して発火
+  const shouldFetch = !sessionLoading && !!token && !!url;
+  const { data, error, isLoading, mutate } = useSWR<T>(
+    shouldFetch ? [url, token] : null,
+    fetcher,
+  );
   return {
     data: data as T | undefined,
     error,
-    isLoading,
+    isLoading: sessionLoading || isLoading,
+    mutate,
   };
 };
 

@@ -100,10 +100,10 @@ const Header: React.FC = () => {
               {isContact && (
                 <>
                   <Link
-                    href="/contact"
-                    className="text-center text-body text-primary hover:underline"
+                    href="/login"
+                    className="rounded-xl border-[2px] border-secondary bg-secondary px-4 py-2 text-body font-semibold text-white transition-colors duration-200 hover:bg-secondary-hover md:text-form-text"
                   >
-                    お問い合わせ
+                    ログイン
                   </Link>
                   <Link
                     href="/signup"

@@ -66,6 +66,10 @@ export const friendListResponseSchema = z.object({
   friendList: friendsListSchema,
 });
 
+export const friendLinkResponseSchema = z.object({
+  friendship: friendSchema,
+});
+
 //// 型を作成
 export type Friend = z.infer<typeof friendSchema>;
 export type FriendList = z.infer<typeof friendsListSchema>;
@@ -76,3 +80,4 @@ export type FriendInviteResponse = z.infer<typeof friendInviteResponseSchema>;
 export type CreateFriendRequest = z.infer<typeof createFriendRequestSchema>;
 export type UpdateFriendRequest = z.infer<typeof updateFriendRequestSchema>;
 export type ReceiveFriendRequest = z.infer<typeof receiveFriendRequestSchema>;
+export type FriendLinkResponse = z.infer<typeof friendLinkResponseSchema>;

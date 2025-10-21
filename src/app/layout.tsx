@@ -13,7 +13,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Bihindlog",
+  title: "Behindlog",
   description: " 学習記録型の継続支援アプリ",
 };
 

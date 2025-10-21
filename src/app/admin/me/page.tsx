@@ -10,43 +10,46 @@ import Loading from "@/app/_components/Loading";
 import { profileFormSchema, ProfileFormValues } from "@/schemas/profileForm";
 import { useApi } from "@/app/_hooks/useApi";
 
+const timezoneOptions = moment.tz
+  .names()
+  .map((tz) => ({ value: tz, label: tz }));
+
+const fields: FieldProps[] = [
+  {
+    name: "name",
+    title: "お名前 (ニックネーム)",
+    type: "text",
+    inputProps: { placeholder: "お名前 (ニックネーム)" },
+  },
+  {
+    name: "colorTheme",
+    title: "カラーテーマ",
+    type: "select",
+    options: themeOptions,
+    inputProps: { placeholder: "カラーテーマを選択してください" },
+  },
+  {
+    name: "timezone",
+    title: "タイムゾーン",
+    type: "select",
+    options: timezoneOptions,
+    inputProps: { placeholder: "カラーテーマを選択してください" },
+  },
+];
+
+const buttons: ButtonProps[] = [
+  { label: "変更を保存", className: "w-full", type: "submit" },
+];
+
 export default function ProfilePage() {
   const { callApi } = useApi();
 
-  const timezoneOptions = moment.tz
-    .names()
-    .map((tz) => ({ value: tz, label: tz }));
-
-  const fields: FieldProps[] = [
-    {
-      name: "name",
-      title: "お名前 (ニックネーム)",
-      type: "text",
-      inputProps: { placeholder: "お名前 (ニックネーム)" },
-    },
-    {
-      name: "colorTheme",
-      title: "カラーテーマ",
-      type: "select",
-      options: themeOptions,
-      inputProps: { placeholder: "カラーテーマを選択してください" },
-    },
-    {
-      name: "timezone",
-      title: "タイムゾーン",
-      type: "select",
-      options: timezoneOptions,
-      inputProps: { placeholder: "カラーテーマを選択してください" },
-    },
-  ];
-
-  const buttons: ButtonProps[] = [
-    { label: "変更を保存", className: "w-full", type: "submit" },
-  ];
-
   // GET: api/me profile情報取得
   const { data, error, isLoading } = useFetch<{ profile: Profile }>("/api/me");
-  if (!data) return <Loading />;
+  if (isLoading) return <Loading />;
+  if (error) return <p>エラーが発生しました: {error.message}</p>;
+  if (!data) return <p>データがありません</p>;
+
   const profile = data.profile;
 
   const defaultValues: ProfileFormValues = {
@@ -76,10 +79,6 @@ export default function ProfilePage() {
       console.error("プロフィールの更新に失敗しました", error);
     }
   };
-
-  if (isLoading) {
-    return <Loading />;
-  }
 
   return (
     <div className="m-auto my-[84px] w-[450px] p-1">

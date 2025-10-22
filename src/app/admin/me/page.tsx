@@ -82,7 +82,7 @@ export default function ProfilePage() {
 
   return (
     <div className="m-auto my-[84px] w-[450px] p-1">
-      <SectionTitle title="Profile" />
+      <SectionTitle title="Profile" isPublic />
       <Form
         fields={fields}
         buttons={buttons}

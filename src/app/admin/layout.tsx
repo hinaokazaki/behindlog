@@ -25,7 +25,7 @@ export default function AdminLayout({
   };
 
   return (
-    <>
+    <div className="flex min-h-screen justify-center bg-background pt-[85px]">
       <aside
         aria-label="サイドメニュー"
         className="fixed bottom-0 left-0 top-[85px] w-[280px] bg-white"
@@ -128,6 +128,6 @@ export default function AdminLayout({
         </div>
       </aside>
       <div className="ml-[280px] p-4">{children}</div>
-    </>
+    </div>
   );
 }

@@ -14,30 +14,16 @@ const CommunityCardBase: React.FC<Props> = ({
   mode = "friends",
 }) => {
   const message = {
-    friends: (
-      <div className="flex">
-        <Image
-          src="/send.png"
-          width={30}
-          height={30}
-          alt="招待中"
-          className="mx-2"
-        />
-        <span className="mr-2 text-base">招待中...</span>
-      </div>
-    ),
-    invitations: (
-      <div className="flex">
-        <Image
-          src="/envelope.png"
-          width={30}
-          height={30}
-          alt="招待が届いています"
-          className="mx-2"
-        />
-        <span className="mr-2 text-base">招待が届いています！</span>
-      </div>
-    ),
+    friends: {
+      imageSrc: "/send.png",
+      imageAlt: "招待中",
+      comment: "招待中...",
+    },
+    invitations: {
+      imageSrc: "/envelope.png",
+      imageAlt: "招待が届いています",
+      comment: "招待が届いています！",
+    },
   }[mode];
 
   return (
@@ -54,7 +40,16 @@ const CommunityCardBase: React.FC<Props> = ({
         />
         <span className="mr-2 text-base font-bold">{name}</span>
       </div>
-      {message}
+      <div className="flex">
+        <Image
+          src={message.imageSrc}
+          width={30}
+          height={30}
+          alt={message.imageAlt}
+          className="mx-2"
+        />
+        <span className="mr-2 text-base">{message.comment}</span>
+      </div>
     </div>
   );
 };

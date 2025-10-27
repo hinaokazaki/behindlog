@@ -61,8 +61,8 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="m-auto my-[84px] w-[450px] p-1">
-      <SectionTitle title="Contact us" />
+    <div className="m-auto my-[168px] w-[450px] p-1">
+      <SectionTitle title="Contact us" isPublic />
       <Form
         fields={fields}
         buttons={buttons}

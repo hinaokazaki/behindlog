@@ -64,8 +64,8 @@ export default function Signup() {
   };
 
   return (
-    <div className="m-auto my-[84px] w-[450px] p-1">
-      <SectionTitle title="Signup" />
+    <div className="m-auto my-[168px] w-[450px] p-1">
+      <SectionTitle title="Signup" isPublic />
       <Form
         fields={fields}
         buttons={buttons}

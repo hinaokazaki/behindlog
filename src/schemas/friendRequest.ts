@@ -19,19 +19,21 @@ export const friendRequestResponseSchema = z.object({
   invitation: friendRequestSchema,
 });
 
-export const friendRequestsSchema = z.object({
+export const friendRequestRecordSchema = z.object({
   friendshipId: z.number(),
   inviter: inviterUserSchema,
 });
 
-export const friendRequestsResponseSchema = z.object({
-  invitations: friendRequestsSchema,
+export const friendRequestRecordsSchema = z.array(friendRequestRecordSchema);
+
+export const friendRequestRecordsResponseSchema = z.object({
+  invitations: friendRequestRecordsSchema,
 });
 
 //型を作成
 export type FriendRequest = z.infer<typeof friendRequestSchema>;
 export type FriendRequestResponse = z.infer<typeof friendRequestResponseSchema>;
-export type FriendRequests = z.infer<typeof friendRequestsSchema>;
-export type FriendRequestsResponse = z.infer<
-  typeof friendRequestsResponseSchema
+export type FriendRequestrecords = z.infer<typeof friendRequestRecordsSchema>;
+export type FriendRequestRecordsResponse = z.infer<
+  typeof friendRequestRecordsResponseSchema
 >;

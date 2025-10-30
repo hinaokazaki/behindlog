@@ -2,9 +2,9 @@ import { NextResponse, NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
 import {
-  FriendRequests,
-  FriendRequestsResponse,
-  friendRequestsSchema,
+  FriendRequestrecords,
+  FriendRequestRecordsResponse,
+  friendRequestRecordsSchema,
 } from "@/schemas/friendRequest";
 import { ErrorResponse } from "@/schemas/common";
 
@@ -35,9 +35,10 @@ export const GET = async (request: NextRequest) => {
       inviter: f.user1,
     }));
 
-    const safeResult: FriendRequests = friendRequestsSchema.parse(result);
+    const safeResult: FriendRequestrecords =
+      friendRequestRecordsSchema.parse(result);
 
-    return NextResponse.json<FriendRequestsResponse>(
+    return NextResponse.json<FriendRequestRecordsResponse>(
       { invitations: safeResult },
       { status: 200 },
     );

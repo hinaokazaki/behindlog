@@ -1,8 +1,20 @@
 "use client";
+import { FriendLists } from "@/schemas/friend";
 import BlockTitle from "../_components/BlockTitle";
+import useFetch from "../_hooks/useFetch";
 import CommunityCardBase from "./_components/CommunityCardBase";
+import Loading from "@/app/_components/Loading";
 
 export default function CommunityPage() {
+  const { isLoading, error, data } = useFetch<{ friendList: FriendLists }>(
+    "/api/friends",
+  );
+  if (isLoading) return <Loading />;
+  if (error) return <p>エラーが発生しました: {error.message}</p>;
+  if (!data) return <p>データがありません</p>;
+
+  const friendLists: FriendLists = data.friendList;
+
   const friends = [{ name: "Hina" }, { name: "Hina" }];
 
   const onClick = () => {};
@@ -12,8 +24,12 @@ export default function CommunityPage() {
       <section>
         <BlockTitle title="Friends" />
         <div className="space-y-2">
-          {friends.map((f) => (
-            <CommunityCardBase key={f.name} name={f.name} mode="friends" />
+          {friendLists.map((f) => (
+            <CommunityCardBase
+              key={f.friend.id}
+              name={f.friend.name ? f.friend.name : f.inviteeEmail}
+              mode="friends"
+            />
           ))}
         </div>
       </section>

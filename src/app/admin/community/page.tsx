@@ -1,21 +1,14 @@
 "use client";
-import { FriendLists } from "@/schemas/friend";
 import BlockTitle from "../_components/BlockTitle";
-import useFetch from "../_hooks/useFetch";
 import CommunityCardBase from "./_components/CommunityCardBase";
 import Loading from "@/app/_components/Loading";
+import { useCommunityData } from "./_hook/useCommunityData";
 
 export default function CommunityPage() {
-  const { isLoading, error, data } = useFetch<{ friendList: FriendLists }>(
-    "/api/friends",
-  );
+  const { friendLists, invitations, isLoading, error } = useCommunityData();
   if (isLoading) return <Loading />;
   if (error) return <p>エラーが発生しました: {error.message}</p>;
-  if (!data) return <p>データがありません</p>;
-
-  const friendLists: FriendLists = data.friendList;
-
-  const friends = [{ name: "Hina" }, { name: "Hina" }];
+  if (!friendLists || !invitations) return <p>データがありません</p>;
 
   const onClick = () => {};
 
@@ -36,10 +29,10 @@ export default function CommunityPage() {
       <section>
         <BlockTitle title="Invitations" />
         <div className="space-y-2">
-          {friends.map((f) => (
+          {invitations.map((i) => (
             <CommunityCardBase
-              key={f.name}
-              name={f.name}
+              key={i.inviter.id}
+              name={i.inviter.name}
               mode="invitations"
               onClick={onClick}
             />

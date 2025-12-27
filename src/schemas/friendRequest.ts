@@ -21,6 +21,7 @@ export const friendRequestResponseSchema = z.object({
 
 export const friendRequestRecordSchema = z.object({
   friendshipId: z.number(),
+  message: z.string(),
   inviter: inviterUserSchema,
 });
 

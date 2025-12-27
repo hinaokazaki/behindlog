@@ -20,6 +20,7 @@ export const GET = async (request: NextRequest) => {
       },
       select: {
         id: true,
+        message: true,
         user1: {
           select: {
             id: true,
@@ -32,6 +33,7 @@ export const GET = async (request: NextRequest) => {
     // 整形して相手ユーザー情報だけ返す
     const result = friendships.map((f) => ({
       friendshipId: f.id,
+      message: f.message,
       inviter: f.user1,
     }));
 

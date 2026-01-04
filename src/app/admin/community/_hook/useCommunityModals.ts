@@ -1,11 +1,6 @@
 import { useState } from "react";
 import { FriendList } from "@/schemas/friend";
-
-type Invitation = {
-  friendshipId: number;
-  inviter: { id: string; name: string | null };
-  message: string;
-};
+import { FriendRequestrecord } from "@/schemas/friendRequest";
 
 export const useCommunityModals = () => {
   // 招待送信モーダル
@@ -15,8 +10,8 @@ export const useCommunityModals = () => {
 
   // 招待詳細（承認/拒否）モーダル
   const [selectedInvitation, setSelectedInvitation] =
-    useState<Invitation | null>(null);
-  const openInvitation = (invitation: Invitation) =>
+    useState<FriendRequestrecord | null>(null);
+  const openInvitation = (invitation: FriendRequestrecord) =>
     setSelectedInvitation(invitation);
   const closeInvitation = () => setSelectedInvitation(null);
 

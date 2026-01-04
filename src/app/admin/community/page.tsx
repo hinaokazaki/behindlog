@@ -23,7 +23,8 @@ const requestSchema = z.object({
 export default function CommunityPage() {
   const modals = useCommunityModals();
   const actions = useCommunityActions();
-  const { friendLists, invitations, isLoading, error } = useCommunityData();
+  const { friendLists, invitations, isLoading, error, refetch } =
+    useCommunityData();
 
   const fields: FieldProps[] = [
     {
@@ -70,7 +71,12 @@ export default function CommunityPage() {
 
   const handleRequest = async (data: CreateFriendRequest) => {
     try {
-      await actions.invite(data, { onSuccess: modals.closeInvite });
+      await actions.invite(data, {
+        onSuccess: async () => {
+          modals.closeInvite();
+          await refetch();
+        },
+      });
     } catch (error) {
       console.log("友達リクエストの送信に失敗しました");
     }
@@ -78,7 +84,12 @@ export default function CommunityPage() {
 
   const handleAccept = async (friendshipId: number) => {
     try {
-      await actions.accept(friendshipId, { onSuccess: modals.closeInvitation });
+      await actions.accept(friendshipId, {
+        onSuccess: async () => {
+          modals.closeInvitation();
+          await refetch();
+        },
+      });
     } catch (error) {
       console.log("友達の承認に失敗しました");
     }
@@ -87,7 +98,10 @@ export default function CommunityPage() {
   const handleDecline = async (friendshipId: number) => {
     try {
       await actions.decline(friendshipId, {
-        onSuccess: modals.closeInvitation,
+        onSuccess: async () => {
+          modals.closeInvitation();
+          await refetch();
+        },
       });
     } catch (error) {
       console.log("友達リクエストの拒否に失敗しました");
@@ -98,7 +112,10 @@ export default function CommunityPage() {
     if (!modals.selectedFriend) return;
     try {
       await actions.deleteFriend(modals.selectedFriend.id, {
-        onSuccess: modals.closeDelete,
+        onSuccess: async () => {
+          modals.closeDelete();
+          await refetch();
+        },
       });
     } catch (error) {
       console.log("友達の削除に失敗しました");

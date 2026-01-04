@@ -34,6 +34,7 @@ export const friendRequestRecordsResponseSchema = z.object({
 //型を作成
 export type FriendRequest = z.infer<typeof friendRequestSchema>;
 export type FriendRequestResponse = z.infer<typeof friendRequestResponseSchema>;
+export type FriendRequestrecord = z.infer<typeof friendRequestRecordSchema>;
 export type FriendRequestrecords = z.infer<typeof friendRequestRecordsSchema>;
 export type FriendRequestRecordsResponse = z.infer<
   typeof friendRequestRecordsResponseSchema

@@ -81,6 +81,7 @@ export type FriendListsResponse = z.infer<typeof friendListsResponseSchema>;
 export type FriendResponse = z.infer<typeof friendResponseSchema>;
 export type FriendInvite = z.infer<typeof friendInviteSchema>;
 export type FriendInviteResponse = z.infer<typeof friendInviteResponseSchema>;
+export type FriendRequest = z.infer<typeof createFriendRequestSchema>;
 export type CreateFriendRequest = z.infer<typeof createFriendRequestSchema>;
 export type UpdateFriendRequest = z.infer<typeof updateFriendRequestSchema>;
 export type ReceiveFriendRequest = z.infer<typeof receiveFriendRequestSchema>;

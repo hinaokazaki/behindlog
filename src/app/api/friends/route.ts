@@ -12,7 +12,6 @@ import { ErrorResponse } from "@/schemas/common";
 export const GET = async (request: NextRequest) => {
   try {
     const user = await getLoggedInUser(request);
-    console.log(user);
 
     const friendships = await prisma.friendship.findMany({
       where: {
@@ -47,9 +46,7 @@ export const GET = async (request: NextRequest) => {
       };
     });
 
-    console.log(result);
     const safeResult: FriendLists = friendsListsSchema.parse(result);
-    console.log(safeResult);
     return NextResponse.json<FriendListsResponse>(
       { friendList: safeResult },
       { status: 200 },

@@ -24,7 +24,7 @@ export const friendInfoSchema = z.object({
 export const friendsListSchema = z.object({
   id: z.number(),
   status: z.enum(["PENDING", "ACCEPTED", "DECLINED"]),
-  inviteeEmail: z.string(),
+  inviteeEmail: z.string().email(),
   friend: friendInfoSchema,
 });
 

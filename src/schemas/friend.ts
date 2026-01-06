@@ -25,7 +25,7 @@ export const friendsListSchema = z.object({
   id: z.number(),
   status: z.enum(["PENDING", "ACCEPTED", "DECLINED"]),
   inviteeEmail: z.string().email(),
-  friend: friendInfoSchema,
+  friend: friendInfoSchema.nullable(),
 });
 
 export const friendsListsSchema = z.array(friendsListSchema);
@@ -41,7 +41,7 @@ export const friendInviteSchema = z.object({
 //// リクエスト用
 // invite
 export const createFriendRequestSchema = z.object({
-  inviteeEmail: z.string(),
+  inviteeEmail: z.string().email(),
   message: z.string(),
 });
 

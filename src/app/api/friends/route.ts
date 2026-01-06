@@ -46,7 +46,7 @@ export const GET = async (request: NextRequest) => {
       };
     });
 
-    const safeResult: FriendLists = friendsListsSchema.parse(result);
+    const safeResult: FriendLists = result;
     return NextResponse.json<FriendListsResponse>(
       { friendList: safeResult },
       { status: 200 },

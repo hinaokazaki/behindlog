@@ -9,9 +9,7 @@ import {
   Friend,
   FriendInvite,
   FriendInviteResponse,
-  friendInviteSchema,
   FriendResponse,
-  friendSchema,
 } from "@/schemas/friend";
 import { withUserTimezone } from "@/lib/timezone";
 import { ErrorResponse } from "@/schemas/common";
@@ -98,13 +96,13 @@ export const POST = async (request: NextRequest) => {
         },
       });
 
-      const safeFriendship: Friend = friendSchema.parse(
-        withUserTimezone(
-          friendship,
-          ["createdAt", "updatedAt", "respondedAt"],
-          user.timezone,
-        ),
+      const converted = withUserTimezone(
+        friendship,
+        ["createdAt", "updatedAt", "respondedAt"],
+        user.timezone,
       );
+
+      const safeFriendship: Friend = converted;
 
       return NextResponse.json<FriendResponse>(
         { friendship: safeFriendship },
@@ -150,13 +148,13 @@ export const POST = async (request: NextRequest) => {
         );
       }
 
-      const safeFriendship: Friend = friendSchema.parse(
-        withUserTimezone(
-          friendship,
-          ["createdAt", "updatedAt", "respondedAt"],
-          user.timezone,
-        ),
+      const converted = withUserTimezone(
+        friendship,
+        ["createdAt", "updatedAt", "respondedAt"],
+        user.timezone,
       );
+
+      const safeFriendship: Friend = converted;
 
       return NextResponse.json<FriendResponse>(
         { friendship: safeFriendship },
@@ -202,8 +200,7 @@ export const GET = async (request: NextRequest) => {
       alreadyRegistered: friendShip.userId2 !== null,
     };
 
-    const safeFriendInvite: FriendInvite =
-      friendInviteSchema.parse(friendInvite);
+    const safeFriendInvite: FriendInvite = friendInvite;
 
     return NextResponse.json<FriendInviteResponse>(
       { friendInvite: safeFriendInvite },

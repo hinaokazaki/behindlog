@@ -1,11 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
-import {
-  FriendLists,
-  FriendListsResponse,
-  friendsListsSchema,
-} from "@/schemas/friend";
+import { FriendLists, FriendListsResponse } from "@/schemas/friend";
 import { ErrorResponse } from "@/schemas/common";
 
 // GET: /friends ユーザー_友達一覧取得

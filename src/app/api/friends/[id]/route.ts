@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
 import { withUserTimezone } from "@/lib/timezone";
-import { Friend, FriendResponse, friendSchema } from "@/schemas/friend";
+import { Friend, FriendResponse } from "@/schemas/friend";
 import { ErrorResponse, StatusResponse } from "@/schemas/common";
 
 // PATCH: /api/friends/:id ユーザー_友達申請承認
@@ -33,13 +33,13 @@ export const PATCH = async (
       },
     });
 
-    const safeFriendship: Friend = friendSchema.parse(
-      withUserTimezone(
-        friendship,
-        ["createdAt", "updatedAt", "respondedAt"],
-        user.timezone,
-      ),
+    const converted = withUserTimezone(
+      friendship,
+      ["createdAt", "updatedAt", "respondedAt"],
+      user.timezone,
     );
+
+    const safeFriendship: Friend = converted;
 
     return NextResponse.json<FriendResponse>(
       { friendship: safeFriendship },

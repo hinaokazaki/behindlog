@@ -4,7 +4,6 @@ import { getLoggedInUser } from "@/utils/auth";
 import {
   FriendRequestrecords,
   FriendRequestRecordsResponse,
-  friendRequestRecordsSchema,
 } from "@/schemas/friendRequest";
 import { ErrorResponse } from "@/schemas/common";
 
@@ -37,8 +36,7 @@ export const GET = async (request: NextRequest) => {
       inviter: f.user1,
     }));
 
-    const safeResult: FriendRequestrecords =
-      friendRequestRecordsSchema.parse(result);
+    const safeResult: FriendRequestrecords = result;
 
     return NextResponse.json<FriendRequestRecordsResponse>(
       { invitations: safeResult },

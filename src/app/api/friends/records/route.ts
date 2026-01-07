@@ -8,6 +8,7 @@ import {
   monthlyRecordsSchema,
 } from "@/schemas/monthlyRecords";
 import { ErrorResponse } from "@/schemas/common";
+import z from "zod";
 
 // GET: /friends/records?month=YYYY-MM ユーザー_記録保持者月別一覧取得(自分と友達両方)
 
@@ -17,7 +18,8 @@ export const GET = async (request: NextRequest) => {
 
     // URLからmonth=YYYY-MMを取得
     const { searchParams } = new URL(request.url);
-    const month = searchParams.get("month");
+    const monthSchema = z.string().regex(/^\d{4}-\d{2}$/);
+    const month = monthSchema.parse(searchParams.get("month"));
     if (!month) {
       return NextResponse.json({ error: "month is required" }, { status: 400 });
     }
@@ -78,13 +80,13 @@ export const GET = async (request: NextRequest) => {
       {} as Record<string, { id: string; name: string | null }[]>,
     );
 
-    const response: MonthlyRecords = monthlyRecordsSchema.parse({
+    const response: MonthlyRecords = {
       month,
-      records: Object.entries(grouped).map(([date, users]) => ({
+      record: Object.entries(grouped).map(([date, users]) => ({
         date,
         users,
       })),
-    });
+    };
 
     return NextResponse.json<MonthlyRecordsResponse>(
       { monthlyRecords: response },

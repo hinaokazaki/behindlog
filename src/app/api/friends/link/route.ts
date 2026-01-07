@@ -5,7 +5,6 @@ import { getLoggedInUser } from "@/utils/auth";
 import {
   Friend,
   FriendResponse,
-  friendSchema,
   ReceiveFriendRequest,
   receiveFriendRequestSchema,
 } from "@/schemas/friend";
@@ -35,13 +34,12 @@ export const PATCH = async (request: NextRequest) => {
       },
     });
 
-    const safeFriendship: Friend = friendSchema.parse(
-      withUserTimezone(
-        friendship,
-        ["createdAt", "updatedAt", "respondedAt"],
-        user.timezone,
-      ),
+    const converted = withUserTimezone(
+      friendship,
+      ["createdAt", "updatedAt", "respondedAt"],
+      user.timezone,
     );
+    const safeFriendship: Friend = converted;
 
     return NextResponse.json<FriendResponse>(
       { friendship: safeFriendship },

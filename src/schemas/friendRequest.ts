@@ -4,7 +4,7 @@ import { z } from "zod";
 // user(id, name)
 export const inviterUserSchema = z.object({
   id: z.string(),
-  name: z.string(),
+  name: z.string().nullable(),
 });
 
 // レスポンス用

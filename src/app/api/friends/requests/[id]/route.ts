@@ -1,11 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
-import {
-  FriendRequest,
-  FriendRequestResponse,
-  friendRequestSchema,
-} from "@/schemas/friendRequest";
+import { FriendRequest, FriendRequestResponse } from "@/schemas/friendRequest";
 import { ErrorResponse } from "@/schemas/common";
 
 // GET: /friends/requests/:id ユーザー_友達招待,申請取得（受けた側）
@@ -47,7 +43,7 @@ export const GET = async (
       inviter: invitation.user1,
     };
 
-    const safeResult: FriendRequest = friendRequestSchema.parse(result);
+    const safeResult: FriendRequest = result;
 
     return NextResponse.json<FriendRequestResponse>(
       { invitation: safeResult },

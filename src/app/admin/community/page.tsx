@@ -128,15 +128,19 @@ export default function CommunityPage() {
       <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
         <BlockTitle title="Friends" />
         <div className="space-y-2">
-          {friendLists.map((f) => (
-            <>
+          {friendLists.map((f) => {
+            const isAccepted = f.status === "ACCEPTED";
+
+            return (
               <CommunityCardBase
-                key={f.friend.id}
-                name={f.friend.name ? f.friend.name : f.inviteeEmail}
-                mode={
-                  f.status === "PENDING" ? "requestSent" : "requestAccepted"
+                key={f.id}
+                name={
+                  isAccepted && f.friend
+                    ? (f.friend.name ?? f.inviteeEmail)
+                    : f.inviteeEmail
                 }
-                onClick={f.status === "ACCEPTED" ? onClick : undefined}
+                mode={isAccepted ? "requestAccepted" : "requestSent"}
+                onClick={isAccepted ? onClick : undefined}
                 rightSlot={
                   <button
                     type="button"
@@ -156,8 +160,8 @@ export default function CommunityPage() {
                   </button>
                 }
               />
-            </>
-          ))}
+            );
+          })}
         </div>
         <div className="mt-4">
           <button
@@ -185,7 +189,7 @@ export default function CommunityPage() {
             invitations.map((invitation) => (
               <CommunityCardBase
                 key={invitation.inviter.id}
-                name={invitation.inviter.name}
+                name={invitation.inviter.name ?? invitation.inviter.id}
                 mode="requestReceived"
                 onClick={() => modals.openInvitation(invitation)}
               />

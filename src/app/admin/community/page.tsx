@@ -2,7 +2,6 @@
 import BlockTitle from "../_components/BlockTitle";
 import CommunityCardBase from "./_components/CommunityCardBase";
 import Loading from "@/app/_components/Loading";
-import { useCommunityData } from "./_hook/useCommunityData";
 import { Modal } from "../_components/Modal";
 import Image from "next/image";
 import { CreateFriendRequest } from "@/schemas/friend";
@@ -14,6 +13,8 @@ import DeleteFriendModal from "./_components/DeleteFriendModal";
 import { useCommunityModals } from "./_hook/useCommunityModals";
 import { useCommunityActions } from "./_hook/useCommunityActions";
 import InvitationModal from "./_components/InvitationModal";
+import { useFriendList } from "./_hook/useFriendList";
+import { useFriendInvitations } from "./_hook/useFriendInvitations";
 
 const requestSchema = z.object({
   message: z.string().min(1, "メッセージを入力してください"),
@@ -23,8 +24,8 @@ const requestSchema = z.object({
 export default function CommunityPage() {
   const modals = useCommunityModals();
   const actions = useCommunityActions();
-  const { friendLists, invitations, isLoading, error, refetch } =
-    useCommunityData();
+  const friends = useFriendList();
+  const friendRequests = useFriendInvitations();
 
   const fields: FieldProps[] = [
     {
@@ -61,9 +62,20 @@ export default function CommunityPage() {
     },
   ];
 
-  if (isLoading) return <Loading />;
-  if (error) return <p>エラーが発生しました: {error.message}</p>;
-  if (!friendLists || !invitations) return <p>データがありません</p>;
+  if (friends.isLoading || friendRequests.isLoading) return <Loading />;
+  if (friends.error)
+    return <p>友達の取得でエラーが発生しました: {friends.error.message}</p>;
+  if (friendRequests.error)
+    return (
+      <p>
+        友達招待の取得でエラーが発生しました: {friendRequests.error.message}
+      </p>
+    );
+  if (!friends.data) return <p>友達のデータがありません</p>;
+  if (!friendRequests.data) return <p>友達招待のデータがありません</p>;
+
+  const friendLists = friends.data.friendList;
+  const invitations = friendRequests.data.invitations;
 
   const onClick = () => {
     actions.router.replace("/"); // 友達のダッシュボードページに飛ぶようにする
@@ -74,7 +86,7 @@ export default function CommunityPage() {
       await actions.invite(data, {
         onSuccess: async () => {
           modals.closeInvite();
-          await refetch();
+          await friendRequests.mutate();
         },
       });
     } catch (error) {
@@ -87,7 +99,7 @@ export default function CommunityPage() {
       await actions.accept(friendshipId, {
         onSuccess: async () => {
           modals.closeInvitation();
-          await refetch();
+          await friends.mutate();
         },
       });
     } catch (error) {
@@ -100,7 +112,7 @@ export default function CommunityPage() {
       await actions.decline(friendshipId, {
         onSuccess: async () => {
           modals.closeInvitation();
-          await refetch();
+          await friends.mutate();
         },
       });
     } catch (error) {
@@ -114,7 +126,7 @@ export default function CommunityPage() {
       await actions.deleteFriend(modals.selectedFriend.id, {
         onSuccess: async () => {
           modals.closeDelete();
-          await refetch();
+          await friends.mutate();
         },
       });
     } catch (error) {

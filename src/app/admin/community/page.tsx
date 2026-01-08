@@ -26,6 +26,8 @@ export default function CommunityPage() {
   const actions = useCommunityActions();
   const friends = useFriendList();
   const friendRequests = useFriendInvitations();
+  // const friendLists = friends.data?.friendList;
+  // const invitations = friendRequests.data?.invitations;
 
   const fields: FieldProps[] = [
     {
@@ -71,11 +73,11 @@ export default function CommunityPage() {
         友達招待の取得でエラーが発生しました: {friendRequests.error.message}
       </p>
     );
-  if (!friends.data) return <p>友達のデータがありません</p>;
-  if (!friendRequests.data) return <p>友達招待のデータがありません</p>;
 
-  const friendLists = friends.data.friendList;
-  const invitations = friendRequests.data.invitations;
+  const friendLists = friends.data?.friendList ?? [];
+  if (friendLists.length === 0) return <p>友達のデータがありません</p>;
+  const invitations = friendRequests.data?.invitations ?? [];
+  if (invitations.length === 0) return <p>友達招待のデータがありません</p>;
 
   const onClick = () => {
     actions.router.replace("/"); // 友達のダッシュボードページに飛ぶようにする

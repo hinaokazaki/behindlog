@@ -75,9 +75,7 @@ export default function CommunityPage() {
     );
 
   const friendLists = friends.data?.friendList ?? [];
-  if (friendLists.length === 0) return <p>友達のデータがありません</p>;
   const invitations = friendRequests.data?.invitations ?? [];
-  if (invitations.length === 0) return <p>友達招待のデータがありません</p>;
 
   const onClick = () => {
     actions.router.replace("/"); // 友達のダッシュボードページに飛ぶようにする
@@ -88,7 +86,7 @@ export default function CommunityPage() {
       await actions.invite(data, {
         onSuccess: async () => {
           modals.closeInvite();
-          await friendRequests.mutate();
+          await friends.mutate();
         },
       });
     } catch (error) {
@@ -102,6 +100,7 @@ export default function CommunityPage() {
         onSuccess: async () => {
           modals.closeInvitation();
           await friends.mutate();
+          await friendRequests.mutate();
         },
       });
     } catch (error) {
@@ -144,15 +143,12 @@ export default function CommunityPage() {
         <div className="space-y-2">
           {friendLists.map((f) => {
             const isAccepted = f.status === "ACCEPTED";
+            const displayName = f.friend?.name ?? f.inviteeEmail;
 
             return (
               <CommunityCardBase
                 key={f.id}
-                name={
-                  isAccepted && f.friend
-                    ? (f.friend.name ?? f.inviteeEmail)
-                    : f.inviteeEmail
-                }
+                name={displayName}
                 mode={isAccepted ? "requestAccepted" : "requestSent"}
                 onClick={isAccepted ? onClick : undefined}
                 rightSlot={
@@ -199,7 +195,9 @@ export default function CommunityPage() {
       <section className="mx-auto w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
         <BlockTitle title="Invitations" />
         <div className="space-y-2">
-          {invitations ? (
+          {invitations.length === 0 ? (
+            <p className="mx-2 text-base font-bold">まだ招待状はありません</p>
+          ) : (
             invitations.map((invitation) => (
               <CommunityCardBase
                 key={invitation.inviter.id}
@@ -208,8 +206,6 @@ export default function CommunityPage() {
                 onClick={() => modals.openInvitation(invitation)}
               />
             ))
-          ) : (
-            <p className="mr-2 text-base">招待状はありません。</p>
           )}
         </div>
       </section>
@@ -219,6 +215,7 @@ export default function CommunityPage() {
         friend={modals.selectedFriend}
         onClose={modals.closeDelete}
         onConfirm={onConfirmDelete}
+        isSubmitting={actions.isSubmitting}
       />
       <Modal isOpen={modals.isInviteOpen} onClose={modals.closeInvite}>
         <div>

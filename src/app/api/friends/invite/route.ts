@@ -9,9 +9,7 @@ import {
   Friend,
   FriendInvite,
   FriendInviteResponse,
-  friendInviteSchema,
   FriendResponse,
-  friendSchema,
 } from "@/schemas/friend";
 import { withUserTimezone } from "@/lib/timezone";
 import { ErrorResponse } from "@/schemas/common";
@@ -42,6 +40,18 @@ export const POST = async (request: NextRequest) => {
   );
 
   try {
+    if (body.inviteeEmail === user.email) {
+      return NextResponse.json(
+        {
+          error: {
+            message: "自分自身にリクエストは送れません",
+            code: "SELF_INVITE",
+          },
+        },
+        { status: 400 },
+      );
+    }
+
     const invitedUser = await prisma.user.findUnique({
       where: {
         email: body.inviteeEmail,
@@ -49,6 +59,32 @@ export const POST = async (request: NextRequest) => {
     });
 
     if (invitedUser) {
+      // 既存の関係チェック（向き関係なし）
+      const existing = await prisma.friendship.findFirst({
+        where: {
+          OR: [
+            { userId1: user.id, userId2: invitedUser.id },
+            { userId1: invitedUser.id, userId2: user.id },
+          ],
+        },
+      });
+
+      if (existing) {
+        if (existing.status === "ACCEPTED") {
+          return NextResponse.json(
+            { error: "すでに友達です" },
+            { status: 409 },
+          );
+        }
+
+        if (existing.status === "PENDING") {
+          return NextResponse.json(
+            { error: "すでに友達リクエストが存在します" },
+            { status: 409 },
+          );
+        }
+      }
+
       const friendship = await prisma.friendship.create({
         data: {
           userId1: user.id,
@@ -60,13 +96,13 @@ export const POST = async (request: NextRequest) => {
         },
       });
 
-      const safeFriendship: Friend = friendSchema.parse(
-        withUserTimezone(
-          friendship,
-          ["createdAt", "updatedAt", "respondedAt"],
-          user.timezone,
-        ),
+      const converted = withUserTimezone(
+        friendship,
+        ["createdAt", "updatedAt", "respondedAt"],
+        user.timezone,
       );
+
+      const safeFriendship: Friend = converted;
 
       return NextResponse.json<FriendResponse>(
         { friendship: safeFriendship },
@@ -74,6 +110,22 @@ export const POST = async (request: NextRequest) => {
       );
     } else {
       const token = uuidv4();
+      // すでに同じ相手に招待を送っていないか確認
+      const existingEmailInvite = await prisma.friendship.findFirst({
+        where: {
+          inviterUserId: user.id,
+          inviteeEmail: body.inviteeEmail,
+          status: "PENDING",
+        },
+      });
+
+      if (existingEmailInvite) {
+        return NextResponse.json(
+          { error: "すでに招待中です" },
+          { status: 409 },
+        );
+      }
+
       const friendship = await prisma.friendship.create({
         data: {
           userId1: user.id,
@@ -96,13 +148,13 @@ export const POST = async (request: NextRequest) => {
         );
       }
 
-      const safeFriendship: Friend = friendSchema.parse(
-        withUserTimezone(
-          friendship,
-          ["createdAt", "updatedAt", "respondedAt"],
-          user.timezone,
-        ),
+      const converted = withUserTimezone(
+        friendship,
+        ["createdAt", "updatedAt", "respondedAt"],
+        user.timezone,
       );
+
+      const safeFriendship: Friend = converted;
 
       return NextResponse.json<FriendResponse>(
         { friendship: safeFriendship },
@@ -148,8 +200,7 @@ export const GET = async (request: NextRequest) => {
       alreadyRegistered: friendShip.userId2 !== null,
     };
 
-    const safeFriendInvite: FriendInvite =
-      friendInviteSchema.parse(friendInvite);
+    const safeFriendInvite: FriendInvite = friendInvite;
 
     return NextResponse.json<FriendInviteResponse>(
       { friendInvite: safeFriendInvite },

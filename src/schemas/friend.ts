@@ -24,8 +24,11 @@ export const friendInfoSchema = z.object({
 export const friendsListSchema = z.object({
   id: z.number(),
   status: z.enum(["PENDING", "ACCEPTED", "DECLINED"]),
-  friend: friendInfoSchema,
+  inviteeEmail: z.string().email(),
+  friend: friendInfoSchema.nullable(),
 });
+
+export const friendsListsSchema = z.array(friendsListSchema);
 
 // GET: /friends/invite?token=xxxx ユーザー_招待お知らせ情報取得用
 export const friendInviteSchema = z.object({
@@ -38,7 +41,7 @@ export const friendInviteSchema = z.object({
 //// リクエスト用
 // invite
 export const createFriendRequestSchema = z.object({
-  inviteeEmail: z.string(),
+  inviteeEmail: z.string().email(),
   message: z.string(),
 });
 
@@ -62,8 +65,8 @@ export const friendInviteResponseSchema = z.object({
   friendInvite: friendInviteSchema,
 });
 
-export const friendListResponseSchema = z.object({
-  friendList: friendsListSchema,
+export const friendListsResponseSchema = z.object({
+  friendList: friendsListsSchema,
 });
 
 export const friendLinkResponseSchema = z.object({
@@ -73,10 +76,12 @@ export const friendLinkResponseSchema = z.object({
 //// 型を作成
 export type Friend = z.infer<typeof friendSchema>;
 export type FriendList = z.infer<typeof friendsListSchema>;
-export type FriendListResponse = z.infer<typeof friendListResponseSchema>;
+export type FriendLists = z.infer<typeof friendsListsSchema>;
+export type FriendListsResponse = z.infer<typeof friendListsResponseSchema>;
 export type FriendResponse = z.infer<typeof friendResponseSchema>;
 export type FriendInvite = z.infer<typeof friendInviteSchema>;
 export type FriendInviteResponse = z.infer<typeof friendInviteResponseSchema>;
+export type FriendRequest = z.infer<typeof createFriendRequestSchema>;
 export type CreateFriendRequest = z.infer<typeof createFriendRequestSchema>;
 export type UpdateFriendRequest = z.infer<typeof updateFriendRequestSchema>;
 export type ReceiveFriendRequest = z.infer<typeof receiveFriendRequestSchema>;

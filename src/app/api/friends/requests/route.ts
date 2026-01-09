@@ -2,9 +2,8 @@ import { NextResponse, NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
 import {
-  FriendRequests,
-  FriendRequestsResponse,
-  friendRequestsSchema,
+  FriendRequestrecords,
+  FriendRequestRecordsResponse,
 } from "@/schemas/friendRequest";
 import { ErrorResponse } from "@/schemas/common";
 
@@ -20,6 +19,7 @@ export const GET = async (request: NextRequest) => {
       },
       select: {
         id: true,
+        message: true,
         user1: {
           select: {
             id: true,
@@ -32,12 +32,13 @@ export const GET = async (request: NextRequest) => {
     // 整形して相手ユーザー情報だけ返す
     const result = friendships.map((f) => ({
       friendshipId: f.id,
+      message: f.message,
       inviter: f.user1,
     }));
 
-    const safeResult: FriendRequests = friendRequestsSchema.parse(result);
+    const safeResult: FriendRequestrecords = result;
 
-    return NextResponse.json<FriendRequestsResponse>(
+    return NextResponse.json<FriendRequestRecordsResponse>(
       { invitations: safeResult },
       { status: 200 },
     );

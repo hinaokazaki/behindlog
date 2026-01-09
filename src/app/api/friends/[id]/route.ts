@@ -1,14 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
-import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
-import {
-  Friend,
-  FriendResponse,
-  friendSchema,
-  UpdateFriendRequest,
-  updateFriendRequestSchema,
-} from "@/schemas/friend";
+import { withUserTimezone } from "@/lib/timezone";
+import { Friend, FriendResponse } from "@/schemas/friend";
 import { ErrorResponse, StatusResponse } from "@/schemas/common";
 
 // PATCH: /api/friends/:id ユーザー_友達申請承認
@@ -19,31 +13,33 @@ export const PATCH = async (
   const { id } = params;
   try {
     const user = await getLoggedInUser(request);
-    const body: UpdateFriendRequest = updateFriendRequestSchema.parse(
-      await request.json(),
-    );
-    const parsed = withUserDateParse(body, ["respondedAt"], user.timezone);
 
-    // status確認
-    if (parsed.status !== "ACCEPTED" && parsed.status !== "DECLINED") {
-      return NextResponse.json({ error: "invalid status" }, { status: 400 });
-    }
-
-    const friendship = await prisma.friendship.update({
+    const pending = await prisma.friendship.findFirst({
       where: {
         id: Number(id),
         userId2: user.id,
+        status: "PENDING",
       },
-      data: parsed,
+    });
+    if (!pending) {
+      return NextResponse.json({ error: "request not found" }, { status: 404 });
+    }
+
+    const friendship = await prisma.friendship.update({
+      where: { id: pending.id },
+      data: {
+        status: "ACCEPTED",
+        respondedAt: new Date(),
+      },
     });
 
-    const safeFriendship: Friend = friendSchema.parse(
-      withUserTimezone(
-        friendship,
-        ["createdAt", "updatedAt", "respondedAt"],
-        user.timezone,
-      ),
+    const converted = withUserTimezone(
+      friendship,
+      ["createdAt", "updatedAt", "respondedAt"],
+      user.timezone,
     );
+
+    const safeFriendship: Friend = converted;
 
     return NextResponse.json<FriendResponse>(
       { friendship: safeFriendship },

@@ -1,11 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
-import {
-  FriendList,
-  FriendListResponse,
-  friendsListSchema,
-} from "@/schemas/friend";
+import { FriendLists, FriendListsResponse } from "@/schemas/friend";
 import { ErrorResponse } from "@/schemas/common";
 
 // GET: /friends ユーザー_友達一覧取得
@@ -29,6 +25,7 @@ export const GET = async (request: NextRequest) => {
       select: {
         id: true,
         status: true,
+        inviteeEmail: true,
         user1: { select: { id: true, name: true } },
         user2: { select: { id: true, name: true } },
       },
@@ -40,18 +37,19 @@ export const GET = async (request: NextRequest) => {
       return {
         id: f.id,
         status: f.status,
+        inviteeEmail: f.inviteeEmail,
         friend,
       };
     });
 
-    const safeResult: FriendList = friendsListSchema.parse(result);
-
-    return NextResponse.json<FriendListResponse>(
+    const safeResult: FriendLists = result;
+    return NextResponse.json<FriendListsResponse>(
       { friendList: safeResult },
       { status: 200 },
     );
   } catch (error) {
     if (error instanceof Error) {
+      console.error("ZodError:", error);
       return NextResponse.json<ErrorResponse>(
         { error: error.message },
         { status: 400 },

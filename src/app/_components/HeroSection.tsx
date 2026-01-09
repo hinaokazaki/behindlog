@@ -11,18 +11,18 @@ export const HeroSection = ({ mode = "lp" }: HeroSectionProps) => {
   const showButtons = mode !== "invite";
   const text = {
     lp: {
-      fontSixeH1: "text-heading-1",
-      fontSixep: "text-subtitle",
+      fontSizeH1: "text-heading-1",
+      fontSizep: "text-subtitle",
       fontCenter: "md:text-left",
     },
     invite: {
-      fontSixeH1: "text-subtitle-top",
-      fontSixep: "text-body",
+      fontSizeH1: "text-subtitle-top",
+      fontSizep: "text-body",
       fontCenter: "md:text-center",
     },
     mobile: {
-      fontSixeH1: "text-subtitle-top",
-      fontSixep: "text-body",
+      fontSizeH1: "text-subtitle-top",
+      fontSizep: "text-body",
       fontCenter: "md:text-center",
     },
   }[mode];
@@ -38,22 +38,22 @@ export const HeroSection = ({ mode = "lp" }: HeroSectionProps) => {
       <div className={`text-center md:text-left ${text.fontCenter}`}>
         <div>
           <p
-            className={`mt-4 text-body font-bold text-primary ${text.fontSixeH1}`}
+            className={`mt-4 text-body font-bold text-primary ${text.fontSizeH1}`}
           >
             成功の裏側を毎日記録、
           </p>
-          <p className={`text-body font-bold text-primary ${text.fontSixeH1}`}>
+          <p className={`text-body font-bold text-primary ${text.fontSizeH1}`}>
             あなたの努力が誰かの支えに
           </p>
         </div>
         <div>
           <p
-            className={`mt-4 text-body font-bold text-foreground ${text.fontSixep}`}
+            className={`mt-4 text-body font-bold text-foreground ${text.fontSizep}`}
           >
             仲間と記録を共有して、続ける力に変えよう。
           </p>
           <p
-            className={`text-body font-bold text-foreground ${text.fontSixep}`}
+            className={`text-body font-bold text-foreground ${text.fontSizep}`}
           >
             目標に向かう大人のための継続支援サービス。
           </p>

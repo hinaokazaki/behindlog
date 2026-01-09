@@ -57,8 +57,8 @@ export default function Login() {
   };
 
   return (
-    <div className="m-auto my-[84px] w-[450px] p-1">
-      <SectionTitle title="Login" />
+    <div className="m-auto my-[168px] w-[450px] p-1">
+      <SectionTitle title="Login" isPublic />
       <Form
         fields={fields}
         buttons={buttons}

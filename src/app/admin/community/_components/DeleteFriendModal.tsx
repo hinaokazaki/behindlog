@@ -37,7 +37,7 @@ const DeleteFriendModal: React.FC<Props> = ({
                 className="mx-2"
               />
               <span className="mr-2 text-base font-bold">
-                {friend.friend.name}
+                {friend.friend ? friend.friend.name : friend.inviteeEmail}
               </span>
               を友達リストから削除しますか？
             </p>

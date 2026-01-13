@@ -48,19 +48,19 @@ export const GET = async (
       );
     }
 
-    const safeDailyRecord: UserRecord = userRecordSchema.parse(
-      withUserTimezone(
-        record,
-        [
-          "createdAt",
-          "updatedAt",
-          "recordedDate",
-          "commitStartDate",
-          "commitEndDate",
-        ],
-        user.timezone,
-      ),
+    const converted = withUserTimezone(
+      record,
+      [
+        "createdAt",
+        "updatedAt",
+        "recordedDate",
+        "commitStartDate",
+        "commitEndDate",
+      ],
+      user.timezone,
     );
+
+    const safeDailyRecord: UserRecord = converted;
 
     return NextResponse.json<UserRecordResponse>(
       { dailyRecord: safeDailyRecord },

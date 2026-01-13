@@ -11,7 +11,7 @@ type Options = {
   onSuccess?: () => void;
 };
 
-export const useCommunityActions = () => {
+export const useGoalActions = () => {
   const { callApi } = useApi();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);

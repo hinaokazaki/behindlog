@@ -33,13 +33,13 @@ export const GET = async (
       );
     }
 
-    const safeGoal: Goal = goalSchema.parse(
-      withUserTimezone(
-        goal,
-        ["deadline", "createdAt", "updatedAt"],
-        user.timezone,
-      ),
+    const converted = withUserTimezone(
+      goal,
+      ["deadline", "createdAt", "updatedAt"],
+      user.timezone,
     );
+
+    const safeGoal: Goal = converted;
 
     return NextResponse.json<GoalResponse>({ goal: safeGoal }, { status: 200 });
   } catch (error) {
@@ -73,13 +73,13 @@ export const PATCH = async (
       data: parsed,
     });
 
-    const safeGoal: Goal = goalSchema.parse(
-      withUserTimezone(
-        goal,
-        ["deadline", "createdAt", "updatedAt"],
-        user.timezone,
-      ),
+    const converted = withUserTimezone(
+      goal,
+      ["deadline", "createdAt", "updatedAt"],
+      user.timezone,
     );
+
+    const safeGoal: Goal = converted;
 
     return NextResponse.json<GoalResponse>({ goal: safeGoal }, { status: 200 });
   } catch (error) {

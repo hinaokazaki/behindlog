@@ -11,13 +11,14 @@ import {
   Control,
   Controller,
 } from "react-hook-form";
+import { DateRangePicker } from "./DaterangePicker";
 
 type Option = { value: string; label: string };
 
 type FormFieldProps<T extends FieldValues> = {
   name: Path<T>;
   title: string;
-  type: "text" | "textarea" | "select" | "date" | "email" | "password";
+  type: "text" | "textarea" | "select" | "dateRange" | "email" | "password";
   register: UseFormRegister<T>;
   control: Control<T>;
   error?: string;
@@ -53,8 +54,17 @@ const FormField = <T extends FieldValues>({
             />
           )}
         />
-      ) : type === "date" ? (
-        <input id={name} type="date" {...register(name)} {...inputProps} />
+      ) : type === "dateRange" ? (
+        <Controller
+          name={name}
+          control={control}
+          render={({ field }) => (
+            <DateRangePicker
+              value={field.value ?? { from: null, to: null }}
+              onChange={field.onChange}
+            />
+          )}
+        />
       ) : (
         <Input id={name} type={type} {...register(name)} {...inputProps} />
       )}

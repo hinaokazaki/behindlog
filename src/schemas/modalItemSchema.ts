@@ -12,4 +12,4 @@ export const modalItemSchema = z.object({
     }),
 });
 
-export type modalItemSchema = z.infer<typeof modalItemSchema>;
+export type modalItemForm = z.infer<typeof modalItemSchema>;

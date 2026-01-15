@@ -3,11 +3,12 @@ import BlockTitle from "../../_components/BlockTitle";
 import { CreateGoalRequest, Goals } from "@/schemas/goal";
 import AddNewButton from "../../_components/AddNewButton";
 import GoalCardBase from "./GoalCardBase";
-import GoalEditButtons from "./GoalEditButtons";
+import EditButtons from "./EditButtons";
 import { useGoalQuery } from "../../_hooks/useGoalQuery";
 import Loading from "@/app/_components/Loading";
 import DeleteGoalModal from "./DeleteGoalModal";
 import { useGoalActions } from "../../_hooks/useGoalActions";
+import { useEditModals } from "../_hooks/useEditModals";
 
 interface Props {
   // goals: Goals;
@@ -17,6 +18,7 @@ interface Props {
 const GoalSection: React.FC<Props> = ({}) => {
   const goalsData = useGoalQuery();
   const actions = useGoalActions();
+  const modals = useEditModals();
 
   if (goalsData.isLoading) return <Loading />;
   if (goalsData.error)
@@ -28,7 +30,7 @@ const GoalSection: React.FC<Props> = ({}) => {
     try {
       await actions.create(data, {
         onSuccess: async () => {
-          // modal close action
+          modals.closeCreateGoal();
           await goalsData.mutate();
         },
       });
@@ -41,7 +43,7 @@ const GoalSection: React.FC<Props> = ({}) => {
     try {
       await actions.update(goalId, data, {
         onSuccess: async () => {
-          // modal close action
+          modals.closeUpdateGoal();
           await goalsData.mutate();
         },
       });
@@ -54,7 +56,7 @@ const GoalSection: React.FC<Props> = ({}) => {
     try {
       await actions.deleteGoal(goalId, {
         onSuccess: async () => {
-          // modal close action
+          modals.closeDeleteGoal();
           await goalsData.mutate();
         },
       });
@@ -73,7 +75,7 @@ const GoalSection: React.FC<Props> = ({}) => {
             deadline={g.deadline}
             onClick={() => handleEdit()}
             rightSlot={
-              <GoalEditButtons
+              <EditButtons
                 handleEdit={() => handleEdit()}
                 handleDelete={() => handleDelete()}
               />

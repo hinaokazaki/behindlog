@@ -9,6 +9,8 @@ import Loading from "@/app/_components/Loading";
 import DeleteGoalModal from "./DeleteGoalModal";
 import { useGoalActions } from "../../_hooks/useGoalActions";
 import { useEditModals } from "../_hooks/useEditModals";
+import { EditModal } from "../../_components/EditModal";
+import { ButtonProps, FieldProps } from "@/app/_types/type";
 
 interface Props {
   // goals: Goals;
@@ -19,6 +21,41 @@ const GoalSection: React.FC<Props> = ({}) => {
   const goalsData = useGoalQuery();
   const actions = useGoalActions();
   const modals = useEditModals();
+
+  const fields: FieldProps[] = [
+    {
+      name: "goal",
+      title: "目標",
+      type: "text",
+      inputProps: { placeholder: "目標を決めよう！" },
+    },
+    {
+      name: "deadline",
+      title: "期限",
+      type: "dateRange",
+      inputProps: { placeholder: "期限を選択してください" },
+    },
+  ];
+
+  const createModalButtons: ButtonProps[] = [
+    {
+      children: "キャンセル",
+      className: "",
+      type: "button",
+      disabled: actions.isSubmitting,
+      onClick: modals.closeCreateGoal || modals.closeCreateTodo,
+      color: "red",
+      variant: "outlined",
+    },
+    {
+      children: "作成",
+      className: "",
+      type: "submit",
+      disabled: actions.isSubmitting,
+      color: "red",
+      variant: "filled",
+    },
+  ];
 
   if (goalsData.isLoading) return <Loading />;
   if (goalsData.error)
@@ -69,28 +106,45 @@ const GoalSection: React.FC<Props> = ({}) => {
     <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
       <BlockTitle title="Goal" />
       <div className="space-y-2">
-        {goals.map((g) => {
+        {goals.map((g) => (
           <GoalCardBase
             goal={g.title}
             deadline={g.deadline}
-            onClick={() => handleEdit()}
+            onClick={() => modals.openUpdateGoal}
             rightSlot={
               <EditButtons
-                handleEdit={() => handleEdit()}
-                handleDelete={() => handleDelete()}
+                handleEdit={() => modals.openUpdateGoal(g)}
+                handleDelete={() => modals.openDeleteGoal(g)}
               />
             }
-          />;
-        })}
+          />
+        ))}
       </div>
-      <AddNewButton label="目標を追加" handleAdding={() => handleAdding()} />
+      <AddNewButton
+        label="目標を追加"
+        handleAdding={() => modals.openCreateGoal()}
+      />
+
+      <EditModal 
+        modalTitle="新しい目標"
+        isOpen={modals.isCreateGoalOpen}
+        onClose={modals.closeCreateGoal}
+        onSubmit={() => {
+          handleAdding;
+        }}
+        buttons={createModalButtons}
+        fields={fields}
+      />
 
       <DeleteGoalModal
-        isOpen={}
-        goal={}
-        onClose={}
-        onConfirm={() => handleDelete()}
-        isSubmitting={}
+        isOpen={modals.isDeleteGoalOpen}
+        goal={modals.selectedGoal}
+        onClose={() => modals.closeDeleteGoal()}
+        onConfirm={() => {
+          if (!modals.selectedGoal) return;
+          handleDelete(modals.selectedGoal.id)}
+        }
+        isSubmitting={actions.isSubmitting}
       />
     </section>
   );

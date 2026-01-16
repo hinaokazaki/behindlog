@@ -34,10 +34,12 @@ export const useEditModals = () => {
 
     // 目標編集モーダル
     selectedGoal,
+    isUpdateGoalOpen: !!selectedGoal,
     openUpdateGoal,
     closeUpdateGoal,
 
     // 目標削除モーダル
+    isDeleteGoalOpen: !!selectedGoal,
     openDeleteGoal,
     closeDeleteGoal,
 

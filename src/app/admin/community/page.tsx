@@ -45,7 +45,7 @@ export default function CommunityPage() {
 
   const buttons: ButtonProps[] = [
     {
-      label: "キャンセル",
+      children: "キャンセル",
       className: "",
       type: "button",
       disabled: actions.isSubmitting,
@@ -54,7 +54,7 @@ export default function CommunityPage() {
       variant: "outlined",
     },
     {
-      label: "招待リンクを送信",
+      children: "招待リンクを送信",
       className: "",
       type: "submit",
       disabled: actions.isSubmitting,

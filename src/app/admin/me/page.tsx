@@ -38,7 +38,7 @@ const fields: FieldProps[] = [
 ];
 
 const buttons: ButtonProps[] = [
-  { label: "変更を保存", className: "w-full", type: "submit" },
+  { children: "変更を保存", className: "w-full", type: "submit" },
 ];
 
 export default function ProfilePage() {

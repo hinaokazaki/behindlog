@@ -58,7 +58,7 @@ export default function InputTestPage() {
           color="red"
           variant="filled"
           className="w-full"
-          label="ログイン"
+          children="ログイン"
         />
 
         <p className="cursor-pointer text-center text-base text-form-text underline">

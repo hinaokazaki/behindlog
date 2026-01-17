@@ -24,7 +24,7 @@ const GoalSection: React.FC<Props> = ({}) => {
 
   const fields: FieldProps[] = [
     {
-      name: "goal",
+      name: "title",
       title: "目標",
       type: "text",
       inputProps: { placeholder: "目標を決めよう！" },
@@ -32,7 +32,7 @@ const GoalSection: React.FC<Props> = ({}) => {
     {
       name: "deadline",
       title: "期限",
-      type: "dateRange",
+      type: "date",
       inputProps: { placeholder: "期限を選択してください" },
     },
   ];
@@ -110,7 +110,7 @@ const GoalSection: React.FC<Props> = ({}) => {
           <GoalCardBase
             goal={g.title}
             deadline={g.deadline}
-            onClick={() => modals.openUpdateGoal}
+            onClick={() => modals.openUpdateGoal(g)}
             rightSlot={
               <EditButtons
                 handleEdit={() => modals.openUpdateGoal(g)}
@@ -129,9 +129,7 @@ const GoalSection: React.FC<Props> = ({}) => {
         modalTitle="新しい目標"
         isOpen={modals.isCreateGoalOpen}
         onClose={modals.closeCreateGoal}
-        onSubmit={() => {
-          handleAdding;
-        }}
+        onSubmit={handleAdding}
         buttons={createModalButtons}
         fields={fields}
       />

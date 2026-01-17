@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { FieldValues, useForm, DefaultValues, Path } from "react-hook-form";
 import { ButtonProps } from "../_types/type";
 import { FieldProps } from "../_types/type";
-import { ZodType, ZodTypeAny, z } from "zod";
+import { ZodType } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "./Button";
 import FormField from "./FormField";

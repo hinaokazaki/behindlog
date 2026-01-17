@@ -11,7 +11,7 @@ import {
   Control,
   Controller,
 } from "react-hook-form";
-import { DateRangePicker } from "./DaterangePicker";
+import { DateRangePicker } from "./DateRangePicker";
 
 type Option = { value: string; label: string };
 

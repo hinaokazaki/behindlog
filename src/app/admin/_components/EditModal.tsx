@@ -10,7 +10,7 @@ interface Props {
   onClose: () => void;
   fields: FieldProps[];
   buttons: ButtonProps[];
-  onSubmit: () => void;
+  onSubmit: (data: modalItemForm) => void;
   defaultValues?: modalItemForm;
 }
 
@@ -35,7 +35,7 @@ export const EditModal: React.FC<Props> = ({
           schema={modalItemSchema}
           onSubmit={onSubmit}
           defaultValues={
-            defaultValues ?? { title: "", dataRange: { from: null, to: null } }
+            defaultValues ?? { title: "", deadline: ""}
           }
         />
       </div>

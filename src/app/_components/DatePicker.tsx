@@ -9,14 +9,14 @@ type Props = {
 
 export const DatePicker = ({ value, onChange }: Props) => {
 	return (
-		<div>
+		<div className="rounded-lg border p-3">
 			<DayPicker 
 				mode='single'
 				selected={value ?? undefined}
 				onSelect={(date) => onChange(date ?? null)}
 			/>
 
-			<div>
+			<div className="mt-2 text-sm">
 				{value ? value.toLocaleDateString() : "日付未選択"}
 			</div>
 		</div>

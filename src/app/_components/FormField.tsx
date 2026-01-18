@@ -12,6 +12,7 @@ import {
   Controller,
 } from "react-hook-form";
 import { DatePicker } from "./DatePicker";
+import { toYmdLocal } from "@/lib/date";
 
 
 type Option = { value: string; label: string };
@@ -62,10 +63,7 @@ const FormField = <T extends FieldValues>({
           render={({ field }) => (
             <DatePicker
               value={field.value ? new Date(field.value) : null}
-              onChange={(d: Date | null) => {
-                const v = d ? d.toISOString().slice(0, 10) : "";
-                field.onChange(v);
-              }}
+              onChange={(d) => field.onChange(d ? toYmdLocal(d) : "")}
             />
           )}
         />

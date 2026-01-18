@@ -12,12 +12,7 @@ import { useEditModals } from "../_hooks/useEditModals";
 import { EditModal } from "../../_components/EditModal";
 import { ButtonProps, FieldProps } from "@/app/_types/type";
 
-interface Props {
-  // goals: Goals;
-  // handleAdding: () => void;
-}
-
-const GoalSection: React.FC<Props> = ({}) => {
+const GoalSection: React.FC = () => {
   const goalsData = useGoalQuery();
   const actions = useGoalActions();
   const modals = useEditModals();

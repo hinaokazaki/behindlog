@@ -56,7 +56,7 @@ const Form = <T extends FieldValues>({
         />
       ))}
 
-      <div className="flex gap-4">
+      <div className="flex size-full items-center justify-center gap-8">
         {buttons.map((btn, index) => (
           <Button key={index} {...btn} />
         ))}

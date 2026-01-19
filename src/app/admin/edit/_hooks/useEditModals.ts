@@ -1,26 +1,30 @@
 import { Goal } from "@/schemas/goal";
 import { useState } from "react";
 
+type ActiveModal = 
+  | { type: "none" }
+  | { type: "updateGoal"; goal: Goal }
+  | { type: "deleteGoal"; goal: Goal };
+
 export const useEditModals = () => {
   // 目標新規作成モーダル
   const [isCreateGoalOpen, setIsCreateGoalOpen] = useState(false);
-  const openCreateGoal = () => setIsCreateGoalOpen(true);
-  const closeCreateGoal = () => setIsCreateGoalOpen(false);
 
-  // 目標編集モーダル
-  const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
-  const openUpdateGoal = (goal: Goal) => setSelectedGoal(goal);
-  const closeUpdateGoal = () => setSelectedGoal(null);
+  // 目標:編集/削除モーダル
+  const [activeModal, setActiveModal] = useState<ActiveModal>({ type: "none" });
 
-  // 目標削除モーダル
-  // const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
-  const openDeleteGoal = (goal: Goal) => setSelectedGoal(goal);
-  const closeDeleteGoal = () => setSelectedGoal(null);
+  const openUpdateGoal = (goal: Goal) => setActiveModal({ type: "updateGoal", goal });
+  const closeUpdateGoal = () => setActiveModal({ type: "none" });
+
+  const openDeleteGoal = (goal: Goal) => setActiveModal({ type: "deleteGoal", goal });
+  const closeDeleteGoal = () => setActiveModal({ type: "none" });
+
+  const selectedGoal = 
+    activeModal.type === "updateGoal" || activeModal.type === "deleteGoal"
+      ? activeModal.goal : null;
 
   // Todo新規作成モーダル
   const [isCreateTodoOpen, setIsCreateTodoOpen] = useState(false);
-  const openCreateTodo = () => setIsCreateTodoOpen(true);
-  const closeCreateTodo = () => setIsCreateTodoOpen(false);
 
   // Todo編集モーダル
 
@@ -29,24 +33,22 @@ export const useEditModals = () => {
   return {
     // 目標新規作成モーダル
     isCreateGoalOpen,
-    openCreateGoal,
-    closeCreateGoal,
+    openCreateGoal: () => setIsCreateGoalOpen(true),
+    closeCreateGoal: () => setIsCreateGoalOpen(false),
 
     // 目標編集モーダル
     selectedGoal,
-    isUpdateGoalOpen: !!selectedGoal,
+    isUpdateGoalOpen: activeModal.type === "updateGoal",
     openUpdateGoal,
     closeUpdateGoal,
 
     // 目標削除モーダル
-    isDeleteGoalOpen: !!selectedGoal,
+    isDeleteGoalOpen: activeModal.type === "deleteGoal",
     openDeleteGoal,
     closeDeleteGoal,
 
     // Todo新規作成モーダル
     isCreateTodoOpen,
-    openCreateTodo,
-    closeCreateTodo,
 
     // Todo編集モーダル
 

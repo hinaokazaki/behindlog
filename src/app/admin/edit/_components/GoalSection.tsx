@@ -38,7 +38,7 @@ const GoalSection: React.FC = () => {
       className: "",
       type: "button",
       disabled: actions.isSubmitting,
-      onClick: modals.closeCreateGoal || modals.closeCreateTodo,
+      onClick: modals.selectedGoal ? modals.closeUpdateGoal : modals.closeCreateGoal,
       color: "red",
       variant: "outlined",
     },
@@ -129,16 +129,34 @@ const GoalSection: React.FC = () => {
         fields={fields}
       />
 
-      <DeleteGoalModal
-        isOpen={modals.isDeleteGoalOpen}
-        goal={modals.selectedGoal}
-        onClose={() => modals.closeDeleteGoal()}
-        onConfirm={() => {
-          if (!modals.selectedGoal) return;
-          handleDelete(modals.selectedGoal.id)}
-        }
-        isSubmitting={actions.isSubmitting}
-      />
+      {modals.selectedGoal && (
+        <EditModal 
+          modalTitle="目標を編集する"
+          isOpen={modals.isUpdateGoalOpen}
+          onClose={() => modals.closeUpdateGoal()}
+          onSubmit={(data) => {
+            handleEdit(modals.selectedGoal!.id, data)}
+          }
+          defaultValues={{
+            title: modals.selectedGoal.title,
+            deadline: modals.selectedGoal.deadline,
+          }}
+          buttons={createModalButtons}
+          fields={fields}
+        />
+      )}
+      
+      {modals.selectedGoal && (
+        <DeleteGoalModal
+          isOpen={modals.isDeleteGoalOpen}
+          goal={modals.selectedGoal}
+          onClose={() => modals.closeDeleteGoal()}
+          onConfirm={() => {
+            handleDelete(modals.selectedGoal!.id)}
+          }
+          isSubmitting={actions.isSubmitting}
+        />
+      )}
     </section>
   );
 };

@@ -39,7 +39,7 @@ const DeleteGoalModal: React.FC<Props> = ({
               onClick={onClose}
               color="red"
               variant="outlined"
-              label="キャンセル"
+              children="キャンセル"
             />
             <Button
               type="button"
@@ -47,7 +47,7 @@ const DeleteGoalModal: React.FC<Props> = ({
               onClick={onConfirm}
               color="red"
               variant="filled"
-              label="削除"
+              children="削除"
             />
           </div>
         </div>

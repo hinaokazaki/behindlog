@@ -37,7 +37,7 @@ export const useGoalActions = () => {
   ) => {
     try {
       setIsSubmitting(true);
-      await callApi<GoalResponse>(`/api/goal/${goalId}`, "PATCH", data);
+      await callApi<GoalResponse>(`/api/goals/${goalId}`, "PATCH", data);
       router.refresh();
       opts?.onSuccess?.();
     } catch (error) {
@@ -51,7 +51,7 @@ export const useGoalActions = () => {
   const deleteGoal = async (goalId: number, opts?: Options) => {
     try {
       setIsSubmitting(true);
-      await callApi<GoalResponse>(`/api/goal/${goalId}`, "DELETE");
+      await callApi<GoalResponse>(`/api/goals/${goalId}`, "DELETE");
       router.refresh();
       opts?.onSuccess?.();
     } catch (error) {

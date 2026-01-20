@@ -14,13 +14,20 @@ import {
 import { DatePicker } from "./DatePicker";
 import { toYmdLocal } from "@/lib/date";
 
-
 type Option = { value: string; label: string };
 
 type FormFieldProps<T extends FieldValues> = {
   name: Path<T>;
   title: string;
-  type: "text" | "textarea" | "select" | "date" | "dateRange" | "email" | "password";
+  type:
+    | "text"
+    | "textarea"
+    | "select"
+    | "date"
+    | "dateRange"
+    | "email"
+    | "password"
+    | "number";
   register: UseFormRegister<T>;
   control: Control<T>;
   error?: string;
@@ -66,6 +73,16 @@ const FormField = <T extends FieldValues>({
               onChange={(d) => field.onChange(d ? toYmdLocal(d) : "")}
             />
           )}
+        />
+      ) : type === "number" ? (
+        <Input
+          id={name}
+          type={type}
+          {...register(
+            name,
+            type === "number" ? { valueAsNumber: true } : undefined,
+          )}
+          {...inputProps}
         />
       ) : (
         <Input id={name} type={type} {...register(name)} {...inputProps} />

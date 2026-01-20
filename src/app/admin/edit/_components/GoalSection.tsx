@@ -11,6 +11,7 @@ import { useGoalActions } from "../../_hooks/useGoalActions";
 import { useEditModals } from "../_hooks/useEditModals";
 import { EditModal } from "../../_components/EditModal";
 import { ButtonProps, FieldProps } from "@/app/_types/type";
+import { GoalModalFormValues, goalModalSchema } from "@/schemas/goalModalSchema";
 
 const GoalSection: React.FC = () => {
   const goalsData = useGoalQuery();
@@ -120,17 +121,18 @@ const GoalSection: React.FC = () => {
         handleAdding={() => modals.openCreateGoal()}
       />
 
-      <EditModal 
+      <EditModal<GoalModalFormValues>
         modalTitle="新しい目標"
         isOpen={modals.isCreateGoalOpen}
         onClose={modals.closeCreateGoal}
         onSubmit={handleAdding}
         buttons={createModalButtons}
         fields={fields}
+        schema={goalModalSchema}
       />
 
       {modals.selectedGoal && (
-        <EditModal 
+        <EditModal<GoalModalFormValues>
           modalTitle="目標を編集する"
           isOpen={modals.isUpdateGoalOpen}
           onClose={() => modals.closeUpdateGoal()}
@@ -143,6 +145,7 @@ const GoalSection: React.FC = () => {
           }}
           buttons={createModalButtons}
           fields={fields}
+          schema={goalModalSchema}
         />
       )}
       

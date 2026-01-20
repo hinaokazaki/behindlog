@@ -157,7 +157,7 @@ export default function CommunityPage() {
                       e.stopPropagation();
                       modals.openDelete(f);
                     }}
-                    className={`flex items-center justify-center rounded-full p-2`}
+                    className={'flex items-center justify-center rounded-full p-2 hover:bg-[#FFF3F0]'}
                   >
                     <Image
                       src="/delete.png"

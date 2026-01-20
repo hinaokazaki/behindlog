@@ -3,26 +3,29 @@ import Form from "@/app/_components/Form";
 import { Modal } from "./Modal";
 import { ButtonProps, FieldProps } from "@/app/_types/type";
 import { modalItemForm, modalItemSchema } from "@/schemas/modalItemSchema";
+import { ZodTypeAny } from "zod";
 
-interface Props {
+interface Props<TFormValues> {
   modalTitle: string;
   isOpen: boolean;
   onClose: () => void;
   fields: FieldProps[];
   buttons: ButtonProps[];
-  onSubmit: (data: modalItemForm) => void;
-  defaultValues?: modalItemForm;
+  schema: ZodTypeAny;
+  onSubmit: (data: TFormValues) => void;
+  defaultValues?: TFormValues;
 }
 
-export const EditModal: React.FC<Props> = ({
+export const EditModal = <TFormValues,>({
   modalTitle,
   isOpen,
   onClose,
   fields,
   buttons,
+  schema,
   onSubmit,
   defaultValues,
-}) => {
+}: Props<TFormValues>) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div>
@@ -32,11 +35,9 @@ export const EditModal: React.FC<Props> = ({
         <Form
           fields={fields}
           buttons={buttons}
-          schema={modalItemSchema}
+          schema={schema}
           onSubmit={onSubmit}
-          defaultValues={
-            defaultValues ?? { title: "", deadline: ""}
-          }
+          defaultValues={defaultValues}
         />
       </div>
     </Modal>

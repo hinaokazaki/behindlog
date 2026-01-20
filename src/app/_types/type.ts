@@ -6,7 +6,15 @@ export type Option = {
 export type FieldProps = {
   name: string;
   title: string;
-  type: "text" | "textarea" | "select" | "date" | "dateRange" | "email" | "password";
+  type:
+    | "text"
+    | "textarea"
+    | "select"
+    | "date"
+    | "dateRange"
+    | "email"
+    | "password"
+    | "number";
   inputProps?: React.InputHTMLAttributes<HTMLInputElement> &
     React.TextareaHTMLAttributes<HTMLTextAreaElement>;
   options?: Option[];

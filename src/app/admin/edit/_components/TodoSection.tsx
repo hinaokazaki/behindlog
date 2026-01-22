@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { ButtonProps, FieldProps } from "@/app/_types/type";
 import AddNewButton from "../../_components/AddNewButton";
 import BlockTitle from "../../_components/BlockTitle";
@@ -10,8 +10,12 @@ import TodoCardBase from "./TodoCardBase";
 import { useTodoActions } from "../../_hooks/useTodoActions";
 import { useEditModals } from "../_hooks/useEditModals";
 import EditButtons from "./EditButtons";
-import { TodoModalFormValues, todoModalSchema } from "@/schemas/todoModalSchema";
+import {
+  TodoModalFormValues,
+  todoModalSchema,
+} from "@/schemas/todoModalSchema";
 import DeleteTodoModal from "./DeleteTodoModal";
+import { todoStatusOptions } from "@/constants/themeOptions";
 
 const TodoSection: React.FC = () => {
   const todosData = useTodoQuery();
@@ -26,6 +30,12 @@ const TodoSection: React.FC = () => {
       inputProps: { placeholder: "Todoを作成しよう" },
     },
     {
+      name: "isCompleted",
+      title: "ステータス",
+      type: "select",
+      options: todoStatusOptions,
+    },
+    {
       name: "dueDate",
       title: "期限",
       type: "date",
@@ -38,7 +48,9 @@ const TodoSection: React.FC = () => {
       className: "",
       type: "button",
       disabled: actions.isSubmitting,
-      onClick: modals.selectedTodo ? modals.closeUpdateTodo : modals.closeCreateTodo,
+      onClick: modals.selectedTodo
+        ? modals.closeUpdateTodo
+        : modals.closeCreateTodo,
       color: "red",
       variant: "outlined",
     },
@@ -70,7 +82,7 @@ const TodoSection: React.FC = () => {
       console.log("Todoの作成に失敗しました");
     }
   };
-  
+
   const handleEdit = async (todoId: number, data: UpdateTodoRequest) => {
     try {
       await actions.update(todoId, data, {
@@ -129,7 +141,7 @@ const TodoSection: React.FC = () => {
         schema={todoModalSchema}
         buttons={createModalButtons}
         fields={fields}
-        defaultValues={{title: "", dueDate: "",}}
+        defaultValues={{ title: "", dueDate: "" }}
       />
 
       {modals.selectedTodo && (
@@ -140,32 +152,33 @@ const TodoSection: React.FC = () => {
           onSubmit={(data) => {
             handleEdit(modals.selectedTodo!.id, {
               ...data,
-              isCompleted: modals.selectedTodo!.isCompleted,
-            })}
-          }
+              isCompleted: data.isCompleted === "true",
+            });
+          }}
           defaultValues={{
             title: modals.selectedTodo.title,
             dueDate: modals.selectedTodo.dueDate,
+            isCompleted: String(modals.selectedTodo.isCompleted),
           }}
           schema={todoModalSchema}
           buttons={createModalButtons}
           fields={fields}
         />
       )}
-      
+
       {modals.selectedTodo && (
         <DeleteTodoModal
           isOpen={modals.isDeleteTodoOpen}
           todo={modals.selectedTodo}
           onClose={() => modals.closeDeleteTodo()}
           onConfirm={() => {
-            handleDelete(modals.selectedTodo!.id)}
-          }
+            handleDelete(modals.selectedTodo!.id);
+          }}
           isSubmitting={actions.isSubmitting}
         />
       )}
     </section>
-  )
+  );
 };
 
 export default TodoSection;

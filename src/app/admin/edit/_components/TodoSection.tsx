@@ -141,7 +141,7 @@ const TodoSection: React.FC = () => {
         schema={todoModalSchema}
         buttons={createModalButtons}
         fields={fields}
-        defaultValues={{ title: "", dueDate: "" }}
+        defaultValues={{ title: "", dueDate: "", isCompleted: "false" }}
       />
 
       {modals.selectedTodo && (
@@ -151,14 +151,15 @@ const TodoSection: React.FC = () => {
           onClose={() => modals.closeUpdateTodo()}
           onSubmit={(data) => {
             handleEdit(modals.selectedTodo!.id, {
-              ...data,
+              title: data.title,
+              dueDate: data.dueDate,
               isCompleted: data.isCompleted === "true",
             });
           }}
           defaultValues={{
             title: modals.selectedTodo.title,
             dueDate: modals.selectedTodo.dueDate,
-            isCompleted: String(modals.selectedTodo.isCompleted),
+            isCompleted: modals.selectedTodo.isCompleted ? "true" : "false",
           }}
           schema={todoModalSchema}
           buttons={createModalButtons}

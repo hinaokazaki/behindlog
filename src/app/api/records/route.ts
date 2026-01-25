@@ -1,11 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
-import {
-  DailyRecord,
-  DailyRecordResponse,
-  dailyRecordSchema,
-} from "@/schemas/dailyRecord";
+import { DailyRecord, DailyRecordResponse } from "@/schemas/dailyRecord";
 import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
 import { ErrorResponse } from "@/schemas/common";
 
@@ -40,19 +36,19 @@ export const GET = async (request: NextRequest) => {
       );
     }
 
-    const safeDailyRecord: DailyRecord = dailyRecordSchema.parse(
-      withUserTimezone(
-        dailyRecord,
-        [
-          "createdAt",
-          "updatedAt",
-          "recordedDate",
-          "commitStartDate",
-          "commitEndDate",
-        ],
-        user.timezone,
-      ),
+    const converted = withUserTimezone(
+      dailyRecord,
+      [
+        "createdAt",
+        "updatedAt",
+        "recordedDate",
+        "commitStartDate",
+        "commitEndDate",
+      ],
+      user.timezone,
     );
+
+    const safeDailyRecord: DailyRecord = converted;
 
     return NextResponse.json<DailyRecordResponse>(
       { dailyRecord: safeDailyRecord },

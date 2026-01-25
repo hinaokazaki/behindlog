@@ -6,7 +6,6 @@ import {
   DailyRecord,
   createDailyRecordSchema,
   DailyRecordResponse,
-  dailyRecordSchema,
   TodoSnapshot,
   todoSnapshotSchema,
 } from "@/schemas/dailyRecord";
@@ -155,19 +154,19 @@ export const PUT = async (
       return dailyRecord;
     });
 
-    const safeDailyRecord: DailyRecord = dailyRecordSchema.parse(
-      withUserTimezone(
-        dailyRecordPostResult,
-        [
-          "createdAt",
-          "updatedAt",
-          "recordedDate",
-          "commitStartDate",
-          "commitEndDate",
-        ],
-        user.timezone,
-      ),
+    const converted = withUserTimezone(
+      dailyRecordPostResult,
+      [
+        "createdAt",
+        "updatedAt",
+        "recordedDate",
+        "commitStartDate",
+        "commitEndDate",
+      ],
+      user.timezone,
     );
+
+    const safeDailyRecord: DailyRecord = converted;
 
     return NextResponse.json<DailyRecordResponse>(
       { dailyRecord: safeDailyRecord },

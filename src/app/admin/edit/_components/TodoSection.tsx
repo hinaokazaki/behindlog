@@ -15,7 +15,7 @@ import {
   todoModalSchema,
 } from "@/schemas/todoModalSchema";
 import DeleteTodoModal from "./DeleteTodoModal";
-import { todoStatusOptions } from "@/constants/themeOptions";
+import { todoStatusOptions } from "@/constants/todoStatusOptions";
 
 const TodoSection: React.FC = () => {
   const todosData = useTodoQuery();

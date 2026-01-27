@@ -10,7 +10,7 @@ export const commitTimeFormSchema = z.object({
     .number({ required_error: "目標時間は必須です" })
     .int("整数で入力してください")
     .min(1, "1分以上にしてください"),
-  period: dateRangeSchema.superRefine((v, ctx) => {
+  deadline: dateRangeSchema.superRefine((v, ctx) => {
     if (!v.from) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,

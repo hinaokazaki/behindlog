@@ -5,7 +5,6 @@ import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
 import {
   Committime,
   CommittimeResponse,
-  committimeSchema,
   CreateCommittimeRequest,
   createCommittimeRequestSchema,
 } from "@/schemas/committime";
@@ -34,13 +33,13 @@ export const POST = async (request: NextRequest) => {
       },
     });
 
-    const safeCommittime: Committime = committimeSchema.parse(
-      withUserTimezone(
-        committime,
-        ["createdAt", "updatedAt", "startDate", "endDate"],
-        user.timezone,
-      ),
+    const converted = withUserTimezone(
+      committime,
+      ["createdAt", "updatedAt", "startDate", "endDate"],
+      user.timezone,
     );
+
+    const safeCommittime: Committime = converted;
 
     return NextResponse.json<CommittimeResponse>(
       { committime: safeCommittime },

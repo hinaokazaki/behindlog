@@ -37,7 +37,7 @@ const CommitTimeSection = () => {
       className: "",
       type: "button",
       disabled: actions.isSubmitting,
-      onClick: ,
+      // onClick: ,
       color: "red",
       variant: "outlined",
     },
@@ -53,21 +53,43 @@ const CommitTimeSection = () => {
 
   if (committimeQuery.isLoading) return <Loading />;
   if (committimeQuery.error)
-    return <p>目標の取得でエラーが発生しました: {committimeQuery.error.message}</p>;
-  if (!committimeQuery.data) return;
-  const commitimeData: Committime = committimeQuery.data?.committime;
+    return (
+      <p>
+        目標時間の取得でエラーが発生しました: {committimeQuery.error.message}
+      </p>
+    );
+  // if (!committimeQuery.data) return;
+  // const committimeData: Committime = committimeQuery.data?.committime;
+
+  // deafultValues
+  const emptyDefaultValues: CommitTimeForm = {
+    targetTime: 0,
+    deadline: { from: null, to: null },
+  };
+
+  const fetchDefaultValues: CommitTimeForm | null = committimeQuery.data
+    ? {
+        targetTime: committimeQuery.data.committime.targetTime,
+        deadline: {
+          from: new Date(committimeQuery.data.committime.startDate),
+          to: new Date(committimeQuery.data.committime.endDate),
+        },
+      }
+    : null;
+
+  const defaultValues = fetchDefaultValues ?? emptyDefaultValues;
 
   const onSubmit = (data: CommitTimeForm) => {
-    if(!DataTransfer.deadline.from || !DataTransfer.deadline.to) return;
+    if (!data.deadline.from || !data.deadline.to) return;
 
     const payload = {
       targetTime: data.targetTime,
       startDate: data.deadline.from,
-      endDate: date.deadline.to,
-    }
+      endDate: data.deadline.to,
+    };
 
-    // api call 
-  }
+    // api call
+  };
 
   return (
     <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
@@ -77,10 +99,7 @@ const CommitTimeSection = () => {
         buttons={Buttons}
         onSubmit={onSubmit}
         schema={commitTimeFormSchema}
-        defaultValues={
-          targetTime: 0,
-          period: { from: null, to: null },
-        }
+        defaultValues={defaultValues}
       />
     </section>
   );

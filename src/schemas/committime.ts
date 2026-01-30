@@ -33,7 +33,7 @@ export const updateCommittimeRequestSchema = z.object({
 
 // レスポンス用
 export const committimeResponseSchema = z.object({
-  committime: committimeSchema,
+  committime: committimeSchema.nullable(),
 });
 
 export const totalStudyTimeResponseSchema = z.object({

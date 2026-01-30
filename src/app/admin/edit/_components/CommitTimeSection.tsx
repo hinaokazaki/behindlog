@@ -37,16 +37,7 @@ const CommitTimeSection = () => {
 
   const Buttons: ButtonProps[] = [
     {
-      children: "キャンセル",
-      className: "",
-      type: "button",
-      disabled: isSubmitting,
-      // onClick: ,
-      color: "red",
-      variant: "outlined",
-    },
-    {
-      children: "作成",
+      children: "保存する",
       className: "",
       type: "submit",
       disabled: isSubmitting,

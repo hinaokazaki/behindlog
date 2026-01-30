@@ -2,11 +2,13 @@
 import Form from "@/app/_components/Form";
 import BlockTitle from "../../_components/BlockTitle";
 import { ButtonProps, FieldProps } from "@/app/_types/type";
-import { useCommitTimeActions } from "../../_hooks/useCommitTimeActions";
 import { useCommittimeQuery } from "../../_hooks/useCommittimeQuery";
 import Loading from "@/app/_components/Loading";
-import { Committime } from "@/schemas/committime";
 import { commitTimeFormSchema } from "@/schemas/committimeFormSchema";
+import { useApi } from "@/app/_hooks/useApi";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { CommittimeResponse } from "@/schemas/committime";
 
 type CommitTimeForm = {
   targetTime: number;
@@ -15,7 +17,9 @@ type CommitTimeForm = {
 
 const CommitTimeSection = () => {
   const committimeQuery = useCommittimeQuery();
-  const actions = useCommitTimeActions();
+  const { callApi } = useApi();
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const fields: FieldProps[] = [
     {
@@ -36,7 +40,7 @@ const CommitTimeSection = () => {
       children: "キャンセル",
       className: "",
       type: "button",
-      disabled: actions.isSubmitting,
+      disabled: isSubmitting,
       // onClick: ,
       color: "red",
       variant: "outlined",
@@ -45,7 +49,7 @@ const CommitTimeSection = () => {
       children: "作成",
       className: "",
       type: "submit",
-      disabled: actions.isSubmitting,
+      disabled: isSubmitting,
       color: "red",
       variant: "filled",
     },
@@ -58,8 +62,6 @@ const CommitTimeSection = () => {
         目標時間の取得でエラーが発生しました: {committimeQuery.error.message}
       </p>
     );
-  // if (!committimeQuery.data) return;
-  // const committimeData: Committime = committimeQuery.data?.committime;
 
   // deafultValues
   const emptyDefaultValues: CommitTimeForm = {
@@ -67,19 +69,19 @@ const CommitTimeSection = () => {
     deadline: { from: null, to: null },
   };
 
-  const fetchDefaultValues: CommitTimeForm | null = committimeQuery.data
+  const committime = committimeQuery.data?.committime;
+
+  const defaultValues: CommitTimeForm = committime
     ? {
-        targetTime: committimeQuery.data.committime.targetTime,
+        targetTime: committime.targetTime,
         deadline: {
-          from: new Date(committimeQuery.data.committime.startDate),
-          to: new Date(committimeQuery.data.committime.endDate),
+          from: new Date(committime.startDate),
+          to: new Date(committime.endDate),
         },
       }
-    : null;
+    : emptyDefaultValues;
 
-  const defaultValues = fetchDefaultValues ?? emptyDefaultValues;
-
-  const onSubmit = (data: CommitTimeForm) => {
+  const onSubmit = async (data: CommitTimeForm) => {
     if (!data.deadline.from || !data.deadline.to) return;
 
     const payload = {
@@ -89,6 +91,17 @@ const CommitTimeSection = () => {
     };
 
     // api call
+    try {
+      setIsSubmitting(true);
+      await callApi<CommittimeResponse>("/api/committime", "PATCH", payload);
+      router.refresh();
+      await committimeQuery.mutate();
+    } catch (error) {
+      console.error("Update committime failed", error);
+      throw error;
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

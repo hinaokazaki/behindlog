@@ -5,21 +5,57 @@ import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
 import {
   Committime,
   CommittimeResponse,
-  CreateCommittimeRequest,
-  createCommittimeRequestSchema,
+  UpdateCommittimeRequest,
+  updateCommittimeRequestSchema,
 } from "@/schemas/committime";
 import { ErrorResponse } from "@/schemas/common";
 
-// POST: /committime ユーザー_目標時間新規作成
-export const POST = async (request: NextRequest) => {
+// GET: /committime ユーザー_目標時間取得
+export const GET = async (request: NextRequest) => {
   try {
     const user = await getLoggedInUser(request);
-    const body: CreateCommittimeRequest = createCommittimeRequestSchema.parse(
+    const committime = await prisma.commitTime.findUnique({
+      where: {
+        userId: user.id,
+      },
+    });
+
+    if (!committime) {
+      return NextResponse.json({ committime: null }, { status: 200 });
+    }
+
+    const converted = withUserTimezone(
+      committime,
+      ["createdAt", "updatedAt", "startDate", "endDate"],
+      user.timezone,
+    );
+
+    const safeCommittime: Committime = converted;
+
+    return NextResponse.json<CommittimeResponse>(
+      { committime: safeCommittime },
+      { status: 200 },
+    );
+  } catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json<ErrorResponse>(
+        { error: error.message },
+        { status: 400 },
+      );
+    }
+  }
+};
+
+// PATCH: /committime ユーザー_目標時間更新
+export const PATCH = async (request: NextRequest) => {
+  try {
+    const user = await getLoggedInUser(request);
+    const body: UpdateCommittimeRequest = updateCommittimeRequestSchema.parse(
       await request.json(),
     );
     const parsed = {
       ...withUserDateParse(body, ["startDate", "endDate"], user.timezone),
-      targetztime: Number(body.targetTime),
+      targetTime: Number(body.targetTime),
     };
 
     const committime = await prisma.commitTime.upsert({
@@ -46,10 +82,11 @@ export const POST = async (request: NextRequest) => {
       { status: 200 },
     );
   } catch (error) {
-    if (error instanceof Error)
+    if (error instanceof Error) {
       return NextResponse.json<ErrorResponse>(
         { error: error.message },
         { status: 400 },
       );
+    }
   }
 };

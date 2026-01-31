@@ -9,6 +9,7 @@ import { useApi } from "@/app/_hooks/useApi";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { CommittimeResponse } from "@/schemas/committime";
+import { fromYmdLocal, toYmdLocal } from "@/lib/date";
 
 type CommitTimeForm = {
   targetTime: number;
@@ -24,7 +25,7 @@ const CommitTimeSection = () => {
   const fields: FieldProps[] = [
     {
       name: "targetTime",
-      title: "目標の合計時間",
+      title: "目標の合計時間 [単位：時間]",
       type: "number",
       inputProps: { placeholder: "目標の合計時間を決めよう" },
     },
@@ -66,8 +67,8 @@ const CommitTimeSection = () => {
     ? {
         targetTime: committime.targetTime,
         deadline: {
-          from: new Date(committime.startDate),
-          to: new Date(committime.endDate),
+          from: fromYmdLocal(committime.startDate),
+          to: fromYmdLocal(committime.endDate),
         },
       }
     : emptyDefaultValues;
@@ -77,8 +78,8 @@ const CommitTimeSection = () => {
 
     const payload = {
       targetTime: data.targetTime,
-      startDate: data.deadline.from,
-      endDate: data.deadline.to,
+      startDate: toYmdLocal(data.deadline.from),
+      endDate: toYmdLocal(data.deadline.to),
     };
 
     // api call

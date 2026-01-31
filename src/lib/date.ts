@@ -18,3 +18,8 @@ export const toYmdLocal = (d: Date): string => {
   const day = String(d.getDate()).padStart(2, "0");
   return `${y}-${m}-${day}`;
 };
+
+export const fromYmdLocal = (ymd: string): Date => {
+  const [y, m, d] = ymd.split("-").map(Number);
+  return new Date(y, m - 1, d); // ← local time の 00:00
+};

@@ -13,6 +13,7 @@ import {
 } from "react-hook-form";
 import { DatePicker } from "./DatePicker";
 import { toYmdLocal } from "@/lib/date";
+import { DateRangePicker } from "./DateRangePicker";
 
 type Option = { value: string; label: string };
 
@@ -74,6 +75,19 @@ const FormField = <T extends FieldValues>({
             />
           )}
         />
+      ) : type === "dateRange" ? (
+        <div className="flex justify-center">
+          <Controller
+            name={name}
+            control={control}
+            render={({ field }) => (
+              <DateRangePicker
+                value={field.value ?? { from: null, to: null }}
+                onChange={(range) => field.onChange(range)}
+              />
+            )}
+          />
+        </div>
       ) : type === "number" ? (
         <Input
           id={name}

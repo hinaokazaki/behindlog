@@ -6,17 +6,12 @@ import { TotalStudyTime, TotalStudyTimeResponse } from "@/schemas/committime";
 import { ErrorResponse } from "@/schemas/common";
 
 // GET: /committime/:id/summary ユーザー_合計学習時間取得
-export const GET = async (
-  request: NextRequest,
-  { params }: { params: { id: string } },
-) => {
-  const { id } = params;
+export const GET = async (request: NextRequest) => {
   try {
     const user = await getLoggedInUser(request);
 
     const committime = await prisma.commitTime.findUnique({
       where: {
-        id: Number(id),
         userId: user.id,
       },
     });

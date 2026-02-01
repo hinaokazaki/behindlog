@@ -65,7 +65,7 @@ const CommitTimeSection = () => {
 
   const defaultValues: CommitTimeForm = committime
     ? {
-        targetTime: committime.targetTime,
+        targetTime: committime.targetTime / 60,
         deadline: {
           from: fromYmdLocal(committime.startDate),
           to: fromYmdLocal(committime.endDate),
@@ -77,7 +77,7 @@ const CommitTimeSection = () => {
     if (!data.deadline.from || !data.deadline.to) return;
 
     const payload = {
-      targetTime: data.targetTime,
+      targetTime: Math.round(data.targetTime * 60),
       startDate: toYmdLocal(data.deadline.from),
       endDate: toYmdLocal(data.deadline.to),
     };

@@ -6,10 +6,9 @@ export const dateRangeSchema = z.object({
 });
 
 export const commitTimeFormSchema = z.object({
-  targetTime: z
+  targetTime: z.coerce
     .number({ required_error: "目標時間は必須です" })
-    .int("整数で入力してください")
-    .min(1, "1分以上にしてください"),
+    .int("整数で入力してください"),
   deadline: dateRangeSchema.superRefine((v, ctx) => {
     if (!v.from) {
       ctx.addIssue({

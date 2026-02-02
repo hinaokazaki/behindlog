@@ -8,7 +8,10 @@ import { commitTimeFormSchema } from "@/schemas/committimeFormSchema";
 import { useApi } from "@/app/_hooks/useApi";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { CommittimeResponse } from "@/schemas/committime";
+import {
+  CommittimeResponse,
+  UpdateCommittimeRequest,
+} from "@/schemas/committime";
 import { fromYmdLocal, toYmdLocal } from "@/lib/date";
 
 type CommitTimeForm = {
@@ -76,13 +79,12 @@ const CommitTimeSection = () => {
   const onSubmit = async (data: CommitTimeForm) => {
     if (!data.deadline.from || !data.deadline.to) return;
 
-    const payload = {
+    const payload: UpdateCommittimeRequest = {
       targetTime: Math.round(data.targetTime * 60),
       startDate: toYmdLocal(data.deadline.from),
       endDate: toYmdLocal(data.deadline.to),
     };
 
-    // api call
     try {
       setIsSubmitting(true);
       await callApi<CommittimeResponse>("/api/committime", "PATCH", payload);

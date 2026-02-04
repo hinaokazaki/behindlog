@@ -27,7 +27,7 @@ const COLORS = {
 };
 
 const Button: React.FC<ButtonProps> = ({
-  children, 
+  label, // childrenにするべきか、labelで十分か
   color = "green",
   variant = "filled",
   className = "",
@@ -53,7 +53,7 @@ const Button: React.FC<ButtonProps> = ({
         className,
       )}
     >
-      {children}
+      {label}
     </button>
   );
 };

@@ -3,15 +3,15 @@ import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
 import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
 import {
-  Goal,
-  GoalResponse,
-  goalSchema,
-  updateGoalRequest,
-  updateGoalRequestSchema,
-} from "@/schemas/goal";
-import { ErrorResponse, StatusResponse } from "@/schemas/common";
+  Committime,
+  CommittimeResponse,
+  committimeSchema,
+  UpdateCommittimeRequest,
+  updateCommittimeRequestSchema,
+} from "@/schemas/committime";
+import { StatusResponse, ErrorResponse } from "@/schemas/common";
 
-// GET: /goal ユーザー_目標取得
+// GET: /committime ユーザー_目標時間取得
 export const GET = async (
   request: NextRequest,
   { params }: { params: { id: string } },
@@ -19,29 +19,32 @@ export const GET = async (
   const { id } = params;
   try {
     const user = await getLoggedInUser(request);
-    const goal = await prisma.goal.findUnique({
+    const committime = await prisma.commitTime.findUnique({
       where: {
-        id: parseInt(id),
+        id: Number(id),
         userId: user.id,
       },
     });
 
-    if (!goal) {
+    if (!committime) {
       return NextResponse.json(
-        { status: "目標を取得できませんでした" },
+        { status: "目標時間設定を取得できませんでした" },
         { status: 400 },
       );
     }
 
-    const safeGoal: Goal = goalSchema.parse(
+    const safeCommittime: Committime = committimeSchema.parse(
       withUserTimezone(
-        goal,
-        ["deadline", "createdAt", "updatedAt"],
+        committime,
+        ["createdAt", "updatedAt", "startDate", "endDate"],
         user.timezone,
       ),
     );
 
-    return NextResponse.json<GoalResponse>({ goal: safeGoal }, { status: 200 });
+    return NextResponse.json<CommittimeResponse>(
+      { committime: safeCommittime },
+      { status: 200 },
+    );
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json<ErrorResponse>(
@@ -52,36 +55,42 @@ export const GET = async (
   }
 };
 
-// PATCH: /goal ユーザー_目標更新
+// PATCH: /committime ユーザー_目標時間更新
 export const PATCH = async (
   request: NextRequest,
   { params }: { params: { id: string } },
 ) => {
   const { id } = params;
-
   try {
     const user = await getLoggedInUser(request);
-    const body: updateGoalRequest = updateGoalRequestSchema.parse(
+    const body: UpdateCommittimeRequest = updateCommittimeRequestSchema.parse(
       await request.json(),
     );
-    const parsed = withUserDateParse(body, ["deadline"], user.timezone);
+    const parsed = {
+      ...withUserDateParse(body, ["startDate", "endDate"], user.timezone),
+      targetTime: Number(body.targetTime),
+    };
 
-    const goal = await prisma.goal.update({
+    const committime = await prisma.commitTime.update({
       where: {
-        id: parseInt(id),
+        id: Number(id),
+        userId: user.id,
       },
       data: parsed,
     });
 
-    const safeGoal: Goal = goalSchema.parse(
+    const safeCommittime: Committime = committimeSchema.parse(
       withUserTimezone(
-        goal,
-        ["deadline", "createdAt", "updatedAt"],
+        committime,
+        ["createdAt", "updatedAt", "startDate", "endDate"],
         user.timezone,
       ),
     );
 
-    return NextResponse.json<GoalResponse>({ goal: safeGoal }, { status: 200 });
+    return NextResponse.json<CommittimeResponse>(
+      { committime: safeCommittime },
+      { status: 200 },
+    );
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json<ErrorResponse>(
@@ -92,7 +101,7 @@ export const PATCH = async (
   }
 };
 
-// DELETE: /goal ユーザー_目標削除
+// DELETE: /committime ユーザー_目標時間削除
 export const DELETE = async (
   request: NextRequest,
   { params }: { params: { id: string } },
@@ -100,9 +109,9 @@ export const DELETE = async (
   const { id } = params;
   try {
     const user = await getLoggedInUser(request);
-    const goal = await prisma.goal.delete({
+    const commitTime = await prisma.commitTime.delete({
       where: {
-        id: parseInt(id),
+        id: Number(id),
         userId: user.id,
       },
     });

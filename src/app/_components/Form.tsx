@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { FieldValues, useForm, DefaultValues, Path } from "react-hook-form";
 import { ButtonProps } from "../_types/type";
 import { FieldProps } from "../_types/type";
-import { ZodType } from "zod";
+import { ZodType, ZodTypeAny, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "./Button";
 import FormField from "./FormField";
@@ -56,7 +56,7 @@ const Form = <T extends FieldValues>({
         />
       ))}
 
-      <div className="flex size-full items-center justify-center gap-8">
+      <div className="flex gap-4">
         {buttons.map((btn, index) => (
           <Button key={index} {...btn} />
         ))}

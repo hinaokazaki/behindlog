@@ -49,7 +49,7 @@ const DeleteFriendModal: React.FC<Props> = ({
               onClick={onClose}
               color="red"
               variant="outlined"
-              children="キャンセル"
+              label="キャンセル"
             />
             <Button
               type="button"
@@ -57,7 +57,7 @@ const DeleteFriendModal: React.FC<Props> = ({
               onClick={onConfirm}
               color="red"
               variant="filled"
-              children="友達リストから削除"
+              label="友達リストから削除"
             />
           </div>
         </div>

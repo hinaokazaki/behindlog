@@ -15,7 +15,6 @@ import { useCommunityActions } from "./_hook/useCommunityActions";
 import InvitationModal from "./_components/InvitationModal";
 import { useFriendList } from "./_hook/useFriendList";
 import { useFriendInvitations } from "./_hook/useFriendInvitations";
-import AddNewButton from "../_components/AddNewButton";
 
 const requestSchema = z.object({
   message: z.string().min(1, "メッセージを入力してください"),
@@ -27,6 +26,8 @@ export default function CommunityPage() {
   const actions = useCommunityActions();
   const friends = useFriendList();
   const friendRequests = useFriendInvitations();
+  // const friendLists = friends.data?.friendList;
+  // const invitations = friendRequests.data?.invitations;
 
   const fields: FieldProps[] = [
     {
@@ -45,7 +46,7 @@ export default function CommunityPage() {
 
   const buttons: ButtonProps[] = [
     {
-      children: "キャンセル",
+      label: "キャンセル",
       className: "",
       type: "button",
       disabled: actions.isSubmitting,
@@ -54,7 +55,7 @@ export default function CommunityPage() {
       variant: "outlined",
     },
     {
-      children: "招待リンクを送信",
+      label: "招待リンクを送信",
       className: "",
       type: "submit",
       disabled: actions.isSubmitting,
@@ -157,7 +158,7 @@ export default function CommunityPage() {
                       e.stopPropagation();
                       modals.openDelete(f);
                     }}
-                    className={'flex items-center justify-center rounded-full p-2 hover:bg-[#FFF3F0]'}
+                    className={`flex items-center justify-center rounded-full p-2`}
                   >
                     <Image
                       src="/delete.png"
@@ -172,7 +173,24 @@ export default function CommunityPage() {
             );
           })}
         </div>
-        <AddNewButton handleAdding={modals.openInvite} label="友達を招待" />
+        <div className="mt-4">
+          <button
+            type="button"
+            onClick={modals.openInvite}
+            className={`flex items-center gap-2 rounded-lg p-3`}
+          >
+            <div className="flex">
+              <Image
+                src="/add.png"
+                width={25}
+                height={25}
+                alt="追加"
+                className="mx-2"
+              />
+              <span className="mr-2 text-base font-bold">新しい友達を招待</span>
+            </div>
+          </button>
+        </div>
       </section>
       <section className="mx-auto w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
         <BlockTitle title="Invitations" />

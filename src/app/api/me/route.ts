@@ -30,13 +30,9 @@ export const GET = async (request: NextRequest) => {
       );
     }
 
-    const converted = withUserTimezone(
-      profile,
-      ["createdAt", "updatedAt"],
-      user.timezone,
+    const safeProfile: Profile = profileSchema.parse(
+      withUserTimezone(profile, ["createdAt", "updatedAt"], user.timezone),
     );
-
-    const safeProfile: Profile = converted;
 
     return NextResponse.json<ProfileResponse>(
       { profile: safeProfile },
@@ -82,13 +78,9 @@ export const POST = async (request: NextRequest) => {
       },
     });
 
-    const converted = withUserTimezone(
-      profile,
-      ["createdAt", "updatedAt"],
-      body.timezone,
+    const safeProfile: Profile = profileSchema.parse(
+      withUserTimezone(profile, ["createdAt", "updatedAt"], body.timezone),
     );
-
-    const safeProfile: Profile = converted;
 
     return NextResponse.json<ProfileResponse>(
       { profile: safeProfile },
@@ -119,13 +111,9 @@ export const PATCH = async (request: NextRequest) => {
       data: body,
     });
 
-    const converted = withUserTimezone(
-      profile,
-      ["createdAt", "updatedAt"],
-      user.timezone,
+    const safeProfile: Profile = profileSchema.parse(
+      withUserTimezone(profile, ["createdAt", "updatedAt"], user.timezone),
     );
-
-    const safeProfile: Profile = converted;
 
     return NextResponse.json<ProfileResponse>(
       { profile: safeProfile },

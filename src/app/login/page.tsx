@@ -23,7 +23,7 @@ const fields: FieldProps[] = [
 ];
 
 const buttons: ButtonProps[] = [
-  { children: "ログイン", className: "w-full", type: "submit" },
+  { label: "ログイン", className: "w-full", type: "submit" },
 ];
 
 const loginSchema = z.object({

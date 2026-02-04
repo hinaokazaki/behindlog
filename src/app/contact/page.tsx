@@ -36,7 +36,7 @@ export default function ContactPage() {
   ];
 
   const buttons: ButtonProps[] = [
-    { children: "お問い合わせ", className: "w-full", type: "submit" },
+    { label: "お問い合わせ", className: "w-full", type: "submit" },
   ];
 
   // POST お問い合わせ送信処理

@@ -92,7 +92,7 @@ export default function AdminLayout({
             <span className="font-bold">コミュニティ</span>
           </Link>
           <Link
-            href="/admin/edit"
+            href=""
             className={`flex items-center gap-2 px-14 py-3 text-body text-primary hover:bg-background ${isSelected("/admin/me") && "bg-background}"}`}
           >
             <Image src="/edit.png" width={30} height={30} alt="編集アイコン" />

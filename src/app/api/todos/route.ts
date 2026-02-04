@@ -7,7 +7,9 @@ import {
   Todo,
   TodoResponse,
   Todos,
+  todoSchema,
   TodosResponse,
+  todosSchema,
 } from "@/schemas/todo";
 import {
   withUserDateParse,
@@ -34,13 +36,13 @@ export const POST = async (request: NextRequest) => {
       },
     });
 
-    const converted = withUserTimezone(
+    const safeTodo: Todo = todoSchema.parse(
+      withUserTimezone(
         todo,
         ["dueDate", "createdAt", "updatedAt"],
         user.timezone,
-      );
-
-    const safeTodo: Todo = converted;
+      ),
+    );
 
     return NextResponse.json<TodoResponse>({ todo: safeTodo }, { status: 200 });
   } catch (error) {
@@ -63,13 +65,13 @@ export const GET = async (request: NextRequest) => {
       },
     });
 
-    const converted = withUserTimezoneMany(
+    const safeTodos: Todos = todosSchema.parse(
+      withUserTimezoneMany(
         todos,
         ["createdAt", "updatedAt", "dueDate"],
         user.timezone,
-      );
-
-    const safeTodos: Todos = converted;
+      ),
+    );
 
     return NextResponse.json<TodosResponse>(
       { todos: safeTodos },

@@ -28,13 +28,13 @@ export const GET = async (request: NextRequest) => {
       },
     });
 
-    const safegoals: Goals = goalsSchema.parse(
-      withUserTimezoneMany(
-        goals,
-        ["deadline", "createdAt", "updatedAt"],
-        user.timezone,
-      ),
+    const converted = withUserTimezoneMany(
+      goals,
+      ["deadline", "createdAt", "updatedAt"],
+      user.timezone,
     );
+
+    const safegoals: Goals = converted;
 
     return NextResponse.json<GoalsResponse>(
       { goals: safegoals },
@@ -66,13 +66,13 @@ export const POST = async (request: NextRequest) => {
       },
     });
 
-    const safeGoal: Goal = goalSchema.parse(
-      withUserTimezone(
-        goal,
-        ["deadline", "createdAt", "updatedAt"],
-        user.timezone,
-      ),
+    const converted = withUserTimezone(
+      goal,
+      ["deadline", "createdAt", "updatedAt"],
+      user.timezone,
     );
+
+    const safeGoal: Goal = converted;
 
     return NextResponse.json<GoalResponse>({ goal: safeGoal }, { status: 200 });
   } catch (error) {

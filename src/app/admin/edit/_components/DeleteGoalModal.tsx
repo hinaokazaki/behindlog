@@ -1,46 +1,36 @@
 "use client";
-import Image from "next/image";
-import React from "react";
+import { Goal } from "@/schemas/goal";
 import { Modal } from "../../_components/Modal";
-import { FriendList } from "@/schemas/friend";
+import GoalCardBase from "./GoalCardBase";
 import Button from "@/app/_components/Button";
 
 interface Props {
   isOpen: boolean;
-  friend: FriendList | null;
+  goal: Goal | null;
   onClose: () => void;
   onConfirm: () => void;
   isSubmitting?: boolean;
 }
 
-const DeleteFriendModal: React.FC<Props> = ({
+const DeleteGoalModal: React.FC<Props> = ({
   isOpen,
-  friend,
+  goal,
   onClose,
   onConfirm,
   isSubmitting,
 }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      {friend && (
+      {goal && (
         <div>
           <div>
             <h1 className="mb-6 text-base text-subtitle-top font-bold">
-              友達の削除
+              目標の削除
             </h1>
             <p className="mb-2 flex items-center text-base text-body">
-              <Image
-                src="/profile-red.png"
-                width={30}
-                height={30}
-                alt="プロフィール"
-                className="mx-2"
-              />
-              <span className="mr-2 text-base font-bold">
-                {friend.friend ? friend.friend.name : friend.inviteeEmail}
-              </span>
-              を友達リストから削除しますか？
+              この目標を削除しますか？
             </p>
+            <GoalCardBase goal={goal.title} deadline={goal.deadline} />
           </div>
           <div className="mt-8 flex items-center justify-evenly">
             <Button
@@ -57,7 +47,7 @@ const DeleteFriendModal: React.FC<Props> = ({
               onClick={onConfirm}
               color="red"
               variant="filled"
-              children="友達リストから削除"
+              children="削除"
             />
           </div>
         </div>
@@ -66,4 +56,4 @@ const DeleteFriendModal: React.FC<Props> = ({
   );
 };
 
-export default DeleteFriendModal;
+export default DeleteGoalModal;

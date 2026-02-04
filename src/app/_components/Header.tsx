@@ -39,7 +39,7 @@ const Header: React.FC = () => {
                   height={40}
                 />
               </Link>
-              <Button label="ログアウト" onClick={handleLogout} />
+              <Button children="ログアウト" onClick={handleLogout} />
             </>
           ) : (
             <>

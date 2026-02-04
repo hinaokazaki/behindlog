@@ -52,31 +52,6 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [page, setPage] = useState<PageState | null>(null);
 
-  if (
-    committimeSummaryQuery.isLoading ||
-    committimeQuery.isLoading ||
-    todoQuery.isLoading
-  )
-    return <Loading />;
-
-  if (committimeSummaryQuery.error)
-    return (
-      <p>
-        合計学習時間の取得でエラーが発生しました:{" "}
-        {committimeSummaryQuery.error.message}
-      </p>
-    );
-
-  if (committimeQuery.error)
-    return (
-      <p>
-        目標時間の取得でエラーが発生しました: {committimeQuery.error.message}
-      </p>
-    );
-
-  if (todoQuery.error)
-    return <p>Todoの取得でエラーが発生しました: {todoQuery.error.message}</p>;
-
   useEffect(() => {
     if (recordQuery.data?.dailyRecord) {
       const dailyRecord = recordQuery.data.dailyRecord;
@@ -133,6 +108,31 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
     committimeQuery.data,
   ]);
 
+  if (
+    committimeSummaryQuery.isLoading ||
+    committimeQuery.isLoading ||
+    todoQuery.isLoading
+  )
+    return <Loading />;
+
+  if (committimeSummaryQuery.error)
+    return (
+      <p>
+        合計学習時間の取得でエラーが発生しました:{" "}
+        {committimeSummaryQuery.error.message}
+      </p>
+    );
+
+  if (committimeQuery.error)
+    return (
+      <p>
+        目標時間の取得でエラーが発生しました: {committimeQuery.error.message}
+      </p>
+    );
+
+  if (todoQuery.error)
+    return <p>Todoの取得でエラーが発生しました: {todoQuery.error.message}</p>;
+
   return (
     <div>
       <SectionTitle title="Today's Record" />
@@ -145,7 +145,7 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
               todo={t.title}
               dueDate={t.dueDate || ""}
               completed={t.isCompleted}
-              onClick={}
+              onClick={() => {}}
             />
           ))}
         </div>
@@ -174,7 +174,7 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
         <Label name="memo" title="今日の記録" />
         <Textarea id="memo" placeholder="今日の記録を記入してください。" />
       </section>
-      <Button children="今日の記録を保存" color="red" onClick={} />
+      <Button children="今日の記録を保存" color="red" onClick={() => {}} />
     </div>
   );
 }

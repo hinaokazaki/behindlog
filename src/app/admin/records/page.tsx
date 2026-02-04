@@ -154,7 +154,10 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
         <BlockTitle title="Commit time" />
         <div>
           <p className="text-base">目標学習時間</p>
-          <p className="text-base">{page?.totalStudyTime}時間</p>
+          <p className="text-base">
+            {page?.committime.targetTime ? page.committime.targetTime / 60 : 0}
+            時間
+          </p>
           <span className="text-base">
             [{`${page?.committime.startDate} - ${page?.committime.endDate}`}]
           </span>

@@ -5,7 +5,6 @@ import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
 import {
   Todo,
   TodoResponse,
-  todoSchema,
   UpdateTodoRequest,
   updateTodoRequestSchema,
 } from "@/schemas/todo";
@@ -33,13 +32,13 @@ export const GET = async (
       );
     }
 
-    const safeTodo: Todo = todoSchema.parse(
-      withUserTimezone(
+    const converted = withUserTimezone(
         todo,
         ["dueDate", "createdAt", "updatedAt"],
         user.timezone,
-      ),
-    );
+      );
+
+    const safeTodo: Todo = converted;
 
     return NextResponse.json<TodoResponse>({ todo: safeTodo }, { status: 200 });
   } catch (error) {
@@ -74,13 +73,13 @@ export const PATCH = async (
       data: parsed,
     });
 
-    const safeTodo: Todo = todoSchema.parse(
-      withUserTimezone(
+    const converted = withUserTimezone(
         todo,
         ["dueDate", "createdAt", "updatedAt"],
         user.timezone,
-      ),
-    );
+      );
+
+    const safeTodo: Todo = converted;
 
     return NextResponse.json<TodoResponse>({ todo: safeTodo }, { status: 200 });
   } catch (error) {

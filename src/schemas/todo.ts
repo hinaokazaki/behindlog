@@ -11,9 +11,7 @@ export const todoSchema = z.object({
   updatedAt: z.string(),
 });
 
-export const todosSchema = z.object({
-  todos: z.array(todoSchema),
-});
+export const todosSchema = z.array(todoSchema);
 
 // リクエスト用
 export const createTodoRequestSchema = z.object({

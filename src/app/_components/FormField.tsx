@@ -11,13 +11,24 @@ import {
   Control,
   Controller,
 } from "react-hook-form";
+import { DatePicker } from "./DatePicker";
+import { toYmdLocal } from "@/lib/date";
+import { DateRangePicker } from "./DateRangePicker";
 
 type Option = { value: string; label: string };
 
 type FormFieldProps<T extends FieldValues> = {
   name: Path<T>;
   title: string;
-  type: "text" | "textarea" | "select" | "date" | "email" | "password";
+  type:
+    | "text"
+    | "textarea"
+    | "select"
+    | "date"
+    | "dateRange"
+    | "email"
+    | "password"
+    | "number";
   register: UseFormRegister<T>;
   control: Control<T>;
   error?: string;
@@ -54,7 +65,39 @@ const FormField = <T extends FieldValues>({
           )}
         />
       ) : type === "date" ? (
-        <input id={name} type="date" {...register(name)} {...inputProps} />
+        <Controller
+          name={name}
+          control={control}
+          render={({ field }) => (
+            <DatePicker
+              value={field.value ? new Date(field.value) : null}
+              onChange={(d) => field.onChange(d ? toYmdLocal(d) : "")}
+            />
+          )}
+        />
+      ) : type === "dateRange" ? (
+        <div className="flex justify-center">
+          <Controller
+            name={name}
+            control={control}
+            render={({ field }) => (
+              <DateRangePicker
+                value={field.value ?? { from: null, to: null }}
+                onChange={(range) => field.onChange(range)}
+              />
+            )}
+          />
+        </div>
+      ) : type === "number" ? (
+        <Input
+          id={name}
+          type={type}
+          {...register(
+            name,
+            type === "number" ? { valueAsNumber: true } : undefined,
+          )}
+          {...inputProps}
+        />
       ) : (
         <Input id={name} type={type} {...register(name)} {...inputProps} />
       )}

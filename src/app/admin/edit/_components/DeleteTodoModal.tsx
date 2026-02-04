@@ -1,46 +1,36 @@
 "use client";
-import Image from "next/image";
-import React from "react";
 import { Modal } from "../../_components/Modal";
-import { FriendList } from "@/schemas/friend";
 import Button from "@/app/_components/Button";
+import { Todo } from "@/schemas/todo";
+import TodoCardBase from "./TodoCardBase";
 
 interface Props {
   isOpen: boolean;
-  friend: FriendList | null;
+  todo: Todo | null;
   onClose: () => void;
   onConfirm: () => void;
   isSubmitting?: boolean;
 }
 
-const DeleteFriendModal: React.FC<Props> = ({
+const DeleteTodoModal: React.FC<Props> = ({
   isOpen,
-  friend,
+  todo,
   onClose,
   onConfirm,
   isSubmitting,
 }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      {friend && (
+      {todo && (
         <div>
           <div>
             <h1 className="mb-6 text-base text-subtitle-top font-bold">
-              友達の削除
+              Todoの削除
             </h1>
             <p className="mb-2 flex items-center text-base text-body">
-              <Image
-                src="/profile-red.png"
-                width={30}
-                height={30}
-                alt="プロフィール"
-                className="mx-2"
-              />
-              <span className="mr-2 text-base font-bold">
-                {friend.friend ? friend.friend.name : friend.inviteeEmail}
-              </span>
-              を友達リストから削除しますか？
+              このTodoを削除しますか？
             </p>
+            <TodoCardBase todo={todo.title} dueDate={todo.dueDate} completed={todo.isCompleted} />
           </div>
           <div className="mt-8 flex items-center justify-evenly">
             <Button
@@ -57,7 +47,7 @@ const DeleteFriendModal: React.FC<Props> = ({
               onClick={onConfirm}
               color="red"
               variant="filled"
-              children="友達リストから削除"
+              children="削除"
             />
           </div>
         </div>
@@ -66,4 +56,4 @@ const DeleteFriendModal: React.FC<Props> = ({
   );
 };
 
-export default DeleteFriendModal;
+export default DeleteTodoModal;

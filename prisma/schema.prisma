@@ -23,7 +23,7 @@ model User {
   records            DailyRecord[]
   goals              Goal[]
   todos              Todo[] 
-  commits            CommitTime[]
+  CommitTime         CommitTime?
   contactMessages    ContactMessage[]
   friendships1       Friendship[] @relation("User1")
   friendships2       Friendship[] @relation("User2")

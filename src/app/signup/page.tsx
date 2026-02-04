@@ -23,7 +23,7 @@ const fields: FieldProps[] = [
 ];
 
 const buttons: ButtonProps[] = [
-  { label: "新規登録", className: "w-full", type: "submit" },
+  { children: "新規登録", className: "w-full", type: "submit" },
 ];
 
 const signupSchema = z.object({

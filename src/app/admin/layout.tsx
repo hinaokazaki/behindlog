@@ -56,7 +56,7 @@ export default function AdminLayout({
             <span className="font-bold">ダッシュボード</span>
           </Link>
           <Link
-            href=""
+            href="/admin/records"
             className={`flex items-center gap-2 px-14 py-3 text-body text-primary hover:bg-background ${isSelected("/admin/me") && "bg-background}"}`}
           >
             <Image

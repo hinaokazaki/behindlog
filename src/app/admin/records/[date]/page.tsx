@@ -52,8 +52,6 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [page, setPage] = useState<PageState | null>(null);
 
-  const today = new Date();
-
   useEffect(() => {
     if (recordQuery.data?.dailyRecord) {
       const dailyRecord = recordQuery.data.dailyRecord;
@@ -137,8 +135,10 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
 
   return (
     <div>
-      <SectionTitle title="Today's Record" />
-      <span>date</span>
+      <div className="flex items-center justify-between">
+        <SectionTitle title="Today's Record" />
+        <p className="text-heading-3 font-extrabold text-primary">{date}</p>
+      </div>
       <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
         <BlockTitle title="Todo list" />
         <div className="space-y-2">

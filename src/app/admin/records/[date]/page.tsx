@@ -1,13 +1,13 @@
 "use client";
 import { useApi } from "@/app/_hooks/useApi";
-import { useCommittimeQuery } from "../_hooks/useCommittimeQuery";
-import { useCommittimeSummaryQuery } from "../_hooks/useCommittimeSummaryQuery";
-import { useTodoQuery } from "../_hooks/useTodoQuery";
+import { useCommittimeQuery } from "../../_hooks/useCommittimeQuery";
+import { useCommittimeSummaryQuery } from "../../_hooks/useCommittimeSummaryQuery";
+import { useTodoQuery } from "../../_hooks/useTodoQuery";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Loading from "@/app/_components/Loading";
-import BlockTitle from "../_components/BlockTitle";
-import useFetch from "../_hooks/useFetch";
+import BlockTitle from "../../_components/BlockTitle";
+import useFetch from "../../_hooks/useFetch";
 import {
   DailyRecord,
   TodoSnapshot,
@@ -15,14 +15,14 @@ import {
 } from "@/schemas/dailyRecord";
 import { FieldProps } from "@/app/_types/type";
 import SectionTitle from "@/app/_components/SectionTitle";
-import TodoCardBase from "../edit/_components/TodoCardBase";
+import TodoCardBase from "../../edit/_components/TodoCardBase";
 import Button from "@/app/_components/Button";
 import Label from "@/app/_components/Label";
 import Textarea from "@/app/_components/Textarea";
 
 type PageState = {
   source: "record" | "fresh";
-  todoItems: TodoSnapshot; // TODO: TodoSnapshot items の型に置換
+  todoItems: TodoSnapshot;
   memo: string;
   totalStudyTime: number;
   committime: {
@@ -51,6 +51,8 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [page, setPage] = useState<PageState | null>(null);
+
+  const today = new Date();
 
   useEffect(() => {
     if (recordQuery.data?.dailyRecord) {

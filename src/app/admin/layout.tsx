@@ -4,6 +4,7 @@ import { useRouteGuard } from "./_hooks/useRouteGuard";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { supabase } from "@/utils/supabase";
+import { toYmdLocal } from "@/lib/date";
 
 export default function AdminLayout({
   children,
@@ -12,7 +13,7 @@ export default function AdminLayout({
 }) {
   useRouteGuard();
   const router = useRouter();
-
+  const today = toYmdLocal(new Date());
   const handleLogout = async () => {
     await supabase.auth.signOut();
     alert("ログアウトしました");
@@ -56,7 +57,7 @@ export default function AdminLayout({
             <span className="font-bold">ダッシュボード</span>
           </Link>
           <Link
-            href="/admin/records"
+            href={`/admin/records/${today}`}
             className={`flex items-center gap-2 px-14 py-3 text-body text-primary hover:bg-background ${isSelected("/admin/me") && "bg-background}"}`}
           >
             <Image

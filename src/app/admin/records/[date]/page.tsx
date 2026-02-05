@@ -179,7 +179,9 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
         <Label name="memo" title="今日の記録" />
         <Textarea id="memo" placeholder="今日の記録を記入してください。" />
       </section>
-      <Button children="今日の記録を保存" color="red" onClick={() => {}} />
+      <div className="mt-8 flex justify-center">
+        <Button children="今日の記録を保存" color="red" onClick={() => {}} />
+      </div>
     </div>
   );
 }

@@ -19,6 +19,7 @@ import Label from "@/app/_components/Label";
 import Textarea from "@/app/_components/Textarea";
 import BlockTitle from "../../_components/BlockTitle";
 import SectionTitle from "@/app/_components/SectionTitle";
+import Input from "@/app/_components/Input";
 
 type PageState = {
   source: "record" | "fresh";
@@ -32,12 +33,17 @@ type PageState = {
   };
 };
 
-const field: FieldProps = {
-  name: "memo",
-  title: "今日の記録",
-  type: "textarea",
-  inputProps: { placeholder: "今日の記録を記入してください。" },
+type StudyTimeForm = {
+  studyHours: number;
+  studyMinutes: number;
 };
+
+// const field: FieldProps = {
+//   name: "memo",
+//   title: "今日の記録",
+//   type: "textarea",
+//   inputProps: { placeholder: "今日の記録を記入してください。" },
+// };
 
 export default function RecordsPage({ params }: { params: { date: string } }) {
   const date = params.date;
@@ -51,6 +57,10 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [page, setPage] = useState<PageState | null>(null);
+  const [studyTime, setStudyTime] = useState<StudyTimeForm>({
+    studyHours: 0,
+    studyMinutes: 0,
+  });
 
   useEffect(() => {
     if (recordQuery.data?.dailyRecord) {
@@ -59,11 +69,17 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
       // unknown型をTodoSnapshotに変換
       const snapshot = todoSnapshotSchema.parse(dailyRecord.todoSnapshot);
 
+      const total = dailyRecord.totalStudyTime ?? 0;
+      setStudyTime({
+        studyHours: Math.floor(total / 60),
+        studyMinutes: total % 60,
+      });
+
       setPage({
         source: "record",
         todoItems: snapshot,
         memo: dailyRecord.memo ?? "",
-        totalStudyTime: dailyRecord.totalStudyTime ?? 0,
+        totalStudyTime: total,
         committime: {
           targetTime: dailyRecord.commitTargetTime ?? null,
           startDate: dailyRecord.commitStartDate
@@ -77,6 +93,7 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
       return;
     }
 
+    setStudyTime({ studyHours: 0, studyMinutes: 0 });
     const committime = committimeQuery.data?.committime ?? null;
     const todos = todoQuery.data?.todos ?? [];
     const snapshot: TodoSnapshot = {
@@ -100,13 +117,7 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
         endDate: committime?.endDate ?? null,
       },
     });
-  }, [
-    date,
-    recordQuery.data,
-    recordQuery.error,
-    todoQuery.data,
-    committimeQuery.data,
-  ]);
+  }, [date, recordQuery.data, todoQuery.data, committimeQuery.data]);
 
   if (
     committimeSummaryQuery.isLoading ||
@@ -133,6 +144,7 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
   if (todoQuery.error)
     return <p>Todoの取得でエラーが発生しました: {todoQuery.error.message}</p>;
 
+  // todo checkbox state
   const toggleTodo = (todoId: number, next: boolean) => {
     setPage((prev) => {
       if (!prev) return prev;
@@ -185,6 +197,34 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
         <div>
           <div>
             <p className="text-base">今日の学習時間</p>
+            <div>
+              <Input
+                type="number"
+                name="studyHours"
+                value={studyTime.studyHours}
+                onChange={(e) =>
+                  setStudyTime((p) => ({
+                    ...p,
+                    studyHours: Number(e.target.value),
+                  }))
+                }
+              />
+              時間
+              <Input
+                type="number"
+                name="studyMinutes"
+                min={0}
+                max={59}
+                value={studyTime.studyMinutes}
+                onChange={(e) =>
+                  setStudyTime((p) => ({
+                    ...p,
+                    studyMinutes: Number(e.target.value),
+                  }))
+                }
+              />
+              分
+            </div>
           </div>
           <div>
             <p className="text-base">合計学習時間</p>

@@ -194,7 +194,14 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
       <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
         <BlockTitle title="Note" />
         <Label name="memo" title="今日の記録" />
-        <Textarea id="memo" placeholder="今日の記録を記入してください。" />
+        <Textarea
+          id="memo"
+          placeholder="今日の記録を記入してください。"
+          value={page?.memo ?? ""}
+          onChange={(e) =>
+            setPage((prev) => (prev ? { ...prev, memo: e.target.value } : prev))
+          }
+        />
       </section>
       <div className="mt-8 flex justify-center">
         <Button children="今日の記録を保存" color="red" onClick={() => {}} />

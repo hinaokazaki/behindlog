@@ -8,11 +8,11 @@ import { useEffect, useState } from "react";
 import Loading from "@/app/_components/Loading";
 import useFetch from "../../_hooks/useFetch";
 import {
+  CreateDailyRecord,
   DailyRecord,
   TodoSnapshot,
   todoSnapshotSchema,
 } from "@/schemas/dailyRecord";
-import { FieldProps } from "@/app/_types/type";
 import TodoCardBase from "../../edit/_components/TodoCardBase";
 import Button from "@/app/_components/Button";
 import Label from "@/app/_components/Label";
@@ -37,13 +37,6 @@ type StudyTimeForm = {
   studyHours: number;
   studyMinutes: number;
 };
-
-// const field: FieldProps = {
-//   name: "memo",
-//   title: "今日の記録",
-//   type: "textarea",
-//   inputProps: { placeholder: "今日の記録を記入してください。" },
-// };
 
 export default function RecordsPage({ params }: { params: { date: string } }) {
   const date = params.date;
@@ -161,6 +154,33 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
     });
   };
 
+  // submit
+  const handleSave = async () => {
+    if (!page) return;
+
+    const total = studyTime.studyHours * 60 + studyTime.studyMinutes;
+    const payload: CreateDailyRecord = {
+      memo: page.memo,
+      totalStudyTime: total,
+      todoSnapshot: page.todoItems,
+      applyTodoUpdates: true,
+    };
+
+    setIsSubmitting(true);
+    try {
+      await callApi<{ dailyRecord: DailyRecord }>(
+        `/api/records/${date}`,
+        "PUT",
+        payload,
+      );
+      router.refresh();
+    } catch (error) {
+      console.error("save records failed", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -244,7 +264,12 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
         />
       </section>
       <div className="mt-8 flex justify-center">
-        <Button children="今日の記録を保存" color="red" onClick={() => {}} />
+        <Button
+          children="今日の記録を保存"
+          color="red"
+          onClick={handleSave}
+          disabled={isSubmitting}
+        />
       </div>
     </div>
   );

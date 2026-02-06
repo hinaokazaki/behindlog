@@ -116,7 +116,9 @@ export const PUT = async (
           id: todo.id,
           title: todo.title,
           isCompleted: todo.isCompleted,
-          dueDate: todo.dueDate ? todo.dueDate.toISOString() : null,
+          dueDate: todo.dueDate
+            ? todo.dueDate.toISOString().slice(0, 10)
+            : null,
         })),
       };
     }

@@ -6,7 +6,6 @@ import { useTodoQuery } from "../../_hooks/useTodoQuery";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Loading from "@/app/_components/Loading";
-import BlockTitle from "../../_components/BlockTitle";
 import useFetch from "../../_hooks/useFetch";
 import {
   DailyRecord,
@@ -14,11 +13,12 @@ import {
   todoSnapshotSchema,
 } from "@/schemas/dailyRecord";
 import { FieldProps } from "@/app/_types/type";
-import SectionTitle from "@/app/_components/SectionTitle";
 import TodoCardBase from "../../edit/_components/TodoCardBase";
 import Button from "@/app/_components/Button";
 import Label from "@/app/_components/Label";
 import Textarea from "@/app/_components/Textarea";
+import BlockTitle from "../../_components/BlockTitle";
+import SectionTitle from "@/app/_components/SectionTitle";
 
 type PageState = {
   source: "record" | "fresh";
@@ -133,6 +133,22 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
   if (todoQuery.error)
     return <p>Todoの取得でエラーが発生しました: {todoQuery.error.message}</p>;
 
+  const toggleTodo = (todoId: number, next: boolean) => {
+    setPage((prev) => {
+      if (!prev) return prev;
+
+      return {
+        ...prev,
+        todoItems: {
+          ...prev.todoItems,
+          items: prev.todoItems.items.map((t) =>
+            t.id === todoId ? { ...t, isCompleted: next } : t,
+          ),
+        },
+      };
+    });
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -144,10 +160,11 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
         <div className="space-y-2">
           {page?.todoItems.items.map((t) => (
             <TodoCardBase
+              key={t.id}
               todo={t.title}
               dueDate={t.dueDate || ""}
               completed={t.isCompleted}
-              onClick={() => {}}
+              onToggle={(next) => toggleTodo(t.id, next)}
             />
           ))}
         </div>

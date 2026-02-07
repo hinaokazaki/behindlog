@@ -38,7 +38,7 @@ export const GET = async (request: NextRequest) => {
 
     const result = {
       committimeId: committime.id,
-      totalStudyTime: totalStudyTime._sum.totalStudyTime ?? 0,
+      totalStudyTimeByPeriod: totalStudyTime._sum.totalStudyTime ?? 0,
       startDate: committime.startDate,
       endDate: committime.endDate,
     };

@@ -34,8 +34,8 @@ type PageState = {
 };
 
 type StudyTimeForm = {
-  studyHours: number;
-  studyMinutes: number;
+  studyHours: string;
+  studyMinutes: string;
 };
 
 export default function RecordsPage({ params }: { params: { date: string } }) {
@@ -51,8 +51,8 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [page, setPage] = useState<PageState | null>(null);
   const [studyTime, setStudyTime] = useState<StudyTimeForm>({
-    studyHours: 0,
-    studyMinutes: 0,
+    studyHours: "",
+    studyMinutes: "",
   });
 
   useEffect(() => {
@@ -64,8 +64,8 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
 
       const total = dailyRecord.totalStudyTime ?? 0;
       setStudyTime({
-        studyHours: Math.floor(total / 60),
-        studyMinutes: total % 60,
+        studyHours: String(Math.floor(total / 60)),
+        studyMinutes: String(total % 60),
       });
 
       setPage({
@@ -86,7 +86,7 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
       return;
     }
 
-    setStudyTime({ studyHours: 0, studyMinutes: 0 });
+    setStudyTime({ studyHours: "", studyMinutes: "" });
     const committime = committimeQuery.data?.committime ?? null;
     const todos = todoQuery.data?.todos ?? [];
     const snapshot: TodoSnapshot = {
@@ -158,7 +158,9 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
   const handleSave = async () => {
     if (!page) return;
 
-    const total = studyTime.studyHours * 60 + studyTime.studyMinutes;
+    const total =
+      Number(studyTime.studyHours || 0) * 60 +
+      Number(studyTime.studyMinutes || 0);
     const payload: CreateDailyRecord = {
       memo: page.memo,
       totalStudyTime: total,
@@ -175,6 +177,7 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
       );
       router.refresh();
       committimeSummaryQuery.mutate();
+      recordQuery.mutate();
     } catch (error) {
       console.error("save records failed", error);
     } finally {
@@ -236,12 +239,14 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
                 <Input
                   type="number"
                   name="studyHours"
+                  placeholder="0"
+                  inputMode="numeric"
                   value={studyTime.studyHours}
                   className="w-20 rounded-md border-2 p-2 text-center"
                   onChange={(e) =>
                     setStudyTime((p) => ({
                       ...p,
-                      studyHours: Number(e.target.value),
+                      studyHours: e.target.value,
                     }))
                   }
                 />
@@ -254,6 +259,8 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
                 <Input
                   type="number"
                   name="studyMinutes"
+                  placeholder="0"
+                  inputMode="numeric"
                   min={0}
                   max={59}
                   value={studyTime.studyMinutes}
@@ -261,7 +268,7 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
                   onChange={(e) =>
                     setStudyTime((p) => ({
                       ...p,
-                      studyMinutes: Number(e.target.value),
+                      studyMinutes: e.target.value,
                     }))
                   }
                 />

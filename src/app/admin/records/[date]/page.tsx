@@ -54,7 +54,6 @@ type RecordForm = {
   };
 };
 
-
 export default function RecordsPage({ params }: { params: { date: string } }) {
   const date = params.date;
   const committimeSummaryQuery = useCommittimeSummaryQuery();
@@ -72,20 +71,15 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
   //   studyMinutes: "",
   // });
 
-  const {
-  register,
-  handleSubmit,
-  reset,
-  watch,
-  setValue,
-} = useForm<RecordForm>({
-  defaultValues: {
-    memo: "",
-    studyHours: "",
-    studyMinutes: "",
-    todoItems: { date, items: [] },
-  },
-});
+  const { register, handleSubmit, reset, watch, setValue } =
+    useForm<RecordForm>({
+      defaultValues: {
+        memo: "",
+        studyHours: "",
+        studyMinutes: "",
+        todoItems: { date, items: [] },
+      },
+    });
 
   useEffect(() => {
     if (recordQuery.data?.dailyRecord) {
@@ -101,8 +95,8 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
         studyMinutes: String(total % 60),
         todoItems: snapshot,
       });
-        return;
-      }
+      return;
+    }
 
     const committime = committimeQuery.data?.committime ?? null;
     const todos = todoQuery.data?.todos ?? [];
@@ -158,8 +152,7 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
   // submit
   const onSubmit = async (data: RecordForm) => {
     const total =
-      Number(data.studyHours || 0) * 60 +
-      Number(data.studyMinutes || 0);
+      Number(data.studyHours || 0) * 60 + Number(data.studyMinutes || 0);
 
     const payload: CreateDailyRecord = {
       memo: data.memo,
@@ -190,7 +183,7 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
     committimeSummaryQuery.data?.totalStudyTime.totalStudyTimeByPeriod ?? 0;
 
   return (
-    <div>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex items-center justify-between">
         <SectionTitle title="Today's Record" />
         <p className="text-heading-3 font-extrabold text-primary">{date}</p>
@@ -288,12 +281,12 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
       </section>
       <div className="mt-8 flex justify-center">
         <Button
+          type="submit"
           children="今日の記録を保存"
           color="red"
-          onClick={handleSave}
           disabled={isSubmitting}
         />
       </div>
-    </div>
+    </form>
   );
 }

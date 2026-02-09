@@ -20,23 +20,40 @@ import Textarea from "@/app/_components/Textarea";
 import BlockTitle from "../../_components/BlockTitle";
 import SectionTitle from "@/app/_components/SectionTitle";
 import Input from "@/app/_components/Input";
+import { useForm } from "react-hook-form";
 
-type PageState = {
-  source: "record" | "fresh";
-  todoItems: TodoSnapshot;
+// type PageState = {
+//   source: "record" | "fresh";
+//   todoItems: TodoSnapshot;
+//   memo: string;
+//   totalStudyTime: number;
+//   committime: {
+//     targetTime: number | null;
+//     startDate: string | null;
+//     endDate: string | null;
+//   };
+// };
+
+// type StudyTimeForm = {
+//   studyHours: string;
+//   studyMinutes: string;
+// };
+
+type RecordForm = {
   memo: string;
-  totalStudyTime: number;
-  committime: {
-    targetTime: number | null;
-    startDate: string | null;
-    endDate: string | null;
+  studyHours: string;
+  studyMinutes: string;
+  todoItems: {
+    date: string;
+    items: {
+      id: number;
+      title: string;
+      isCompleted: boolean;
+      dueDate: string | null;
+    }[];
   };
 };
 
-type StudyTimeForm = {
-  studyHours: string;
-  studyMinutes: string;
-};
 
 export default function RecordsPage({ params }: { params: { date: string } }) {
   const date = params.date;
@@ -49,11 +66,26 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
   const { callApi } = useApi();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [page, setPage] = useState<PageState | null>(null);
-  const [studyTime, setStudyTime] = useState<StudyTimeForm>({
+  // const [page, setPage] = useState<PageState | null>(null);
+  // const [studyTime, setStudyTime] = useState<StudyTimeForm>({
+  //   studyHours: "",
+  //   studyMinutes: "",
+  // });
+
+  const {
+  register,
+  handleSubmit,
+  reset,
+  watch,
+  setValue,
+} = useForm<RecordForm>({
+  defaultValues: {
+    memo: "",
     studyHours: "",
     studyMinutes: "",
-  });
+    todoItems: { date, items: [] },
+  },
+});
 
   useEffect(() => {
     if (recordQuery.data?.dailyRecord) {
@@ -63,30 +95,15 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
       const snapshot = todoSnapshotSchema.parse(dailyRecord.todoSnapshot);
 
       const total = dailyRecord.totalStudyTime ?? 0;
-      setStudyTime({
+      reset({
+        memo: dailyRecord.memo ?? "",
         studyHours: String(Math.floor(total / 60)),
         studyMinutes: String(total % 60),
-      });
-
-      setPage({
-        source: "record",
         todoItems: snapshot,
-        memo: dailyRecord.memo ?? "",
-        totalStudyTime: total,
-        committime: {
-          targetTime: dailyRecord.commitTargetTime ?? null,
-          startDate: dailyRecord.commitStartDate
-            ? String(dailyRecord.commitStartDate)
-            : null,
-          endDate: dailyRecord.commitEndDate
-            ? String(dailyRecord.commitEndDate)
-            : null,
-        },
       });
-      return;
-    }
+        return;
+      }
 
-    setStudyTime({ studyHours: "", studyMinutes: "" });
     const committime = committimeQuery.data?.committime ?? null;
     const todos = todoQuery.data?.todos ?? [];
     const snapshot: TodoSnapshot = {
@@ -99,18 +116,13 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
       })),
     };
 
-    setPage({
-      source: "fresh",
-      todoItems: snapshot,
+    reset({
       memo: "",
-      totalStudyTime: 0,
-      committime: {
-        targetTime: committime?.targetTime ?? null,
-        startDate: committime?.startDate ?? null,
-        endDate: committime?.endDate ?? null,
-      },
+      studyHours: "",
+      studyMinutes: "",
+      todoItems: snapshot,
     });
-  }, [date, recordQuery.data, todoQuery.data, committimeQuery.data]);
+  }, [date, recordQuery.data, todoQuery.data, reset]);
 
   if (
     committimeSummaryQuery.isLoading ||
@@ -138,33 +150,21 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
     return <p>Todoの取得でエラーが発生しました: {todoQuery.error.message}</p>;
 
   // todo checkbox state
-  const toggleTodo = (todoId: number, next: boolean) => {
-    setPage((prev) => {
-      if (!prev) return prev;
-
-      return {
-        ...prev,
-        todoItems: {
-          ...prev.todoItems,
-          items: prev.todoItems.items.map((t) =>
-            t.id === todoId ? { ...t, isCompleted: next } : t,
-          ),
-        },
-      };
-    });
+  const todoItems = watch("todoItems");
+  const toggleTodo = (index: number, next: boolean) => {
+    setValue(`todoItems.items.${index}.isCompleted`, next);
   };
 
   // submit
-  const handleSave = async () => {
-    if (!page) return;
-
+  const onSubmit = async (data: RecordForm) => {
     const total =
-      Number(studyTime.studyHours || 0) * 60 +
-      Number(studyTime.studyMinutes || 0);
+      Number(data.studyHours || 0) * 60 +
+      Number(data.studyMinutes || 0);
+
     const payload: CreateDailyRecord = {
-      memo: page.memo,
+      memo: data.memo,
       totalStudyTime: total,
-      todoSnapshot: page.todoItems,
+      todoSnapshot: data.todoItems,
       applyTodoUpdates: true,
     };
 
@@ -198,13 +198,13 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
       <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
         <BlockTitle title="Todo list" />
         <div className="space-y-2">
-          {page?.todoItems.items.map((t) => (
+          {todoItems.items.map((t, index) => (
             <TodoCardBase
               key={t.id}
               todo={t.title}
               dueDate={t.dueDate || ""}
               completed={t.isCompleted}
-              onToggle={(next) => toggleTodo(t.id, next)}
+              onToggle={(next) => toggleTodo(index, next)}
             />
           ))}
         </div>
@@ -238,17 +238,9 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
               <div className="flex items-center gap-2">
                 <Input
                   type="number"
-                  name="studyHours"
                   placeholder="0"
-                  inputMode="numeric"
-                  value={studyTime.studyHours}
                   className="w-20 rounded-md border-2 p-2 text-center"
-                  onChange={(e) =>
-                    setStudyTime((p) => ({
-                      ...p,
-                      studyHours: e.target.value,
-                    }))
-                  }
+                  {...register("studyHours")}
                 />
                 <span className="text-base text-form-text font-medium">
                   時間
@@ -258,19 +250,12 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
               <div className="flex items-center gap-2">
                 <Input
                   type="number"
-                  name="studyMinutes"
                   placeholder="0"
                   inputMode="numeric"
                   min={0}
                   max={59}
-                  value={studyTime.studyMinutes}
                   className="w-20 rounded-md border-2 p-2 text-center"
-                  onChange={(e) =>
-                    setStudyTime((p) => ({
-                      ...p,
-                      studyMinutes: e.target.value,
-                    }))
-                  }
+                  {...register("studyMinutes")}
                 />
                 <span className="text-base text-form-text font-medium">分</span>
               </div>
@@ -298,10 +283,7 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
         <Textarea
           id="memo"
           placeholder="今日の記録を記入してください。"
-          value={page?.memo ?? ""}
-          onChange={(e) =>
-            setPage((prev) => (prev ? { ...prev, memo: e.target.value } : prev))
-          }
+          {...register("memo")}
         />
       </section>
       <div className="mt-8 flex justify-center">

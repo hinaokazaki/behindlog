@@ -5,6 +5,7 @@ import { useCommittimeSummaryQuery } from "../../_hooks/useCommittimeSummaryQuer
 import { useTodoQuery } from "../../_hooks/useTodoQuery";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import Loading from "@/app/_components/Loading";
 import useFetch from "../../_hooks/useFetch";
 import {
@@ -20,24 +21,6 @@ import Textarea from "@/app/_components/Textarea";
 import BlockTitle from "../../_components/BlockTitle";
 import SectionTitle from "@/app/_components/SectionTitle";
 import Input from "@/app/_components/Input";
-import { useForm } from "react-hook-form";
-
-// type PageState = {
-//   source: "record" | "fresh";
-//   todoItems: TodoSnapshot;
-//   memo: string;
-//   totalStudyTime: number;
-//   committime: {
-//     targetTime: number | null;
-//     startDate: string | null;
-//     endDate: string | null;
-//   };
-// };
-
-// type StudyTimeForm = {
-//   studyHours: string;
-//   studyMinutes: string;
-// };
 
 type RecordForm = {
   memo: string;
@@ -65,11 +48,6 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
   const { callApi } = useApi();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  // const [page, setPage] = useState<PageState | null>(null);
-  // const [studyTime, setStudyTime] = useState<StudyTimeForm>({
-  //   studyHours: "",
-  //   studyMinutes: "",
-  // });
 
   const { register, handleSubmit, reset, watch, setValue } =
     useForm<RecordForm>({
@@ -98,7 +76,6 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
       return;
     }
 
-    const committime = committimeQuery.data?.committime ?? null;
     const todos = todoQuery.data?.todos ?? [];
     const snapshot: TodoSnapshot = {
       date,
@@ -142,6 +119,23 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
 
   if (todoQuery.error)
     return <p>Todoの取得でエラーが発生しました: {todoQuery.error.message}</p>;
+
+  // committime
+  const record = recordQuery.data?.dailyRecord ?? null;
+  const displayCommittime = {
+    targetTime:
+      record?.commitTargetTime ??
+      committimeQuery.data?.committime?.targetTime ??
+      null,
+    startDate:
+      record?.commitStartDate ??
+      committimeQuery.data?.committime?.startDate ??
+      null,
+    endDate:
+      record?.commitEndDate ??
+      committimeQuery.data?.committime?.endDate ??
+      null,
+  };
 
   // todo checkbox state
   const todoItems = watch("todoItems");
@@ -208,16 +202,16 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
           <div>
             <p className="text-base text-form-text">目標学習時間</p>
             <p className="ml-4 mt-4 text-base font-bold">
-              {page?.committime.targetTime
-                ? Math.floor(page.committime.targetTime / 60)
+              {displayCommittime.targetTime
+                ? Math.floor(displayCommittime.targetTime / 60)
                 : 0}
               <span className="ml-8 text-base text-form-text">時間</span>
             </p>
           </div>
 
           <p className="text-base text-sm font-semibold">
-            [{page?.committime.startDate ?? "----"} -{" "}
-            {page?.committime.endDate ?? "----"}]
+            [{displayCommittime.startDate ?? "----"} -{" "}
+            {displayCommittime.endDate ?? "----"}]
           </p>
         </div>
 

@@ -1,11 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
-import {
-  UserRecord,
-  UserRecordResponse,
-  userRecordSchema,
-} from "@/schemas/userRecord";
+import { UserRecord, UserRecordResponse } from "@/schemas/userRecord";
 import { withUserTimezone } from "@/lib/timezone";
 import { ErrorResponse } from "@/schemas/common";
 

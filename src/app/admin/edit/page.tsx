@@ -1,3 +1,4 @@
+"use client";
 import SectionTitle from "@/app/_components/SectionTitle";
 import GoalSection from "./_components/GoalSection";
 import TodoSection from "./_components/TodoSection";

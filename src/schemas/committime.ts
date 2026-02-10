@@ -13,7 +13,7 @@ export const committimeSchema = z.object({
 
 export const totalStudyTimeSchema = z.object({
   committimeId: z.number(),
-  totalStudyTime: z.number(),
+  totalStudyTimeByPeriod: z.number(),
   startDate: z.string(),
   endDate: z.string(),
 });

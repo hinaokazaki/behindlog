@@ -22,7 +22,7 @@ export const todoItemSchema = z.object({
   id: z.number().int(),
   title: z.string(),
   isCompleted: z.boolean(),
-  dueDate: z.iso.datetime().nullable().optional(),
+  dueDate: z.iso.date().nullable().optional(),
 });
 
 export const todoSnapshotSchema = z.object({

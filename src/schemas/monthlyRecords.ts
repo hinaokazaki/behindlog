@@ -4,6 +4,7 @@ import { z } from "zod";
 export const userSummarySchema = z.object({
   id: z.string(),
   name: z.string().nullable(),
+  recordId: z.number(),
 });
 
 // １日の記録保持者

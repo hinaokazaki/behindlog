@@ -5,7 +5,6 @@ import { withUserTimezone } from "@/lib/timezone";
 import {
   MonthlyRecords,
   MonthlyRecordsResponse,
-  monthlyRecordsSchema,
 } from "@/schemas/monthlyRecords";
 import { ErrorResponse } from "@/schemas/common";
 import z from "zod";
@@ -54,6 +53,7 @@ export const GET = async (request: NextRequest) => {
         },
       },
       select: {
+        id: true,
         recordedDate: true,
         user: {
           select: {
@@ -74,10 +74,17 @@ export const GET = async (request: NextRequest) => {
         );
         const date = formatted.recordedDate;
         if (!acc[date]) acc[date] = [];
-        acc[date].push(record.user);
+        acc[date].push({
+          id: record.user.id,
+          name: record.user.name,
+          recordId: record.id,
+        });
         return acc;
       },
-      {} as Record<string, { id: string; name: string | null }[]>,
+      {} as Record<
+        string,
+        { id: string; name: string | null; recordId: number }[]
+      >,
     );
 
     const response: MonthlyRecords = {

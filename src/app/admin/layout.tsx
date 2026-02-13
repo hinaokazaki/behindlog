@@ -69,7 +69,7 @@ export default function AdminLayout({
             <span className="font-bold">今日の記録</span>
           </Link>
           <Link
-            href=""
+            href="/admin/calendar"
             className={`flex items-center gap-2 px-14 py-3 text-body text-primary hover:bg-background ${isSelected("/admin/me") && "bg-background}"}`}
           >
             <Image

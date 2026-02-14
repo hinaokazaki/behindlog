@@ -1,6 +1,12 @@
 import useFetch from "./useFetch";
 import { MonthlyRecords } from "@/schemas/monthlyRecords";
 
-export const useMonthlyRecordsQuery = () => {
-  return useFetch<{ monthlyRecords: MonthlyRecords }>("/api/friends/records");
+type Props = {
+  month: string;
+};
+
+export const useMonthlyRecordsQuery = ({ month }: Props) => {
+  return useFetch<{ monthlyRecords: MonthlyRecords }>(
+    `/api/friends/records?month=${month}`,
+  );
 };

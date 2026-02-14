@@ -19,6 +19,9 @@ export const toYmdLocal = (d: Date): string => {
   return `${y}-${m}-${day}`;
 };
 
+export const toYmLocal = (d: Date) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+
 export const fromYmdLocal = (ymd: string): Date => {
   const [y, m, d] = ymd.split("-").map(Number);
   return new Date(y, m - 1, d); // ← local time の 00:00

@@ -39,7 +39,7 @@ export default function CalendarPage() {
     return <p>カレンダー情報の取得でエラーが発生しました。</p>;
 
   return (
-    <div className="rounded-2xl bg-[#F6F2E8] p-8">
+    <div className="mx-auto w-full max-w-[980px] rounded-3xl bg-white p-8 shadow-sm">
       <Calendar
         locale="en-US"
         value={value}

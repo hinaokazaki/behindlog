@@ -27,3 +27,33 @@ body {
     text-wrap: balance;
   }
 }
+
+/* globals.css */
+
+.react-calendar {
+  width: 100%;
+  border: none;
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.react-calendar__tile {
+  text-align: left;
+  font-size: 14px;
+}
+
+.react-calendar__navigation button {
+  background: none;
+  font-weight: bold;
+}
+
+.react-calendar__tile--now {
+  background: #fff6e3;
+  border-radius: 12px;
+}
+
+.react-calendar__tile--active {
+  background: #fff6e3 !important;
+  border-radius: 12px;
+}

@@ -36,6 +36,7 @@ body {
   background: white;
   border-radius: 20px;
   padding: 20px;
+  color: #3c4a5e;
 }
 
 .react-calendar__tile {
@@ -47,7 +48,7 @@ body {
   background: none;
   font-weight: bold;
 }
-
+/* 
 .react-calendar__tile--now {
   background: #fff6e3;
   border-radius: 12px;
@@ -56,4 +57,84 @@ body {
 .react-calendar__tile--active {
   background: #fff6e3 !important;
   border-radius: 12px;
+} */
+
+/* react-calendar の幅 */
+.bl-calendar.react-calendar {
+  width: 100%;
+  border: none;
+  background: transparent;
+}
+
+/* 上のナビ（月名・矢印） */
+.bl-calendar .react-calendar__navigation {
+  height: 56px;
+  margin-bottom: 16px;
+}
+
+/* 月名 */
+.bl-calendar .react-calendar__navigation__label {
+  font-size: 36px;
+  font-weight: 700;
+}
+
+/* 曜日行 */
+.bl-calendar .react-calendar__month-view__weekdays {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* “タイル”＝日付セルのサイズ */
+.bl-calendar .react-calendar__tile {
+  height: 110px;
+  padding: 10px;
+  text-align: left;
+  border-radius: 12px;
+}
+
+/* グリッドの罫線っぽさ */
+.bl-calendar .react-calendar__month-view__days__day {
+  border: 1px solid #e5e7eb;
+}
+
+/* タイルを左上寄せレイアウトにする */
+.bl-calendar .react-calendar__tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* ← 左寄せ */
+  justify-content: flex-start; /* ← 上寄せ */
+  position: relative;
+  padding: 12px;
+}
+
+/* 日付数字の位置調整 */
+.bl-calendar .react-calendar__tile abbr {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+/* 今日の背景を下に敷く */
+.bl-calendar .react-calendar__tile--now {
+  position: relative;
+  background: transparent !important;
+}
+
+.bl-calendar .react-calendar__tile--now::before {
+  content: "";
+  position: absolute;
+  inset: 0px;
+  background: #fff6e3; /* ベージュ */
+  border-radius: 16px;
+  z-index: 0; /* 下に */
+}
+
+/* 中身を前に出す */
+.bl-calendar .react-calendar__tile > * {
+  position: relative;
+  z-index: 1;
+}
+
+.bl-calendar .react-calendar__tile--now abbr {
+  color: #3c4a5e;
 }

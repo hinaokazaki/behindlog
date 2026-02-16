@@ -48,16 +48,6 @@ body {
   background: none;
   font-weight: bold;
 }
-/* 
-.react-calendar__tile--now {
-  background: #fff6e3;
-  border-radius: 12px;
-}
-
-.react-calendar__tile--active {
-  background: #fff6e3 !important;
-  border-radius: 12px;
-} */
 
 /* react-calendar の幅 */
 .bl-calendar.react-calendar {
@@ -86,7 +76,7 @@ body {
 
 /* “タイル”＝日付セルのサイズ */
 .bl-calendar .react-calendar__tile {
-  height: 110px;
+  height: 130px;
   padding: 10px;
   text-align: left;
   border-radius: 12px;

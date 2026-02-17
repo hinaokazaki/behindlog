@@ -15,7 +15,7 @@ const UserName: React.FC<Props> = ({ key, name, link }) => {
       key={key}
       className="flex cursor-pointer items-center border-secondary hover:rounded-lg hover:border-[2px]"
     >
-      <div className="flex">
+      <div className="flex flex-row">
         <Image
           src="/profile-red.png"
           width={20}

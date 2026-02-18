@@ -77,13 +77,20 @@ export default function CalendarPage() {
                 ))}
 
                 {remaining > 0 && (
-                  <Image
-                    src="/more.png"
-                    width={20}
-                    height={20}
-                    alt="more"
-                    className="mx-2"
-                  />
+                  <button
+                    type="button"
+                    onClick={() => {}}
+                    className="rounded-full p-2 hover:bg-[#FFF3F0]"
+                    aria-label="More"
+                  >
+                    <Image
+                      src="/more.png"
+                      width={20}
+                      height={20}
+                      alt="more"
+                      className="mx-2"
+                    />
+                  </button>
                 )}
               </div>
             );

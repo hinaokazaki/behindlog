@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { UserSummary } from "@/schemas/monthlyRecords";
 import { useMonthlyRecordsQuery } from "../_hooks/useMonthlyRecordsQuery";
-import { toYmdLocal, toYmLocal } from "@/lib/date";
+import { toYmLocal } from "@/lib/date";
 import Loading from "@/app/_components/Loading";
 import SectionTitle from "@/app/_components/SectionTitle";
 import UserName from "./_component/UserName";
@@ -50,10 +50,6 @@ export default function CalendarPage() {
           locale="en-US"
           value={value}
           onChange={(val) => setValue(val as Date)}
-          onClickDay={(date) => {
-            const dateString = formatDate(date);
-            router.push(`/records/${dateString}`);
-          }}
           tileContent={({ date, view }) => {
             if (view !== "month") return null;
 
@@ -72,7 +68,7 @@ export default function CalendarPage() {
                   <UserName
                     key={record.id}
                     name={record.name ? record.name : ""}
-                    link={`/users/${record.recordId}/records/${toYmdLocal(new Date())}`}
+                    link={`/api/users/${record.recordId}/records/${dateString}`}
                   />
                 ))}
 

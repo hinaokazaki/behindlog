@@ -64,13 +64,21 @@ export default function CalendarPage() {
 
             return (
               <div className="mt-1 space-y-1 text-xs">
-                {visibleRecords.map((record) => (
-                  <UserName
-                    key={record.id}
-                    name={record.name ? record.name : ""}
-                    link={`/api/users/${record.recordId}/records/${dateString}`}
-                  />
-                ))}
+                {visibleRecords.map((record) => {
+                  const isMe = record.id === monthlyRecords?.viewerUserId;
+
+                  const href = isMe
+                    ? `/admin/records/${dateString}`
+                    : `/admin/users/${record.id}/records/${dateString}`;
+
+                  return (
+                    <UserName
+                      key={record.id}
+                      name={record.name ? record.name : ""}
+                      link={href}
+                    />
+                  );
+                })}
 
                 {remaining > 0 && (
                   <button

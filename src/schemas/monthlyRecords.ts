@@ -4,7 +4,6 @@ import { z } from "zod";
 export const userSummarySchema = z.object({
   id: z.string(),
   name: z.string().nullable(),
-  recordId: z.number(),
 });
 
 // １日の記録保持者
@@ -16,6 +15,7 @@ export const usersDailyRecordSchema = z.object({
 // レスポンス全体
 export const monthlyRecordsSchema = z.object({
   month: z.string(),
+  viewerUserId: z.string(),
   record: z.array(usersDailyRecordSchema),
 });
 

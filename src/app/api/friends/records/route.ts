@@ -53,7 +53,6 @@ export const GET = async (request: NextRequest) => {
         },
       },
       select: {
-        id: true,
         recordedDate: true,
         user: {
           select: {
@@ -77,18 +76,15 @@ export const GET = async (request: NextRequest) => {
         acc[date].push({
           id: record.user.id,
           name: record.user.name,
-          recordId: record.id,
         });
         return acc;
       },
-      {} as Record<
-        string,
-        { id: string; name: string | null; recordId: number }[]
-      >,
+      {} as Record<string, { id: string; name: string | null }[]>,
     );
 
     const response: MonthlyRecords = {
       month,
+      viewerUserId: user.id,
       record: Object.entries(grouped).map(([date, users]) => ({
         date,
         users,

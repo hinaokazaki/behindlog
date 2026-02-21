@@ -26,3 +26,14 @@ export const fromYmdLocal = (ymd: string): Date => {
   const [y, m, d] = ymd.split("-").map(Number);
   return new Date(y, m - 1, d); // ← local time の 00:00
 };
+
+export const toYmdWithTimezone = (date: Date, timeZone: string) => {
+  const formatter = new Intl.DateTimeFormat("en-CA", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+
+  return formatter.format(date); // YYYY-MM-DD 形式
+};

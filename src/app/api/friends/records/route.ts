@@ -85,6 +85,7 @@ export const GET = async (request: NextRequest) => {
     const response: MonthlyRecords = {
       month,
       viewerUserId: user.id,
+      viewerTimezone: user.timezone,
       record: Object.entries(grouped).map(([date, users]) => ({
         date,
         users,

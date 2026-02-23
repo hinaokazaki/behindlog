@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
 import { UserRecord, UserRecordResponse } from "@/schemas/userRecord";
-import { withUserTimezone } from "@/lib/timezone";
+import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
 import { ErrorResponse } from "@/schemas/common";
 
 // GET: /users/[id]/records/[date] ユーザー_友達の記録取得（特定日）
@@ -11,16 +11,17 @@ export const GET = async (
   request: NextRequest,
   { params }: { params: { id: string; date: string } },
 ) => {
-  const { id, date } = params;
-  const user = await getLoggedInUser(request);
+  const { id: ownerId, date } = params;
 
   try {
+    const viewer = await getLoggedInUser(request);
+
     // 友達関係の確認
     const friendship = await prisma.friendship.findFirst({
       where: {
         OR: [
-          { userId1: user.id, userId2: id },
-          { userId1: id, userId2: user.id },
+          { userId1: viewer.id, userId2: ownerId },
+          { userId1: ownerId, userId2: viewer.id },
         ],
         status: "ACCEPTED",
       },
@@ -30,17 +31,36 @@ export const GET = async (
       return NextResponse.json({ message: "Forbidden" }, { status: 403 });
     }
 
-    const record = await prisma.dailyRecord.findFirst({
+    // 記録の持ち主（友達）の timezone を取得（検索に必要）
+    const owner = await prisma.user.findUnique({
+      where: { id: ownerId },
+      select: { timezone: true },
+    });
+
+    if (!owner) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+
+    // "YYYY-MM-DD" を owner.timezone 基準で Date に変換
+    const { recordedDate } = withUserDateParse(
+      { recordedDate: date },
+      ["recordedDate"],
+      owner.timezone,
+    );
+
+    const record = await prisma.dailyRecord.findUnique({
       where: {
-        userId: id,
-        recordedDate: date,
+        userId_recordedDate: {
+          userId: ownerId,
+          recordedDate,
+        },
       },
     });
 
     if (!record) {
       return NextResponse.json(
         { message: "Record not found" },
-        { status: 400 },
+        { status: 404 },
       );
     }
 
@@ -53,7 +73,7 @@ export const GET = async (
         "commitStartDate",
         "commitEndDate",
       ],
-      user.timezone,
+      owner.timezone,
     );
 
     const safeDailyRecord: UserRecord = converted;

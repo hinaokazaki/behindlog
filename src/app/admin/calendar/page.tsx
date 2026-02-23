@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { UserSummary } from "@/schemas/monthlyRecords";
 import { useMonthlyRecordsQuery } from "../_hooks/useMonthlyRecordsQuery";
-import { toYmLocal } from "@/lib/date";
+import { toYmdLocal, toYmdWithTimezone, toYmLocal } from "@/lib/date";
 import Loading from "@/app/_components/Loading";
 import SectionTitle from "@/app/_components/SectionTitle";
 import UserName from "./_component/UserName";
@@ -33,8 +33,11 @@ export default function CalendarPage() {
     return map;
   }, [monthlyRecords]);
 
+  const timeZone = monthlyRecords?.viewerTimezone
+    ? monthlyRecords.viewerTimezone
+    : "";
   const formatDate = (date: Date) => {
-    return date.toISOString().split("T")[0];
+    return toYmdWithTimezone(date, timeZone);
   };
 
   if (monthlyRecordsQuery.isLoading) return <Loading />;

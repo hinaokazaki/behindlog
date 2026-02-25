@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
-import { withUserTimezone } from "@/lib/timezone";
 import {
   MonthlyRecords,
   MonthlyRecordsResponse,
 } from "@/schemas/monthlyRecords";
 import { ErrorResponse } from "@/schemas/common";
 import z from "zod";
+import { toYmdFromDbDate } from "@/lib/date";
 
 // GET: /friends/records?month=YYYY-MM ユーザー_記録保持者月別一覧取得(自分と友達両方)
 
@@ -24,9 +24,9 @@ export const GET = async (request: NextRequest) => {
     }
 
     // 月の開始日と終了日
-    const startDate = new Date(`${month}-01`);
+    const startDate = new Date(`${month}-01T00:00:00.000Z`);
     const endDate = new Date(startDate);
-    endDate.setMonth(startDate.getMonth() + 1);
+    endDate.setUTCMonth(startDate.getUTCMonth() + 1);
 
     // 自分の友達一覧を取得
     const friendships = await prisma.friendship.findMany({
@@ -66,12 +66,7 @@ export const GET = async (request: NextRequest) => {
     // 日付ごとにユーザーをグループ化
     const grouped = records.reduce(
       (acc, record) => {
-        const formatted = withUserTimezone(
-          record,
-          ["recordedDate"],
-          user.timezone,
-        );
-        const date = formatted.recordedDate;
+        const date = toYmdFromDbDate(record.recordedDate);
         if (!acc[date]) acc[date] = [];
         acc[date].push({
           id: record.user.id,

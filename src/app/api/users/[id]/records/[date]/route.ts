@@ -11,6 +11,7 @@ export const GET = async (
   request: NextRequest,
   { params }: { params: { id: string; date: string } },
 ) => {
+  // owner=記録保有者, viewer=閲覧者(ログインユーザー)
   const { id: ownerId, date } = params;
 
   try {

@@ -49,15 +49,11 @@ export const GET = async (
       owner.timezone,
     );
 
-    const start = recordedDate; // owner日付をUTCにした開始
-    const end = new Date(start);
-    end.setUTCDate(end.getUTCDate() + 1);
-
     const record = await prisma.dailyRecord.findUnique({
       where: {
         userId_recordedDate: {
           userId: ownerId,
-          recordedDate: { gte: start, lt: end },
+          recordedDate,
         },
       },
     });

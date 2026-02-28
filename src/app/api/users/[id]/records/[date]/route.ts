@@ -43,12 +43,10 @@ export const GET = async (
     }
 
     console.log("[params]", { ownerId, date });
-    // "YYYY-MM-DD" を owner.timezone 基準で Date に変換
-    const { recordedDate } = withUserDateParse(
-      { recordedDate: date },
-      ["recordedDate"],
-      owner.timezone,
-    );
+
+    // "YYYY-MM-DD" を UTC 00:00:00.000Z に固定して Date を作る
+    const recordedDate = new Date(`${date}T00:00:00.000Z`);
+
     console.log("[parsed]", recordedDate.toISOString());
     const debug = await prisma.dailyRecord.findMany({
       where: { userId: ownerId },

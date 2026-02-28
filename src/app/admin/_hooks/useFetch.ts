@@ -2,16 +2,11 @@
 import useSWR from "swr";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 
-type SwrKey = [string, string]; // [url, token]
-
 const useFetch = <T = any>(url: string | null) => {
   const { token, isLoading: sessionLoading } = useSupabaseSession();
 
-  const fetcher = async ([reqUrl, reqToken]: SwrKey): Promise<T> => {
+  const fetcher = async (): Promise<T> => {
     if (!token) throw new Error("No token available");
-    console.log("[useFetch] GET", reqUrl);
-    console.trace("[useFetch trace]");
-
     const res = await fetch(url as string, {
       headers: {
         "Content-Type": "application/json",
@@ -19,21 +14,14 @@ const useFetch = <T = any>(url: string | null) => {
       },
     });
 
-    // 404/400 の中身も見たいので、まず text を取る
-    const text = await res.text();
-
-    if (!res.ok) {
-      console.log("[useFetch] status", res.status, "body", text);
-      throw new Error(`API fetch failed: ${res.status}`);
-    }
-
-    return JSON.parse(text) as T;
+    if (!res.ok) throw new Error("API fetch failed");
+    return res.json();
   };
 
   // SWRのキーをtoken確定後に限定して発火
   const shouldFetch = !sessionLoading && !!token && !!url;
   const { data, error, isLoading, mutate } = useSWR<T>(
-    shouldFetch ? ([url as string, token as string] satisfies SwrKey) : null,
+    shouldFetch ? [url, token] : null,
     fetcher,
   );
   return {

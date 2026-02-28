@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
 import { UserRecord, UserRecordResponse } from "@/schemas/userRecord";
-import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
+import { withUserTimezone } from "@/lib/timezone";
 import { ErrorResponse } from "@/schemas/common";
 
 // GET: /users/[id]/records/[date] ユーザー_友達の記録取得（特定日）
@@ -42,22 +42,8 @@ export const GET = async (
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
-    console.log("[params]", { ownerId, date });
-
     // "YYYY-MM-DD" を UTC 00:00:00.000Z に固定して Date を作る
     const recordedDate = new Date(`${date}T00:00:00.000Z`);
-
-    console.log("[parsed]", recordedDate.toISOString());
-    const debug = await prisma.dailyRecord.findMany({
-      where: { userId: ownerId },
-      orderBy: { recordedDate: "desc" },
-      take: 5,
-      select: { recordedDate: true },
-    });
-    console.log(
-      "[db latest 5]",
-      debug.map((r) => r.recordedDate.toISOString()),
-    );
 
     const record = await prisma.dailyRecord.findUnique({
       where: {

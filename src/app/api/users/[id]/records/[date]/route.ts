@@ -42,11 +42,23 @@ export const GET = async (
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
+    console.log("[params]", { ownerId, date });
     // "YYYY-MM-DD" を owner.timezone 基準で Date に変換
     const { recordedDate } = withUserDateParse(
       { recordedDate: date },
       ["recordedDate"],
       owner.timezone,
+    );
+    console.log("[parsed]", recordedDate.toISOString());
+    const debug = await prisma.dailyRecord.findMany({
+      where: { userId: ownerId },
+      orderBy: { recordedDate: "desc" },
+      take: 5,
+      select: { recordedDate: true },
+    });
+    console.log(
+      "[db latest 5]",
+      debug.map((r) => r.recordedDate.toISOString()),
     );
 
     const record = await prisma.dailyRecord.findUnique({

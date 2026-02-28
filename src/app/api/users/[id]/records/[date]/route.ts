@@ -63,17 +63,14 @@ export const GET = async (
 
     const converted = withUserTimezone(
       record,
-      [
-        "createdAt",
-        "updatedAt",
-        "recordedDate",
-        "commitStartDate",
-        "commitEndDate",
-      ],
+      ["createdAt", "updatedAt", "commitStartDate", "commitEndDate"],
       owner.timezone,
     );
 
-    const safeDailyRecord: UserRecord = converted;
+    const safeDailyRecord: UserRecord = {
+      ...converted,
+      recordedDate: record.recordedDate.toISOString(),
+    };
 
     return NextResponse.json<UserRecordResponse>(
       { dailyRecord: safeDailyRecord },

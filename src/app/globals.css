@@ -121,10 +121,14 @@ body {
 
 /* 中身を前に出す */
 .bl-calendar .react-calendar__tile > * {
-  position: relative;
   z-index: 1;
 }
 
 .bl-calendar .react-calendar__tile--now abbr {
   color: #3c4a5e;
+}
+
+/* タイル全体を absolute の基準にする */
+.bl-calendar .react-calendar__tile {
+  position: relative;
 }

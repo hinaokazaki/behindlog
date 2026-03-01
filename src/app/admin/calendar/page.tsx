@@ -62,22 +62,17 @@ export default function CalendarPage() {
             const remaining = records.length - maxVisible;
 
             return (
-              <div className="relative mt-1 space-y-1 text-xs">
+              <div className="h-full w-full text-xs">
                 <button
                   type="button"
                   onClick={() => {}}
-                  className="absolute right-2 top-2 rounded-full p-2 hover:bg-[#FFF3F0]"
+                  className="absolute right-1 top-1 z-10 rounded-full p-1 hover:bg-[#FFF3F0]"
                   aria-label="create new record"
                 >
-                  <Image
-                    src="/add.png"
-                    width={20}
-                    height={20}
-                    alt="more"
-                    className="mx-2"
-                  />
+                  <Image src="/add.png" width={20} height={20} alt="more" />
                 </button>
-                <div className="mt-8 space-y-1 text-sm">
+
+                <div className="space-y-1 pt-7 text-sm">
                   {visibleRecords.map((record) => {
                     const isMe = record.id === monthlyRecords?.viewerUserId;
 
@@ -99,7 +94,7 @@ export default function CalendarPage() {
                   <button
                     type="button"
                     onClick={() => {}}
-                    className="rounded-full p-2 hover:bg-[#FFF3F0]"
+                    className="mt-1 rounded-full p-1 hover:bg-[#FFF3F0]"
                     aria-label="More"
                   >
                     <Image

@@ -62,22 +62,38 @@ export default function CalendarPage() {
             const remaining = records.length - maxVisible;
 
             return (
-              <div className="mt-1 space-y-1 text-xs">
-                {visibleRecords.map((record) => {
-                  const isMe = record.id === monthlyRecords?.viewerUserId;
+              <div className="relative mt-1 space-y-1 text-xs">
+                <button
+                  type="button"
+                  onClick={() => {}}
+                  className="absolute right-2 top-2 rounded-full p-2 hover:bg-[#FFF3F0]"
+                  aria-label="create new record"
+                >
+                  <Image
+                    src="/add.png"
+                    width={20}
+                    height={20}
+                    alt="more"
+                    className="mx-2"
+                  />
+                </button>
+                <div className="mt-8 space-y-1 text-sm">
+                  {visibleRecords.map((record) => {
+                    const isMe = record.id === monthlyRecords?.viewerUserId;
 
-                  const href = isMe
-                    ? `/admin/records/${dateString}`
-                    : `/admin/users/${record.id}/records/${dateString}`;
+                    const href = isMe
+                      ? `/admin/records/${dateString}`
+                      : `/admin/users/${record.id}/records/${dateString}`;
 
-                  return (
-                    <UserName
-                      key={record.id}
-                      name={record.name ? record.name : ""}
-                      link={href}
-                    />
-                  );
-                })}
+                    return (
+                      <UserName
+                        key={record.id}
+                        name={record.name ? record.name : ""}
+                        link={href}
+                      />
+                    );
+                  })}
+                </div>
 
                 {remaining > 0 && (
                   <button

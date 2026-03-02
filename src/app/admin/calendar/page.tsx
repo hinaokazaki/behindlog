@@ -53,58 +53,64 @@ export default function CalendarPage() {
             if (view !== "month") return null;
 
             const dateString = formatDate(date);
-            const records = recordMap.get(dateString);
-
-            if (!records || records.length === 0) return null;
+            const records = recordMap.get(dateString) ?? [];
 
             const maxVisible = 2;
             const visibleRecords = records.slice(0, maxVisible);
             const remaining = records.length - maxVisible;
 
             return (
-              <div className="h-full w-full text-xs">
+              <div className="group h-full w-full text-xs">
                 <button
                   type="button"
-                  onClick={() => {}}
-                  className="absolute right-1 top-1 z-10 rounded-full p-1 hover:bg-[#FFF3F0]"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    router.push(`/admin/records/${dateString}`);
+                  }}
+                  className="pointer-events-none absolute right-1 top-1 z-10 rounded-full p-1 opacity-0 transition-opacity hover:bg-[#FFF3F0] group-hover:pointer-events-auto group-hover:opacity-100"
                   aria-label="create new record"
                 >
                   <Image src="/add.png" width={20} height={20} alt="more" />
                 </button>
 
-                <div className="space-y-1 pt-7 text-sm">
-                  {visibleRecords.map((record) => {
-                    const isMe = record.id === monthlyRecords?.viewerUserId;
+                {records.length > 0 && (
+                  <>
+                    <div className="space-y-1 pt-7 text-sm">
+                      {visibleRecords.map((record) => {
+                        const isMe = record.id === monthlyRecords?.viewerUserId;
 
-                    const href = isMe
-                      ? `/admin/records/${dateString}`
-                      : `/admin/users/${record.id}/records/${dateString}`;
+                        const href = isMe
+                          ? `/admin/records/${dateString}`
+                          : `/admin/users/${record.id}/records/${dateString}`;
 
-                    return (
-                      <UserName
-                        key={record.id}
-                        name={record.name ? record.name : ""}
-                        link={href}
-                      />
-                    );
-                  })}
-                </div>
+                        return (
+                          <UserName
+                            key={record.id}
+                            name={record.name ? record.name : ""}
+                            link={href}
+                          />
+                        );
+                      })}
+                    </div>
 
-                {remaining > 0 && (
-                  <button
-                    type="button"
-                    onClick={() => {}}
-                    className="mt-1 rounded-full p-1 hover:bg-[#FFF3F0]"
-                    aria-label="More"
-                  >
-                    <Image
-                      src="/more.png"
-                      width={20}
-                      height={20}
-                      alt="more"
-                      className="mx-2"
-                    />
-                  </button>
+                    {remaining > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => {}}
+                        className="mt-1 rounded-full p-1 hover:bg-[#FFF3F0]"
+                        aria-label="More"
+                      >
+                        <Image
+                          src="/more.png"
+                          width={20}
+                          height={20}
+                          alt="more"
+                          className="mx-2"
+                        />
+                      </button>
+                    )}
+                  </>
                 )}
               </div>
             );

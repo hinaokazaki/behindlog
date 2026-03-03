@@ -2,7 +2,7 @@
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { UserSummary } from "@/schemas/monthlyRecords";
 import { useMonthlyRecordsQuery } from "../_hooks/useMonthlyRecordsQuery";
 import { toYmdWithTimezone, toYmLocal } from "@/lib/date";
@@ -11,15 +11,30 @@ import SectionTitle from "@/app/_components/SectionTitle";
 import UserName from "./_component/UserName";
 import Image from "next/image";
 
+// "YYYY-MM" -> Date(その月の1日) にする
+const ymToDate = (ym: string) => {
+  const [y, m] = ym.split("-").map(Number);
+  return new Date(y, m - 1, 1);
+};
+
 export default function CalendarPage() {
   const router = useRouter();
-  const [value, setValue] = useState<Date>(new Date());
   const searchParams = useSearchParams();
   const monthParam = searchParams.get("month");
-  const month = useMemo(
-    () => monthParam ?? toYmLocal(new Date()),
-    [monthParam],
-  );
+  const initialMonth = monthParam ?? toYmLocal(new Date());
+  const [value, setValue] = useState<Date>(() => new Date()); // 選択している日
+  const [activeStartDate, setActiveStartDate] = useState<Date>(() =>
+    ymToDate(initialMonth),
+  ); // 表示している月
+
+  // 表示中の月からYYYY-MMを作る
+  const month = useMemo(() => toYmLocal(activeStartDate), [activeStartDate]);
+
+  // 初回や、外部からURL month が変わった時に表示月を同期
+  useEffect(() => {
+    if (!monthParam) return;
+    setActiveStartDate(ymToDate(monthParam));
+  }, [monthParam]);
 
   const monthlyRecordsQuery = useMonthlyRecordsQuery({ month });
   const monthlyRecords = monthlyRecordsQuery.data?.monthlyRecords;
@@ -49,6 +64,18 @@ export default function CalendarPage() {
           locale="en-US"
           value={value}
           onChange={(val) => setValue(val as Date)}
+          activeStartDate={activeStartDate}
+          onActiveStartDateChange={({ activeStartDate }) => {
+            if (!activeStartDate) return;
+
+            setActiveStartDate(activeStartDate);
+
+            // URLも更新
+            const nextMonth = toYmLocal(activeStartDate);
+            const params = new URLSearchParams(searchParams.toString());
+            params.set("month", nextMonth);
+            router.replace(`?${params.toString()}`);
+          }}
           tileContent={({ date, view }) => {
             if (view !== "month") return null;
 

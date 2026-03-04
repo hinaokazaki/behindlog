@@ -108,7 +108,7 @@ export default function CalendarPage() {
 
                 {records.length > 0 && (
                   <>
-                    <div className="space-y-1 pt-7 text-sm">
+                    <div className="space-y-1 pt-2 text-sm">
                       {visibleRecords.map((record) => {
                         const isMe = record.id === monthlyRecords?.viewerUserId;
 
@@ -155,7 +155,29 @@ export default function CalendarPage() {
           }}
         />
       </div>
-      <Modal isOpen={isOpen} onClose={() => {}} />
+      <Modal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        children={
+          <div className="space-y-2">
+            <p className="mb-4 text-base font-bold">{selectedDate}</p>
+            {selectedUsers.map((record) => {
+              const isMe = record.id === monthlyRecords?.viewerUserId;
+
+              const href = isMe
+                ? `/admin/records/${selectedDate}`
+                : `/admin/users/${record.id}/records/${selectedDate}`;
+              return (
+                <UserName
+                  key={record.id}
+                  name={record.name ?? ""}
+                  link={selectedDate ? href : "#"}
+                />
+              );
+            })}
+          </div>
+        }
+      />
     </div>
   );
 }

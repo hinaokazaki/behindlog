@@ -129,7 +129,13 @@ export default function CalendarPage() {
                     {remaining > 0 && (
                       <button
                         type="button"
-                        onClick={() => {}}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setSelectedDate(dateString);
+                          setSelectedUsers(records);
+                          setIsOpen(true);
+                        }}
                         className="mt-1 rounded-full p-1 hover:bg-[#FFF3F0]"
                         aria-label="More"
                       >

@@ -10,6 +10,7 @@ import Loading from "@/app/_components/Loading";
 import SectionTitle from "@/app/_components/SectionTitle";
 import UserName from "./_component/UserName";
 import Image from "next/image";
+import { Modal } from "../_components/Modal";
 
 // "YYYY-MM" -> Date(その月の1日) にする
 const ymToDate = (ym: string) => {
@@ -26,6 +27,10 @@ export default function CalendarPage() {
   const [activeStartDate, setActiveStartDate] = useState<Date>(() =>
     ymToDate(initialMonth),
   ); // 表示している月
+  // Modal
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [selectedUsers, setSelectedUsers] = useState<UserSummary[]>([]);
 
   // 表示中の月からYYYY-MMを作る
   const month = useMemo(() => toYmLocal(activeStartDate), [activeStartDate]);
@@ -144,6 +149,7 @@ export default function CalendarPage() {
           }}
         />
       </div>
+      <Modal isOpen={isOpen} onClose={() => {}} />
     </div>
   );
 }

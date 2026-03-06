@@ -93,18 +93,26 @@ export default function CalendarPage() {
 
             return (
               <div className="group h-full w-full text-xs">
-                <button
-                  type="button"
+                <div
+                  role="button"
+                  tabIndex={0}
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     router.push(`/admin/records/${dateString}`);
                   }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      router.push(`/admin/records/${dateString}`);
+                    }
+                  }}
                   className="pointer-events-none absolute right-1 top-1 z-10 rounded-full p-1 opacity-0 transition-opacity hover:bg-[#FFF3F0] group-hover:pointer-events-auto group-hover:opacity-100"
                   aria-label="create new record"
                 >
                   <Image src="/add.png" width={20} height={20} alt="more" />
-                </button>
+                </div>
 
                 {records.length > 0 && (
                   <>
@@ -127,14 +135,24 @@ export default function CalendarPage() {
                     </div>
 
                     {remaining > 0 && (
-                      <button
-                        type="button"
+                      <div
+                        role="button"
+                        tabIndex={0}
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
                           setSelectedDate(dateString);
                           setSelectedUsers(records);
                           setIsOpen(true);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setSelectedDate(dateString);
+                            setSelectedUsers(records);
+                            setIsOpen(true);
+                          }
                         }}
                         className="mt-1 rounded-full p-1 hover:bg-[#FFF3F0]"
                         aria-label="More"
@@ -146,7 +164,7 @@ export default function CalendarPage() {
                           alt="more"
                           className="mx-2"
                         />
-                      </button>
+                      </div>
                     )}
                   </>
                 )}

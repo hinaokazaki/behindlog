@@ -92,7 +92,7 @@ export default function CalendarPage() {
             const remaining = records.length - maxVisible;
 
             return (
-              <div className="group h-full w-full text-xs">
+              <div className="tile-content group h-full w-full text-xs">
                 <div
                   role="button"
                   tabIndex={0}
@@ -108,10 +108,15 @@ export default function CalendarPage() {
                       router.push(`/admin/records/${dateString}`);
                     }
                   }}
-                  className="pointer-events-none absolute right-1 top-1 z-10 rounded-full p-1 opacity-0 transition-opacity hover:bg-[#FFF3F0] group-hover:pointer-events-auto group-hover:opacity-100"
+                  className="calendar-add-btn absolute right-1 top-1 z-10 flex h-7 w-7 items-center justify-center rounded-full p-1 opacity-0 transition-opacity duration-200 hover:bg-[#FFF3F0] focus:opacity-100 group-hover:opacity-100"
                   aria-label="create new record"
                 >
-                  <Image src="/add.png" width={20} height={20} alt="more" />
+                  <Image
+                    src="/add.png"
+                    width={20}
+                    height={20}
+                    alt="add new page"
+                  />
                 </div>
 
                 {records.length > 0 && (

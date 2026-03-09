@@ -76,9 +76,6 @@ export default function FriendRecordsPage({
   const friendRecord = friendRecordData.data?.dailyRecord;
   // unknown型をTodoSnapshotに変換
   const snapshot = todoSnapshotSchema.parse(friendRecord.todoSnapshot);
-  // const todoItems: TodoSnapshot = friendRecord?.todoSnapshot
-  //   ? friendRecord?.todoSnapshot
-  //   : undefined;
 
   const displayCommittime = {
     targetTime: friendRecord?.commitTargetTime
@@ -109,7 +106,6 @@ export default function FriendRecordsPage({
               todo={t.title}
               dueDate={t.dueDate || ""}
               completed={t.isCompleted}
-              // onToggle={(next) => toggleTodo(index, next)}
             />
           ))}
         </div>

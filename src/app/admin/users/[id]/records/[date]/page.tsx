@@ -140,7 +140,8 @@ export default function FriendRecordsPage({
                 <Input
                   type="number"
                   placeholder="0"
-                  className="w-20 rounded-md border-2 p-2 text-center"
+                  readOnly
+                  className="w-20 cursor-default rounded-md border-2 bg-gray-50 p-2 text-center text-base"
                   {...register("studyHours")}
                 />
                 <span className="text-base text-form-text font-medium">
@@ -155,7 +156,8 @@ export default function FriendRecordsPage({
                   inputMode="numeric"
                   min={0}
                   max={59}
-                  className="w-20 rounded-md border-2 p-2 text-center"
+                  readOnly
+                  className="w-20 rounded-md border-2 bg-gray-50 p-2 text-center text-base"
                   {...register("studyMinutes")}
                 />
                 <span className="text-base text-form-text font-medium">分</span>
@@ -184,6 +186,8 @@ export default function FriendRecordsPage({
         <Textarea
           id="memo"
           placeholder="今日の記録はありません"
+          className="cursor-default bg-gray-50 text-base"
+          readOnly
           {...register("memo")}
         />
       </section>

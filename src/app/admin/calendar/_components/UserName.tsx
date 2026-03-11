@@ -12,7 +12,6 @@ const UserName: React.FC<Props> = ({ key, name, link }) => {
   return (
     <Link
       href={link}
-      key={key}
       className="flex cursor-pointer items-center border-secondary hover:rounded-lg hover:border-[2px]"
     >
       <div className="flex flex-row">

@@ -8,7 +8,7 @@ import { useMonthlyRecordsQuery } from "../_hooks/useMonthlyRecordsQuery";
 import { toYmdWithTimezone, toYmLocal } from "@/lib/date";
 import Loading from "@/app/_components/Loading";
 import SectionTitle from "@/app/_components/SectionTitle";
-import UserName from "./_component/UserName";
+import UserName from "./_components/UserName";
 import Image from "next/image";
 import { Modal } from "../_components/Modal";
 

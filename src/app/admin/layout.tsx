@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useRouteGuard } from "./_hooks/useRouteGuard";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { supabase } from "@/utils/supabase";
 import { toYmdLocal, toYmLocal } from "@/lib/date";

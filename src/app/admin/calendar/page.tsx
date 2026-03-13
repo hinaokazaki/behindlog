@@ -56,6 +56,41 @@ export default function CalendarPage() {
   const timeZone = monthlyRecords?.viewerTimezone ?? "UTC";
   const formatDate = (date: Date) => toYmdWithTimezone(date, timeZone);
 
+  const stopTileEvent = (
+    e: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>,
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const openRecordPage = (
+    e: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>,
+    dateString: string,
+  ) => {
+    stopTileEvent(e);
+    router.push(`/admin/records/${dateString}`);
+  };
+
+  const openMoreModal = (
+    e: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>,
+    dateString: string,
+    records: UserSummary[],
+  ) => {
+    stopTileEvent(e);
+    setSelectedDate(dateString);
+    setSelectedUsers(records);
+    setIsOpen(true);
+  };
+
+  const handleEnterOrSpace = (
+    e: React.KeyboardEvent<HTMLElement>,
+    callback: () => void,
+  ) => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    stopTileEvent(e);
+    callback();
+  };
+
   if (monthlyRecordsQuery.isLoading) return <Loading />;
   if (monthlyRecordsQuery.error)
     return <p>カレンダー情報の取得でエラーが発生しました。</p>;

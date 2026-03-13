@@ -136,13 +136,11 @@ export default function CalendarPage() {
                     e.stopPropagation();
                     router.push(`/admin/records/${dateString}`);
                   }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      router.push(`/admin/records/${dateString}`);
-                    }
-                  }}
+                  onKeyDown={(e) =>
+                    handleEnterOrSpace(e, () =>
+                      router.push(`/admin/records/${dateString}`),
+                    )
+                  }
                   className="calendar-add-btn absolute right-1 top-1 z-10 flex h-7 w-7 items-center justify-center rounded-full p-1 opacity-0 transition-opacity duration-200 hover:bg-[#FFF3F0] focus:opacity-100 group-hover:opacity-100"
                   aria-label="create new record"
                 >

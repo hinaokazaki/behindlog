@@ -35,7 +35,7 @@ export default function AdminLayout({
         <div>
           <Link
             href="/admin/me"
-            className={`flex items-center gap-2 px-14 py-3 text-body text-primary hover:bg-background ${isSelected("/admin/me") && "bg-background}"}`}
+            className={`flex items-center gap-2 px-14 py-3 text-body text-primary hover:bg-background ${isSelected("/admin/me") && "bg-background"}`}
           >
             <Image
               src="/Profile.png"
@@ -46,8 +46,8 @@ export default function AdminLayout({
             <span className="font-bold">プロフィール</span>
           </Link>
           <Link
-            href=""
-            className={`flex items-center gap-2 px-14 py-3 text-body text-primary hover:bg-background ${isSelected("/admin/me") && "bg-background}"}`}
+            href="/admin/dashboard"
+            className={`flex items-center gap-2 px-14 py-3 text-body text-primary hover:bg-background ${isSelected("/admin/dashboard") && "bg-background"}`}
           >
             <Image
               src="/dashboard.png"
@@ -59,7 +59,7 @@ export default function AdminLayout({
           </Link>
           <Link
             href={`/admin/records/${today}`}
-            className={`flex items-center gap-2 px-14 py-3 text-body text-primary hover:bg-background ${isSelected("/admin/me") && "bg-background}"}`}
+            className={`flex items-center gap-2 px-14 py-3 text-body text-primary hover:bg-background ${isSelected(`/admin/records`) && "bg-background"}`}
           >
             <Image
               src="/record.png"
@@ -71,7 +71,7 @@ export default function AdminLayout({
           </Link>
           <Link
             href={`/admin/calendar?month=${thisMonth}`}
-            className={`flex items-center gap-2 px-14 py-3 text-body text-primary hover:bg-background ${isSelected("/admin/me") && "bg-background}"}`}
+            className={`flex items-center gap-2 px-14 py-3 text-body text-primary hover:bg-background ${isSelected("/admin/calendar") && "bg-background"}`}
           >
             <Image
               src="/calendar.png"
@@ -83,7 +83,7 @@ export default function AdminLayout({
           </Link>
           <Link
             href="/admin/community"
-            className={`flex items-center gap-2 px-14 py-3 text-body text-primary hover:bg-background ${isSelected("/admin/me") && "bg-background}"}`}
+            className={`flex items-center gap-2 px-14 py-3 text-body text-primary hover:bg-background ${isSelected("/admin/community") && "bg-background"}`}
           >
             <Image
               src="/users.png"
@@ -95,7 +95,7 @@ export default function AdminLayout({
           </Link>
           <Link
             href="/admin/edit"
-            className={`flex items-center gap-2 px-14 py-3 text-body text-primary hover:bg-background ${isSelected("/admin/me") && "bg-background}"}`}
+            className={`flex items-center gap-2 px-14 py-3 text-body text-primary hover:bg-background ${isSelected("/admin/edit") && "bg-background"}`}
           >
             <Image src="/edit.png" width={30} height={30} alt="編集アイコン" />
             <span className="font-bold">編集</span>
@@ -104,7 +104,7 @@ export default function AdminLayout({
         <div className="fixed bottom-0 mb-12 w-[280px]">
           <Link
             href="/contact"
-            className={`flex items-center gap-2 px-14 py-3 text-body text-primary hover:bg-background ${isSelected("/admin/me") && "bg-background}"}`}
+            className={`flex items-center gap-2 px-14 py-3 text-body text-primary hover:bg-background ${isSelected("/contact") && "bg-background"}`}
           >
             <Image
               src="/contact.png"
@@ -117,7 +117,9 @@ export default function AdminLayout({
           <Link
             href=""
             onClick={handleLogout}
-            className={`flex items-center gap-2 px-14 py-3 text-body text-primary hover:bg-background ${isSelected("/admin/me") && "bg-background}"}`}
+            className={
+              "flex items-center gap-2 px-14 py-3 text-body text-primary hover:bg-background"
+            }
           >
             <Image
               src="/logout.png"

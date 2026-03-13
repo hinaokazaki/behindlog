@@ -177,15 +177,13 @@ export default function CalendarPage() {
                         role="button"
                         tabIndex={0}
                         onClick={(e) => openMoreModal(e, dateString, records)}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            e.preventDefault();
-                            e.stopPropagation();
+                        onKeyDown={(e) =>
+                          handleEnterOrSpace(e, () => {
                             setSelectedDate(dateString);
                             setSelectedUsers(records);
                             setIsOpen(true);
-                          }
-                        }}
+                          })
+                        }
                         className="mt-1 rounded-full p-1 hover:bg-[#FFF3F0]"
                         aria-label="More"
                       >

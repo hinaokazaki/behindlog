@@ -131,11 +131,7 @@ export default function CalendarPage() {
                 <div
                   role="button"
                   tabIndex={0}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    router.push(`/admin/records/${dateString}`);
-                  }}
+                  onClick={(e) => openRecordPage(e, dateString)}
                   onKeyDown={(e) =>
                     handleEnterOrSpace(e, () =>
                       router.push(`/admin/records/${dateString}`),

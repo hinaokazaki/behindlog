@@ -176,13 +176,7 @@ export default function CalendarPage() {
                       <div
                         role="button"
                         tabIndex={0}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setSelectedDate(dateString);
-                          setSelectedUsers(records);
-                          setIsOpen(true);
-                        }}
+                        onClick={(e) => openMoreModal(e, dateString, records)}
                         onKeyDown={(e) => {
                           if (e.key === "Enter" || e.key === " ") {
                             e.preventDefault();

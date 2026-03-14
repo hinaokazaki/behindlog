@@ -15,6 +15,8 @@ export const usersDailyRecordSchema = z.object({
 // レスポンス全体
 export const monthlyRecordsSchema = z.object({
   month: z.string(),
+  viewerUserId: z.string(),
+  viewerTimezone: z.string(),
   record: z.array(usersDailyRecordSchema),
 });
 

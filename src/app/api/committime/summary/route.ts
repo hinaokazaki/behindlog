@@ -18,8 +18,8 @@ export const GET = async (request: NextRequest) => {
 
     if (!committime) {
       return NextResponse.json(
-        { error: "Committime not found" },
-        { status: 400 },
+        { totalStudyTime: 0, committime: null },
+        { status: 200 },
       );
     }
 

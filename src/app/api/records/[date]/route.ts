@@ -9,7 +9,7 @@ import {
   TodoSnapshot,
   todoSnapshotSchema,
 } from "@/schemas/dailyRecord";
-import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
+import { withUserTimezone } from "@/lib/timezone";
 import { ErrorResponse, ValidationErrorResponse } from "@/schemas/common";
 
 // GET: /records ユーザー_記録取得（特定日）
@@ -27,11 +27,8 @@ export const GET = async (
 
   try {
     const user = await getLoggedInUser(request);
-    const { recordedDate } = withUserDateParse(
-      { recordedDate: date },
-      ["recordedDate"],
-      user.timezone,
-    );
+    const [year, month, day] = params.date.split("-").map(Number);
+    const recordedDate = new Date(Date.UTC(year, month - 1, day));
     const dailyRecord = await prisma.dailyRecord.findUnique({
       where: {
         userId_recordedDate: {
@@ -51,17 +48,14 @@ export const GET = async (
 
     const converted = withUserTimezone(
       dailyRecord,
-      [
-        "createdAt",
-        "updatedAt",
-        "recordedDate",
-        "commitStartDate",
-        "commitEndDate",
-      ],
+      ["createdAt", "updatedAt", "commitStartDate", "commitEndDate"],
       user.timezone,
     );
 
-    const safeDailyRecord: DailyRecord = converted;
+    const safeDailyRecord: DailyRecord = {
+      ...converted,
+      recordedDate: dailyRecord.recordedDate.toISOString(),
+    };
 
     return NextResponse.json<DailyRecordResponse>(
       { dailyRecord: safeDailyRecord },
@@ -85,11 +79,8 @@ export const PUT = async (
   try {
     const user = await getLoggedInUser(request);
     const body = createDailyRecordSchema.parse(await request.json());
-    const { recordedDate } = withUserDateParse(
-      { recordedDate: params.date },
-      ["recordedDate"],
-      user.timezone,
-    );
+    const [year, month, day] = params.date.split("-").map(Number);
+    const recordedDate = new Date(Date.UTC(year, month - 1, day));
 
     // todoのsnapshot
     // requestにsnapshotが含まれていなかった場合、サーバ側でsnapshotを作成
@@ -220,17 +211,14 @@ export const PUT = async (
 
     const converted = withUserTimezone(
       dailyRecordPostResult,
-      [
-        "createdAt",
-        "updatedAt",
-        "recordedDate",
-        "commitStartDate",
-        "commitEndDate",
-      ],
+      ["createdAt", "updatedAt", "commitStartDate", "commitEndDate"],
       user.timezone,
     );
 
-    const safeDailyRecord: DailyRecord = converted;
+    const safeDailyRecord: DailyRecord = {
+      ...converted,
+      recordedDate: dailyRecordPostResult.recordedDate.toISOString(),
+    };
 
     return NextResponse.json<DailyRecordResponse>(
       { dailyRecord: safeDailyRecord },

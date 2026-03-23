@@ -38,6 +38,21 @@ const DashCommittimeSection: React.FC = () => {
   const totalStudyTimeByPeriod =
     committimeSummaryQuery.data?.totalStudyTime.totalStudyTimeByPeriod ?? 0;
 
+  const targetTime = committime?.targetTime ?? 0;
+
+  const studiedMinutes = Math.min(totalStudyTimeByPeriod, targetTime);
+  const remainingMinutes = Math.max(targetTime - totalStudyTimeByPeriod, 0);
+
+  const chartData = [
+    { name: "学習済み", value: studiedMinutes },
+    { name: "残り", value: remainingMinutes },
+  ];
+
+  const progressPercent =
+    targetTime > 0
+      ? Math.min((totalStudyTimeByPeriod / targetTime) * 100, 100)
+      : 0;
+
   return (
     <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
       <BlockTitle title="Commit Time" />

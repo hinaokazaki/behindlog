@@ -4,6 +4,7 @@ import Loading from "@/app/_components/Loading";
 import { useCommittimeQuery } from "../../_hooks/useCommittimeQuery";
 import BlockTitle from "../../_components/BlockTitle";
 import { useCommittimeSummaryQuery } from "../../_hooks/useCommittimeSummaryQuery";
+import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
 const DashCommittimeSection: React.FC = () => {
   const committimeQuery = useCommittimeQuery();
@@ -56,6 +57,25 @@ const DashCommittimeSection: React.FC = () => {
   return (
     <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
       <BlockTitle title="Commit Time" />
+      <div className="mt-6 flex items-center justify-between gap-8">
+        <div className="h-[180px] w-[180px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={chartData}
+                dataKey="value"
+                innerRadius={45}
+                outerRadius={75}
+                paddingAngle={2}
+                stroke="none"
+              >
+                <Cell fill="#F58C7B" />
+                <Cell fill="#E9DB9B" />
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
       <div className="mt-2 flex items-end justify-between">
         <div>
           <p className="text-base text-form-text">目標学習時間</p>

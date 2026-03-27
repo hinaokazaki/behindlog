@@ -69,6 +69,8 @@ const DashCommittimeSection: React.FC = () => {
                   outerRadius={75}
                   paddingAngle={2}
                   stroke="none"
+                  startAngle={90}
+                  endAngle={-270}
                 >
                   <Cell fill="#F58C7B" />
                   <Cell fill="#E9DB9B" />
@@ -81,19 +83,21 @@ const DashCommittimeSection: React.FC = () => {
           <div className="mt-2 flex items-end justify-between">
             <div>
               <p className="text-base text-form-text">目標学習時間</p>
-              <p className="ml-4 mt-4 text-base font-bold">
-                {committime?.targetTime
-                  ? Math.floor(committime.targetTime / 60)
-                  : 0}
-                <span className="ml-8 text-base text-form-text">時間</span>
-              </p>
+              <div className="flex items-baseline gap-4">
+                <p className="mt-4 text-base font-bold">
+                  {committime?.targetTime
+                    ? Math.floor(committime.targetTime / 60)
+                    : 0}
+                  <span className="ml-4 text-base text-form-text">時間</span>
+                </p>
+                <p className="text-base text-sm font-semibold">
+                  [{committime?.startDate ?? "----"} -{" "}
+                  {committime?.endDate ?? "----"}]
+                </p>
+              </div>
             </div>
-
-            <p className="text-base text-sm font-semibold">
-              [{committime?.startDate ?? "----"} -{" "}
-              {committime?.endDate ?? "----"}]
-            </p>
           </div>
+          <hr className="my-1" />
           <div>
             <p className="text-base text-form-text">現在の合計学習時間</p>
             <p className="mt-4 text-base font-semibold">

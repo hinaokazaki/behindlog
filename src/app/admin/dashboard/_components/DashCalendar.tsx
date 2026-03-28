@@ -1,1 +1,93 @@
 "use client";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
+import { useEffect, useMemo, useState } from "react";
+import Loading from "@/app/_components/Loading";
+import SectionTitle from "@/app/_components/SectionTitle";
+import { toYmdWithTimezone, toYmLocal } from "@/lib/date";
+import { useMonthlyRecordsQuery } from "../../_hooks/useMonthlyRecordsQuery";
+
+// "YYYY-MM" -> Date(その月の1日)
+const ymToDate = (ym: string) => {
+  const [y, m] = ym.split("-").map(Number);
+  return new Date(y, m - 1, 1);
+};
+
+type CalendarSectionProps = {
+  initialMonth?: string;
+};
+
+export default function DashCalendar({ initialMonth }: CalendarSectionProps) {
+  const defaultMonth = initialMonth ?? toYmLocal(new Date());
+
+  const [value, setValue] = useState<Date>(new Date());
+  const [activeStartDate, setActiveStartDate] = useState<Date>(
+    ymToDate(defaultMonth),
+  );
+
+  const month = useMemo(() => toYmLocal(activeStartDate), [activeStartDate]);
+
+  const monthlyRecordsQuery = useMonthlyRecordsQuery({ month });
+  const monthlyRecords = monthlyRecordsQuery.data?.monthlyRecords;
+
+  useEffect(() => {
+    if (!initialMonth) return;
+    setActiveStartDate(ymToDate(initialMonth));
+  }, [initialMonth]);
+
+  const recordMap = useMemo(() => {
+    const map = new Map<string, boolean>();
+
+    monthlyRecords?.record.forEach((item) => {
+      if (item.users.length > 0) {
+        map.set(item.date, true);
+      }
+    });
+
+    return map;
+  }, [monthlyRecords]);
+
+  const timeZone = monthlyRecords?.viewerTimezone ?? "UTC";
+
+  const formatDate = (date: Date) => {
+    return toYmdWithTimezone(date, timeZone);
+  };
+
+  if (monthlyRecordsQuery.isLoading) return <Loading />;
+  if (monthlyRecordsQuery.error) {
+    return <p>カレンダー情報の取得でエラーが発生しました。</p>;
+  }
+
+  return (
+    <section className="w-full rounded-[32px] bg-[#F7F7F7] p-6 md:p-8">
+      <SectionTitle title="Calendar" />
+
+      <p className="mb-6 text-2xl font-bold text-[#2F2F2F]">
+        {activeStartDate.getFullYear()}年{activeStartDate.getMonth() + 1}月
+      </p>
+
+      <Calendar
+        className="behindlog-calendar"
+        locale="ko-KR"
+        value={value}
+        onChange={(val) => setValue(val as Date)}
+        activeStartDate={activeStartDate}
+        onActiveStartDateChange={({ activeStartDate }) => {
+          if (!activeStartDate) return;
+          setActiveStartDate(activeStartDate);
+        }}
+        prev2Label={null}
+        next2Label={null}
+        formatDay={(_, date) => String(date.getDate())}
+        tileClassName={({ date, view }) => {
+          if (view !== "month") return "";
+
+          const dateString = formatDate(date);
+          const hasRecord = recordMap.has(dateString);
+
+          return hasRecord ? "has-record" : "no-record";
+        }}
+      />
+    </section>
+  );
+}

@@ -17,7 +17,9 @@ type CalendarSectionProps = {
   initialMonth?: string;
 };
 
-export default function DashCalendar({ initialMonth }: CalendarSectionProps) {
+export default function DashCalendarSection({
+  initialMonth,
+}: CalendarSectionProps) {
   const defaultMonth = initialMonth ?? toYmLocal(new Date());
 
   const [value, setValue] = useState<Date>(new Date());

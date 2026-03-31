@@ -7,7 +7,7 @@ import DashCalendarSection from "./_components/DashCalendarSection";
 
 export default function DashboardPage() {
   return (
-    <div className="h-[calc(100vh-72px)] overflow-hidden px-10 py-4">
+    <div className="h-[calc(100vh-140px)] overflow-hidden px-10 py-4">
       <SectionTitle title="Dashboard" />
 
       <div className="mt-4 grid h-[calc(100%-80px)] grid-cols-[1.8fr_1.2fr] gap-6">

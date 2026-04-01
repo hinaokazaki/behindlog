@@ -6,6 +6,7 @@ import Loading from "@/app/_components/Loading";
 import SectionTitle from "@/app/_components/SectionTitle";
 import { toYmdWithTimezone, toYmLocal } from "@/lib/date";
 import { useMonthlyRecordsQuery } from "../../_hooks/useMonthlyRecordsQuery";
+import BlockTitle from "../../_components/BlockTitle";
 
 // "YYYY-MM" -> Date(その月の1日)
 const ymToDate = (ym: string) => {
@@ -61,17 +62,16 @@ export default function DashCalendarSection({
   }
 
   return (
-    <section className="w-full rounded-[32px] bg-[#F7F7F7] p-6 md:p-8">
-      <SectionTitle title="Calendar" />
-
+    <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
+      <BlockTitle title="Calendar" />
       <p className="mb-6 text-2xl font-bold text-[#2F2F2F]">
         {activeStartDate.getFullYear()}年{activeStartDate.getMonth() + 1}月
       </p>
 
       <Calendar
         className="behindlog-calendar"
-        locale="ko-KR"
         value={value}
+        locale="en-US"
         onChange={(val) => setValue(val as Date)}
         activeStartDate={activeStartDate}
         onActiveStartDateChange={({ activeStartDate }) => {

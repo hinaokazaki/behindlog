@@ -10,8 +10,8 @@ export default function DashboardPage() {
     <div>
       <SectionTitle title="Dashboard" />
       <DashGoalSection />
-      <DashTodoSection />
       <DashCalendarSection />
+      <DashTodoSection />
       <DashCommittimeSection />
     </div>
   );

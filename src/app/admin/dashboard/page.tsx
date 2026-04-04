@@ -15,7 +15,6 @@ export default function DashboardPage() {
           <DashGoalSection />
           <DashCalendarSection />
         </div>
-
         <div className="grid h-full min-h-0 grid-rows-[1.5fr_0.55fr] gap-6">
           <DashTodoSection />
           <DashCommittimeSection />

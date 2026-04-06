@@ -1,6 +1,6 @@
 "use client";
 import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+// import "react-calendar/dist/Calendar.css";
 import { useEffect, useMemo, useState } from "react";
 import Loading from "@/app/_components/Loading";
 import SectionTitle from "@/app/_components/SectionTitle";

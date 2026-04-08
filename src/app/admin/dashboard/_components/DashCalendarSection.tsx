@@ -1,6 +1,5 @@
 "use client";
 import Calendar from "react-calendar";
-// import "react-calendar/dist/Calendar.css";
 import { useEffect, useMemo, useState } from "react";
 import Loading from "@/app/_components/Loading";
 import { toYmdWithTimezone, toYmLocal } from "@/lib/date";
@@ -63,6 +62,7 @@ export default function DashCalendarSection({
   return (
     <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
       <BlockTitle title="Calendar" />
+
       <p className="mb-6 text-2xl font-bold text-[#2F2F2F]">
         {activeStartDate.getFullYear()}年{activeStartDate.getMonth() + 1}月
       </p>
@@ -70,7 +70,7 @@ export default function DashCalendarSection({
       <Calendar
         className="behindlog-calendar"
         value={value}
-        locale="en-US"
+        locale="ko-KR"
         onChange={(val) => setValue(val as Date)}
         activeStartDate={activeStartDate}
         onActiveStartDateChange={({ activeStartDate }) => {
@@ -79,7 +79,13 @@ export default function DashCalendarSection({
         }}
         prev2Label={null}
         next2Label={null}
+        showNeighboringMonth={false}
+        // navigationLabel={null}
         formatDay={(_, date) => String(date.getDate())}
+        formatShortWeekday={(_, date) => {
+          const weekDays = ["일", "월", "화", "수", "목", "금", "토"];
+          return weekDays[date.getDay()];
+        }}
         tileClassName={({ date, view }) => {
           if (view !== "month") return "";
 

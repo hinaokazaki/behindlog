@@ -225,3 +225,101 @@ body {
 .react-calendar__tile .calendar-add-btn:hover {
   opacity: 1;
 }
+
+.behindlog-calendar {
+  width: 100% !important;
+  border: none !important;
+  background: transparent !important;
+  font-family: inherit;
+}
+
+.behindlog-calendar .react-calendar__navigation {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+
+.behindlog-calendar .react-calendar__navigation button {
+  min-width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: #444;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.behindlog-calendar .react-calendar__navigation button:enabled:hover,
+.behindlog-calendar .react-calendar__navigation button:enabled:focus {
+  background: transparent;
+}
+
+.behindlog-calendar .react-calendar__navigation__label {
+  flex-grow: 0 !important;
+  pointer-events: none;
+  color: #444;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.behindlog-calendar .react-calendar__month-view__weekdays {
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.behindlog-calendar .react-calendar__month-view__weekdays__weekday {
+  padding: 8px 0;
+  color: #444;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.behindlog-calendar .react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none;
+}
+
+.behindlog-calendar .react-calendar__month-view__days {
+  gap: 10px 0;
+}
+
+.behindlog-calendar .react-calendar__tile {
+  height: 54px;
+  border: none !important;
+  background: transparent !important;
+  font-size: 16px;
+  font-weight: 700;
+  color: #9a9a9a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.behindlog-calendar .react-calendar__tile:enabled:hover,
+.behindlog-calendar .react-calendar__tile:enabled:focus {
+  background: transparent !important;
+}
+
+.behindlog-calendar .react-calendar__tile--now {
+  background: transparent !important;
+  color: #666 !important;
+}
+
+.behindlog-calendar .react-calendar__tile--active {
+  background: transparent !important;
+  color: inherit !important;
+}
+
+.behindlog-calendar .no-record {
+  color: #9a9a9a !important;
+}
+
+.behindlog-calendar .has-record {
+  width: 46px !important;
+  height: 46px !important;
+  margin: 0 auto;
+  border-radius: 9999px;
+  background: #f7b4a8 !important;
+  color: #ea7f6b !important;
+}

@@ -83,7 +83,7 @@ export default function DashCalendarSection({
         // navigationLabel={null}
         formatDay={(_, date) => String(date.getDate())}
         formatShortWeekday={(_, date) => {
-          const weekDays = ["일", "월", "화", "수", "목", "금", "토"];
+          const weekDays = ["S", "M", "T", "W", "T", "F", "S"];
           return weekDays[date.getDay()];
         }}
         tileClassName={({ date, view }) => {

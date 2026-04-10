@@ -60,7 +60,7 @@ export default function DashCalendarSection({
   }
 
   return (
-    <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
+    <section className="mx-auto mb-4 w-full min-w-0 max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
       <BlockTitle title="Calendar" />
 
       <p className="mb-6 text-2xl font-bold text-[#2F2F2F]">
@@ -70,7 +70,7 @@ export default function DashCalendarSection({
       <Calendar
         className="behindlog-calendar"
         value={value}
-        locale="ko-KR"
+        locale="en-US"
         onChange={(val) => setValue(val as Date)}
         activeStartDate={activeStartDate}
         onActiveStartDateChange={({ activeStartDate }) => {
@@ -80,7 +80,6 @@ export default function DashCalendarSection({
         prev2Label={null}
         next2Label={null}
         showNeighboringMonth={false}
-        // navigationLabel={null}
         formatDay={(_, date) => String(date.getDate())}
         formatShortWeekday={(_, date) => {
           const weekDays = ["S", "M", "T", "W", "T", "F", "S"];

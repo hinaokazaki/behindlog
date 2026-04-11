@@ -47,184 +47,8 @@ body {
 }
 
 /* -------------------------------
-   Behindlog calendar style
+   Behindlog dashboard calendar
 -------------------------------- */
-
-/* カレンダー全体 */
-.bl-calendar.react-calendar {
-  width: 100%;
-  border: none;
-  background: transparent;
-  padding: 0;
-  border-radius: 0;
-}
-
-/* 上部ナビ（月 + 矢印） */
-.bl-calendar .react-calendar__navigation {
-  height: 56px;
-  margin-bottom: 16px;
-}
-
-.bl-calendar .react-calendar__navigation button {
-  min-width: 44px;
-  border-radius: 10px;
-  transition:
-    background 0.2s ease,
-    opacity 0.2s ease;
-}
-
-.bl-calendar .react-calendar__navigation button:hover {
-  background: #f8f8f8;
-}
-
-.bl-calendar .react-calendar__navigation button:disabled {
-  opacity: 0.4;
-}
-
-/* 月タイトル */
-.bl-calendar .react-calendar__navigation__label {
-  font-size: 36px;
-  font-weight: 700;
-}
-
-/* 曜日 */
-.bl-calendar .react-calendar__month-view__weekdays {
-  margin-bottom: 8px;
-  font-size: 14px;
-  font-weight: 700;
-  color: #6b7280;
-  text-transform: none;
-}
-
-.bl-calendar .react-calendar__month-view__weekdays__weekday {
-  padding: 8px 0;
-  text-align: left;
-}
-
-.bl-calendar .react-calendar__month-view__weekdays__weekday abbr {
-  text-decoration: none;
-}
-
-.bl-calendar .react-calendar__month-view__days {
-  gap: 0;
-}
-
-/* 日付セル */
-.bl-calendar .react-calendar__tile {
-  height: 130px;
-  padding: 12px;
-  text-align: left;
-  font-size: 14px;
-  border-radius: 12px;
-  position: relative;
-
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-
-  transition:
-    background 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-/* グリッド線 */
-.bl-calendar .react-calendar__month-view__days__day {
-  border: 1px solid #e5e7eb;
-  margin: 0;
-}
-
-/* ホバー */
-.bl-calendar .react-calendar__tile:hover {
-  background: #fafafa;
-}
-
-/* アクティブ選択のデフォルト強調を抑える */
-.bl-calendar .react-calendar__tile:enabled:focus,
-.bl-calendar .react-calendar__tile:enabled:hover {
-  border-radius: 12px;
-}
-
-.bl-calendar .react-calendar__tile--active {
-  background: transparent !important;
-  color: inherit !important;
-}
-
-/* 日付数字 */
-.bl-calendar .react-calendar__tile abbr {
-  display: inline-block;
-  min-width: 20px;
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 4px;
-  text-decoration: none;
-  position: relative;
-  z-index: 1;
-}
-
-/* 今月以外の日付 */
-.bl-calendar .react-calendar__month-view__days__day--neighboringMonth {
-  color: #c4c7cf;
-}
-
-/* -------------------------------
-   今日
--------------------------------- */
-
-.bl-calendar .react-calendar__tile--now {
-  background: transparent !important;
-}
-
-.bl-calendar .react-calendar__tile--now::before {
-  content: "";
-  position: absolute;
-  inset: 4px;
-  background: #fff6e3;
-  border-radius: 12px;
-  z-index: 0;
-}
-
-.bl-calendar .react-calendar__tile--now abbr {
-  color: #3c4a5e;
-  font-weight: 700;
-}
-
-/* -------------------------------
-   tile content
--------------------------------- */
-
-.react-calendar__tile .tile-content {
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
-
-/* -------------------------------
-   add button hover
--------------------------------- */
-
-.react-calendar__tile .calendar-add-btn {
-  opacity: 0;
-  transition:
-    opacity 0.2s ease,
-    background 0.2s ease,
-    transform 0.2s ease;
-}
-
-.react-calendar__tile:hover .calendar-add-btn {
-  opacity: 1;
-}
-
-.react-calendar__tile .calendar-add-btn:hover {
-  background: #fff3f0;
-  transform: scale(1.03);
-}
-
-/* タイルをホバーしている間、ボタンが消えにくいように */
-.react-calendar__tile:hover .calendar-add-btn,
-.react-calendar__tile .calendar-add-btn:hover {
-  opacity: 1;
-}
 
 .behindlog-calendar {
   width: 100% !important;
@@ -233,6 +57,7 @@ body {
   font-family: inherit;
 }
 
+/* 上部ナビ */
 .behindlog-calendar .react-calendar__navigation {
   display: flex;
   align-items: center;
@@ -248,11 +73,12 @@ body {
   color: #444;
   font-size: 20px;
   font-weight: 700;
+  border-radius: 9999px;
 }
 
 .behindlog-calendar .react-calendar__navigation button:enabled:hover,
 .behindlog-calendar .react-calendar__navigation button:enabled:focus {
-  background: transparent;
+  background: transparent !important;
 }
 
 .behindlog-calendar .react-calendar__navigation__label {
@@ -263,6 +89,7 @@ body {
   font-size: 18px;
 }
 
+/* 曜日 */
 .behindlog-calendar .react-calendar__month-view__weekdays {
   margin-bottom: 14px;
   text-align: center;
@@ -280,12 +107,15 @@ body {
   text-decoration: none;
 }
 
+/* 日付グリッド */
 .behindlog-calendar .react-calendar__month-view__days {
-  gap: 10px 0;
+  gap: 6px 0;
 }
 
+/* 日付セル */
 .behindlog-calendar .react-calendar__tile {
-  height: 54px;
+  height: 44px;
+  padding: 0;
   border: none !important;
   background: transparent !important;
   font-size: 16px;
@@ -294,32 +124,48 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: none !important;
 }
 
+/* 全体ホバー無効 */
 .behindlog-calendar .react-calendar__tile:enabled:hover,
 .behindlog-calendar .react-calendar__tile:enabled:focus {
   background: transparent !important;
+  color: inherit !important;
+  box-shadow: none !important;
 }
 
+/* 今日 */
 .behindlog-calendar .react-calendar__tile--now {
   background: transparent !important;
   color: #666 !important;
 }
 
+/* 選択状態を消す */
 .behindlog-calendar .react-calendar__tile--active {
   background: transparent !important;
   color: inherit !important;
 }
 
+/* 記録なし */
 .behindlog-calendar .no-record {
   color: #9a9a9a !important;
 }
 
+/* 記録あり */
 .behindlog-calendar .has-record {
-  width: 46px !important;
-  height: 46px !important;
+  width: 38px !important;
+  height: 38px !important;
   margin: 0 auto;
   border-radius: 9999px;
   background: #f7b4a8 !important;
   color: #ea7f6b !important;
+}
+
+/* 記録ありの日は hover / focus しても変えない */
+.behindlog-calendar .has-record:enabled:hover,
+.behindlog-calendar .has-record:enabled:focus {
+  background: #f7b4a8 !important;
+  color: #ea7f6b !important;
+  box-shadow: none !important;
 }

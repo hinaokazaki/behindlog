@@ -1,5 +1,4 @@
 "use client";
-
 import Loading from "@/app/_components/Loading";
 import { useTodoQuery } from "../../_hooks/useTodoQuery";
 import { Todos } from "@/schemas/todo";
@@ -24,7 +23,6 @@ const DashTodoSection: React.FC = () => {
             todo={t.title}
             dueDate={t.dueDate}
             completed={t.isCompleted}
-            // onClick={() => {}}
           />
         ))}
       </div>

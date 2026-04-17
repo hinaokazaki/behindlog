@@ -5,7 +5,7 @@ import DashCommittimeSection from "@/app/admin/dashboard/_components/DashCommitt
 import DashGoalSection from "@/app/admin/dashboard/_components/DashGoalSection";
 import DashTodoSection from "@/app/admin/dashboard/_components/DashTodoSection";
 
-export default function DashboardPage() {
+export default function FriendsDashboardPage() {
   return (
     <div className="h-auto min-h-[calc(100vh-120px)] px-4 py-4 sm:px-6 lg:h-[calc(100vh-120px)] lg:overflow-hidden lg:px-10">
       <SectionTitle title="Dashboard" />

@@ -77,7 +77,7 @@ export default function CommunityPage() {
   const invitations = friendRequests.data?.invitations ?? [];
 
   const onClick = () => {
-    actions.router.replace("/"); // 友達のダッシュボードページに飛ぶようにする
+    actions.router.replace("/admin/users/:id/dashboard"); // 友達のダッシュボードページに飛ぶようにする
   };
 
   const handleRequest = async (data: CreateFriendRequest) => {
@@ -157,7 +157,9 @@ export default function CommunityPage() {
                       e.stopPropagation();
                       modals.openDelete(f);
                     }}
-                    className={'flex items-center justify-center rounded-full p-2 hover:bg-[#FFF3F0]'}
+                    className={
+                      "flex items-center justify-center rounded-full p-2 hover:bg-[#FFF3F0]"
+                    }
                   >
                     <Image
                       src="/delete.png"

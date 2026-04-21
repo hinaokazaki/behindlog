@@ -76,8 +76,8 @@ export default function CommunityPage() {
   const friendLists = friends.data?.friendList ?? [];
   const invitations = friendRequests.data?.invitations ?? [];
 
-  const onClick = () => {
-    actions.router.replace("/admin/users/:id/dashboard"); // 友達のダッシュボードページに飛ぶようにする
+  const handleFriendClick = (id: number) => {
+    actions.router.replace(`/admin/users/${id}/dashboard`);
   };
 
   const handleRequest = async (data: CreateFriendRequest) => {
@@ -149,7 +149,7 @@ export default function CommunityPage() {
                 key={f.id}
                 name={displayName}
                 mode={isAccepted ? "requestAccepted" : "requestSent"}
-                onClick={isAccepted ? onClick : undefined}
+                onClick={isAccepted ? () => handleFriendClick(f.id) : undefined}
                 rightSlot={
                   <button
                     type="button"

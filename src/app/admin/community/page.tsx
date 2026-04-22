@@ -143,7 +143,6 @@ export default function CommunityPage() {
           {friendLists.map((f) => {
             const isAccepted = f.status === "ACCEPTED";
             const displayName = f.friend?.name ?? f.inviteeEmail;
-
             return (
               <CommunityCardBase
                 key={f.id}

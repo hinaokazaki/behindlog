@@ -1,6 +1,5 @@
 "use client";
 import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { UserSummary } from "@/schemas/monthlyRecords";
@@ -11,6 +10,7 @@ import SectionTitle from "@/app/_components/SectionTitle";
 import UserName from "./_components/UserName";
 import Image from "next/image";
 import { Modal } from "../_components/Modal";
+import "react-calendar/dist/Calendar.css";
 
 // "YYYY-MM" -> Date(その月の1日) にする
 const ymToDate = (ym: string) => {

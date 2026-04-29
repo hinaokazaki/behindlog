@@ -29,35 +29,177 @@ body {
 }
 
 /* -------------------------------
-   react-calendar base
+   main calendar
 -------------------------------- */
 
-.react-calendar {
+.main-calendar.react-calendar {
   width: 100%;
   border: none;
-  background: white;
-  border-radius: 20px;
-  padding: 20px;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
   color: #3c4a5e;
 }
 
-.react-calendar__navigation button {
+.main-calendar .react-calendar__navigation {
+  height: 56px;
+  margin-bottom: 16px;
+}
+
+.main-calendar .react-calendar__navigation button {
+  min-width: 44px;
+  border-radius: 10px;
   background: none;
   font-weight: bold;
+  transition:
+    background 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.main-calendar .react-calendar__navigation button:hover {
+  background: #f8f8f8;
+}
+
+.main-calendar .react-calendar__navigation button:disabled {
+  opacity: 0.4;
+}
+
+.main-calendar .react-calendar__navigation__label {
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.main-calendar .react-calendar__month-view__weekdays {
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: none;
+}
+
+.main-calendar .react-calendar__month-view__weekdays__weekday {
+  padding: 8px 0;
+  text-align: left;
+}
+
+.main-calendar .react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none;
+}
+
+.main-calendar .react-calendar__month-view__days {
+  gap: 0;
+}
+
+.main-calendar .react-calendar__tile {
+  height: 130px;
+  padding: 12px;
+  text-align: left;
+  font-size: 14px;
+  border-radius: 12px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.main-calendar .react-calendar__month-view__days__day {
+  border: 1px solid #e5e7eb;
+  margin: 0;
+}
+
+.main-calendar .react-calendar__tile:hover {
+  background: #fafafa;
+}
+
+.main-calendar .react-calendar__tile:enabled:focus,
+.main-calendar .react-calendar__tile:enabled:hover {
+  border-radius: 12px;
+}
+
+.main-calendar .react-calendar__tile--active {
+  background: transparent !important;
+  color: inherit !important;
+}
+
+.main-calendar .react-calendar__tile abbr {
+  display: inline-block;
+  min-width: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  text-decoration: none;
+  position: relative;
+  z-index: 1;
+}
+
+.main-calendar .react-calendar__month-view__days__day--neighboringMonth {
+  color: #c4c7cf;
+}
+
+.main-calendar .react-calendar__tile--now {
+  background: transparent !important;
+}
+
+.main-calendar .react-calendar__tile--now::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  background: #fff6e3;
+  border-radius: 12px;
+  z-index: 0;
+}
+
+.main-calendar .react-calendar__tile--now abbr {
+  color: #3c4a5e;
+  font-weight: 700;
+}
+
+.main-calendar .react-calendar__tile .tile-content {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.main-calendar .react-calendar__tile .calendar-add-btn {
+  opacity: 0;
+  transition:
+    opacity 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.main-calendar .react-calendar__tile:hover .calendar-add-btn {
+  opacity: 1;
+}
+
+.main-calendar .react-calendar__tile .calendar-add-btn:hover {
+  background: #fff3f0;
+  transform: scale(1.03);
+}
+
+.main-calendar .react-calendar__tile:hover .calendar-add-btn,
+.main-calendar .react-calendar__tile .calendar-add-btn:hover {
+  opacity: 1;
 }
 
 /* -------------------------------
-   mini calendar (dashboard)
+   mini calendar
 -------------------------------- */
 
-.mini-calendar {
+.mini-calendar.react-calendar {
   width: 100% !important;
   border: none !important;
   background: transparent !important;
+  padding: 0;
+  border-radius: 0;
   font-family: inherit;
+  color: #3c4a5e;
 }
 
-/* 上部ナビ */
 .mini-calendar .react-calendar__navigation {
   display: flex;
   align-items: center;
@@ -89,7 +231,6 @@ body {
   font-size: 18px;
 }
 
-/* 曜日 */
 .mini-calendar .react-calendar__month-view__weekdays {
   margin-bottom: 14px;
   text-align: center;
@@ -107,12 +248,10 @@ body {
   text-decoration: none;
 }
 
-/* 日付グリッド */
 .mini-calendar .react-calendar__month-view__days {
   gap: 6px 0;
 }
 
-/* 日付セル */
 .mini-calendar .react-calendar__tile {
   height: 44px;
   padding: 0;
@@ -127,7 +266,6 @@ body {
   box-shadow: none !important;
 }
 
-/* 全体ホバー無効 */
 .mini-calendar .react-calendar__tile:enabled:hover,
 .mini-calendar .react-calendar__tile:enabled:focus {
   background: transparent !important;
@@ -135,24 +273,20 @@ body {
   box-shadow: none !important;
 }
 
-/* 今日 */
 .mini-calendar .react-calendar__tile--now {
   background: transparent !important;
   color: #666 !important;
 }
 
-/* 選択状態を消す */
 .mini-calendar .react-calendar__tile--active {
   background: transparent !important;
   color: inherit !important;
 }
 
-/* 記録なし */
 .mini-calendar .no-record {
   color: #9a9a9a !important;
 }
 
-/* 記録あり */
 .mini-calendar .has-record {
   width: 38px !important;
   height: 38px !important;
@@ -162,7 +296,6 @@ body {
   color: #ea7f6b !important;
 }
 
-/* 記録ありの日は hover / focus しても変えない */
 .mini-calendar .has-record:enabled:hover,
 .mini-calendar .has-record:enabled:focus {
   background: #f7b4a8 !important;

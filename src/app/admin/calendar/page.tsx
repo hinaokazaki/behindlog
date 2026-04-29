@@ -100,7 +100,7 @@ export default function CalendarPage() {
       <SectionTitle title="Calendar" />
       <div className="mx-auto w-full max-w-[1080px] rounded-3xl bg-white p-8 shadow-sm">
         <Calendar
-          className="bl-calendar"
+          className="main-calendar"
           locale="en-US"
           value={value}
           onChange={(val) => setValue(val as Date)}

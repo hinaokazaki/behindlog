@@ -47,10 +47,10 @@ body {
 }
 
 /* -------------------------------
-   Behindlog dashboard calendar
+   mini calendar (dashboard)
 -------------------------------- */
 
-.behindlog-calendar {
+.mini-calendar {
   width: 100% !important;
   border: none !important;
   background: transparent !important;
@@ -58,14 +58,14 @@ body {
 }
 
 /* 上部ナビ */
-.behindlog-calendar .react-calendar__navigation {
+.mini-calendar .react-calendar__navigation {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   margin-bottom: 20px;
 }
 
-.behindlog-calendar .react-calendar__navigation button {
+.mini-calendar .react-calendar__navigation button {
   min-width: 32px;
   height: 32px;
   border: none;
@@ -76,12 +76,12 @@ body {
   border-radius: 9999px;
 }
 
-.behindlog-calendar .react-calendar__navigation button:enabled:hover,
-.behindlog-calendar .react-calendar__navigation button:enabled:focus {
+.mini-calendar .react-calendar__navigation button:enabled:hover,
+.mini-calendar .react-calendar__navigation button:enabled:focus {
   background: transparent !important;
 }
 
-.behindlog-calendar .react-calendar__navigation__label {
+.mini-calendar .react-calendar__navigation__label {
   flex-grow: 0 !important;
   pointer-events: none;
   color: #444;
@@ -90,12 +90,12 @@ body {
 }
 
 /* 曜日 */
-.behindlog-calendar .react-calendar__month-view__weekdays {
+.mini-calendar .react-calendar__month-view__weekdays {
   margin-bottom: 14px;
   text-align: center;
 }
 
-.behindlog-calendar .react-calendar__month-view__weekdays__weekday {
+.mini-calendar .react-calendar__month-view__weekdays__weekday {
   padding: 8px 0;
   color: #444;
   font-size: 15px;
@@ -103,17 +103,17 @@ body {
   text-decoration: none;
 }
 
-.behindlog-calendar .react-calendar__month-view__weekdays__weekday abbr {
+.mini-calendar .react-calendar__month-view__weekdays__weekday abbr {
   text-decoration: none;
 }
 
 /* 日付グリッド */
-.behindlog-calendar .react-calendar__month-view__days {
+.mini-calendar .react-calendar__month-view__days {
   gap: 6px 0;
 }
 
 /* 日付セル */
-.behindlog-calendar .react-calendar__tile {
+.mini-calendar .react-calendar__tile {
   height: 44px;
   padding: 0;
   border: none !important;
@@ -128,32 +128,32 @@ body {
 }
 
 /* 全体ホバー無効 */
-.behindlog-calendar .react-calendar__tile:enabled:hover,
-.behindlog-calendar .react-calendar__tile:enabled:focus {
+.mini-calendar .react-calendar__tile:enabled:hover,
+.mini-calendar .react-calendar__tile:enabled:focus {
   background: transparent !important;
   color: inherit !important;
   box-shadow: none !important;
 }
 
 /* 今日 */
-.behindlog-calendar .react-calendar__tile--now {
+.mini-calendar .react-calendar__tile--now {
   background: transparent !important;
   color: #666 !important;
 }
 
 /* 選択状態を消す */
-.behindlog-calendar .react-calendar__tile--active {
+.mini-calendar .react-calendar__tile--active {
   background: transparent !important;
   color: inherit !important;
 }
 
 /* 記録なし */
-.behindlog-calendar .no-record {
+.mini-calendar .no-record {
   color: #9a9a9a !important;
 }
 
 /* 記録あり */
-.behindlog-calendar .has-record {
+.mini-calendar .has-record {
   width: 38px !important;
   height: 38px !important;
   margin: 0 auto;
@@ -163,8 +163,8 @@ body {
 }
 
 /* 記録ありの日は hover / focus しても変えない */
-.behindlog-calendar .has-record:enabled:hover,
-.behindlog-calendar .has-record:enabled:focus {
+.mini-calendar .has-record:enabled:hover,
+.mini-calendar .has-record:enabled:focus {
   background: #f7b4a8 !important;
   color: #ea7f6b !important;
   box-shadow: none !important;

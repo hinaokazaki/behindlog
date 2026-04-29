@@ -68,7 +68,7 @@ export default function DashCalendarSection({
       </p>
 
       <Calendar
-        className="behindlog-calendar"
+        className="mini-calendar"
         value={value}
         locale="en-US"
         onChange={(val) => setValue(val as Date)}

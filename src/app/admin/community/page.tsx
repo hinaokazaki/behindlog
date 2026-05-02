@@ -77,7 +77,7 @@ export default function CommunityPage() {
   const invitations = friendRequests.data?.invitations ?? [];
 
   const handleFriendClick = (id: number) => {
-    actions.router.replace(`/admin/users/${id}/dashboard`);
+    actions.router.push(`/admin/users/${id}/dashboard`);
   };
 
   const handleRequest = async (data: CreateFriendRequest) => {

@@ -20,7 +20,7 @@ const DashCommittimeSection: React.FC = () => {
       </p>
     );
 
-  if (committimeQuery.error)
+  if (committimeSummaryQuery.error)
     return (
       <p>
         合計時間の取得でエラーが発生しました:{" "}

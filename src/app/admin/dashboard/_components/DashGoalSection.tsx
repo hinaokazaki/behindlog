@@ -19,11 +19,7 @@ const DashGoalSection: React.FC = () => {
       <BlockTitle title="Goal" />
       <div className="space-y-2">
         {goals.map((g) => (
-          <GoalCardBase
-            goal={g.title}
-            deadline={g.deadline}
-            // onClick={() => {}}
-          />
+          <GoalCardBase key={g.id} goal={g.title} deadline={g.deadline} />
         ))}
       </div>
     </section>

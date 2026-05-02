@@ -32,10 +32,6 @@ const DashCommittimeSection: React.FC = () => {
     ? committimeQuery.data.committime
     : null;
 
-  const committimeSummary = committimeSummaryQuery.data
-    ? committimeSummaryQuery.data.totalStudyTime
-    : null;
-
   const totalStudyTimeByPeriod =
     committimeSummaryQuery.data?.totalStudyTime.totalStudyTimeByPeriod ?? 0;
 

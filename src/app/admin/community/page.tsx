@@ -76,8 +76,8 @@ export default function CommunityPage() {
   const friendLists = friends.data?.friendList ?? [];
   const invitations = friendRequests.data?.invitations ?? [];
 
-  const onClick = () => {
-    actions.router.replace("/"); // 友達のダッシュボードページに飛ぶようにする
+  const handleFriendClick = (id: number) => {
+    actions.router.push(`/admin/users/${id}/dashboard`);
   };
 
   const handleRequest = async (data: CreateFriendRequest) => {
@@ -143,13 +143,12 @@ export default function CommunityPage() {
           {friendLists.map((f) => {
             const isAccepted = f.status === "ACCEPTED";
             const displayName = f.friend?.name ?? f.inviteeEmail;
-
             return (
               <CommunityCardBase
                 key={f.id}
                 name={displayName}
                 mode={isAccepted ? "requestAccepted" : "requestSent"}
-                onClick={isAccepted ? onClick : undefined}
+                onClick={isAccepted ? () => handleFriendClick(f.id) : undefined}
                 rightSlot={
                   <button
                     type="button"
@@ -157,7 +156,9 @@ export default function CommunityPage() {
                       e.stopPropagation();
                       modals.openDelete(f);
                     }}
-                    className={'flex items-center justify-center rounded-full p-2 hover:bg-[#FFF3F0]'}
+                    className={
+                      "flex items-center justify-center rounded-full p-2 hover:bg-[#FFF3F0]"
+                    }
                   >
                     <Image
                       src="/delete.png"

@@ -1,4 +1,3 @@
-// 次のブランチで修正します
 "use client";
 import SectionTitle from "@/app/_components/SectionTitle";
 import DashCalendarSection from "@/app/admin/dashboard/_components/DashCalendarSection";

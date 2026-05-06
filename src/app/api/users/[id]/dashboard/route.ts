@@ -1,10 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
-import { withUserTimezone, withUserTimezoneMany } from "@/lib/timezone";
+import { withUserTimezoneMany } from "@/lib/timezone";
 import { Todos } from "@/schemas/todo";
 import { Goals } from "@/schemas/goal";
-import { ErrorResponse } from "resend";
+import { ErrorResponse } from "@/schemas/common";
+
+type FriendDashboardResponse = {
+  friendDashboard: {
+    todos: Todos;
+    goals: Goals;
+  };
+};
 
 // GET: /users/[userId]/dashboard 友達のダッシュボード用データ取得
 export const GET = async (
@@ -87,11 +94,11 @@ export const GET = async (
 
     // 友達のコミットタイムとミニカレンダー情報の取得、
     const friendDashboard = {
-      todo: safeTodos,
-      goal: safegoals,
+      todos: safeTodos,
+      goals: safegoals,
     };
 
-    return NextResponse.json<UserRecordResponse>(
+    return NextResponse.json<FriendDashboardResponse>(
       { friendDashboard: friendDashboard },
       { status: 200 },
     );

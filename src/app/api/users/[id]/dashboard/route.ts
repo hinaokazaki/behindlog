@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
-import { withUserTimezoneMany } from "@/lib/timezone";
+import { withUserTimezone, withUserTimezoneMany } from "@/lib/timezone";
 import { Todos } from "@/schemas/todo";
 import { Goals } from "@/schemas/goal";
 import { ErrorResponse } from "@/schemas/common";
+import { Committime } from "@/schemas/committime";
 
 type FriendDashboardResponse = {
   friendDashboard: {
@@ -93,9 +94,28 @@ export const GET = async (
     const safegoals: Goals = goalConverted;
 
     // 友達のコミットタイムとミニカレンダー情報の取得、
+    const committime = await prisma.commitTime.findUnique({
+      where: {
+        userId: ownerId,
+      },
+    });
+
+    if (!committime) {
+      return NextResponse.json({ committime: null }, { status: 200 });
+    }
+
+    const committimeConverted = withUserTimezone(
+      committime,
+      ["createdAt", "updatedAt", "startDate", "endDate"],
+      owner.timezone,
+    );
+
+    const safeCommittime: Committime = committimeConverted;
+
     const friendDashboard = {
       todos: safeTodos,
       goals: safegoals,
+      Committime: safeCommittime,
     };
 
     return NextResponse.json<FriendDashboardResponse>(

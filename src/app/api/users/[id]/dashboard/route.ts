@@ -5,12 +5,12 @@ import { withUserTimezone, withUserTimezoneMany } from "@/lib/timezone";
 import { Todos } from "@/schemas/todo";
 import { Goals } from "@/schemas/goal";
 import { ErrorResponse } from "@/schemas/common";
-import { Committime } from "@/schemas/committime";
 
 type FriendDashboardResponse = {
   friendDashboard: {
     todos: Todos;
     goals: Goals;
+    committime: TotalStudyTime;
   };
 };
 
@@ -147,7 +147,7 @@ export const GET = async (
     const friendDashboard = {
       todos: safeTodos,
       goals: safegoals,
-      Committime: safeCommittime,
+      committime: safeCommittime,
     };
 
     return NextResponse.json<FriendDashboardResponse>(

@@ -14,6 +14,14 @@ type FriendDashboardResponse = {
   };
 };
 
+type TotalStudyTime = {
+  startDate: string;
+  endDate: string;
+  targetTime: number;
+  committimeId: number;
+  totalStudyTimeByPeriod: number;
+};
+
 // GET: /users/[userId]/dashboard 友達のダッシュボード用データ取得
 export const GET = async (
   request: NextRequest,
@@ -101,16 +109,40 @@ export const GET = async (
     });
 
     if (!committime) {
-      return NextResponse.json({ committime: null }, { status: 200 });
+      return NextResponse.json(
+        { totalStudyTime: 0, committime: null },
+        { status: 200 },
+      );
     }
 
+    const totalStudyTime = await prisma.dailyRecord.aggregate({
+      where: {
+        userId: committime.userId,
+        recordedDate: {
+          gte: committime.startDate,
+          lte: committime.endDate,
+        },
+      },
+      _sum: {
+        totalStudyTime: true,
+      },
+    });
+
+    const result = {
+      committimeId: committime.id,
+      totalStudyTimeByPeriod: totalStudyTime._sum.totalStudyTime ?? 0,
+      startDate: committime.startDate,
+      endDate: committime.endDate,
+      targetTime: committime.targetTime,
+    };
+
     const committimeConverted = withUserTimezone(
-      committime,
-      ["createdAt", "updatedAt", "startDate", "endDate"],
+      result,
+      ["startDate", "endDate"],
       owner.timezone,
     );
 
-    const safeCommittime: Committime = committimeConverted;
+    const safeCommittime: TotalStudyTime = committimeConverted;
 
     const friendDashboard = {
       todos: safeTodos,

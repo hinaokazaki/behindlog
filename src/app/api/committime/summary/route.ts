@@ -41,6 +41,7 @@ export const GET = async (request: NextRequest) => {
       totalStudyTimeByPeriod: totalStudyTime._sum.totalStudyTime ?? 0,
       startDate: committime.startDate,
       endDate: committime.endDate,
+      targetTime: committime.targetTime,
     };
 
     const converted = withUserTimezone(

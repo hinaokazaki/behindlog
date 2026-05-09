@@ -1,24 +1,13 @@
 "use client";
-
 import Loading from "@/app/_components/Loading";
-import { useCommittimeQuery } from "../../_hooks/useCommittimeQuery";
 import BlockTitle from "../../_components/BlockTitle";
 import { useCommittimeSummaryQuery } from "../../_hooks/useCommittimeSummaryQuery";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
 const DashCommittimeSection: React.FC = () => {
-  const committimeQuery = useCommittimeQuery();
   const committimeSummaryQuery = useCommittimeSummaryQuery();
 
-  if (committimeQuery.isLoading || committimeSummaryQuery.isLoading)
-    return <Loading />;
-
-  if (committimeQuery.error)
-    return (
-      <p>
-        目標時間の取得でエラーが発生しました: {committimeQuery.error.message}
-      </p>
-    );
+  if (committimeSummaryQuery.isLoading) return <Loading />;
 
   if (committimeSummaryQuery.error)
     return (
@@ -28,14 +17,15 @@ const DashCommittimeSection: React.FC = () => {
       </p>
     );
 
-  const committime = committimeQuery.data
-    ? committimeQuery.data.committime
+  const committime = committimeSummaryQuery.data?.totalStudyTime
+    ? committimeSummaryQuery.data?.totalStudyTime
     : null;
 
   const totalStudyTimeByPeriod =
     committimeSummaryQuery.data?.totalStudyTime.totalStudyTimeByPeriod ?? 0;
 
-  const targetTime = committime?.targetTime ?? 0;
+  const targetTime =
+    committimeSummaryQuery.data?.totalStudyTime.targetTime ?? 0;
 
   const studiedMinutes = Math.min(totalStudyTimeByPeriod, targetTime);
   const remainingMinutes = Math.max(targetTime - totalStudyTimeByPeriod, 0);
@@ -81,9 +71,7 @@ const DashCommittimeSection: React.FC = () => {
               <p className="text-base text-form-text">目標学習時間</p>
               <div className="flex items-baseline gap-4">
                 <p className="mt-4 text-base font-bold">
-                  {committime?.targetTime
-                    ? Math.floor(committime.targetTime / 60)
-                    : 0}
+                  {targetTime ? Math.floor(targetTime / 60) : 0}
                   <span className="ml-4 text-base text-form-text">時間</span>
                 </p>
                 <p className="text-base text-sm font-semibold">

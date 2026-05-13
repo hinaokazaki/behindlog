@@ -3,7 +3,6 @@ import Calendar from "react-calendar";
 import { useEffect, useMemo, useState } from "react";
 import Loading from "@/app/_components/Loading";
 import { toYmdWithTimezone, toYmLocal } from "@/lib/date";
-import { useMonthlyRecordsQuery } from "../../_hooks/useMonthlyRecordsQuery";
 import BlockTitle from "../../_components/BlockTitle";
 import { useMonthlyRecordDatesQuery } from "../../_hooks/useMonthlyRecordDatesQuery";
 

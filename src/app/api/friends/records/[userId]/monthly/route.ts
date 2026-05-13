@@ -66,22 +66,17 @@ export const GET = async (
     // 対象ユーザーの１か月分の記録を取得
     const records = await prisma.dailyRecord.findMany({
       where: {
+        userId,
         recordedDate: {
           gte: startDate,
           lt: endDate,
         },
-        userId: {
-          in: [userId],
-        },
       },
       select: {
         recordedDate: true,
-        user: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
+      },
+      orderBy: {
+        recordedDate: "asc",
       },
     });
 

@@ -5,6 +5,7 @@ import Loading from "@/app/_components/Loading";
 import { toYmdWithTimezone, toYmLocal } from "@/lib/date";
 import { useMonthlyRecordsQuery } from "../../_hooks/useMonthlyRecordsQuery";
 import BlockTitle from "../../_components/BlockTitle";
+import { useMonthlyRecordDatesQuery } from "../../_hooks/useMonthlyRecordDatesQuery";
 
 // "YYYY-MM" -> Date(その月の1日)
 const ymToDate = (ym: string) => {
@@ -13,10 +14,12 @@ const ymToDate = (ym: string) => {
 };
 
 type CalendarSectionProps = {
+  userId: string;
   initialMonth?: string;
 };
 
 export default function DashCalendarSection({
+  userId,
   initialMonth,
 }: CalendarSectionProps) {
   const defaultMonth = initialMonth ?? toYmLocal(new Date());
@@ -28,8 +31,8 @@ export default function DashCalendarSection({
 
   const month = useMemo(() => toYmLocal(activeStartDate), [activeStartDate]);
 
-  const monthlyRecordsQuery = useMonthlyRecordsQuery({ month });
-  const monthlyRecords = monthlyRecordsQuery.data?.monthlyRecords;
+  const monthlyRecordDatesQuery = useMonthlyRecordDatesQuery({ userId, month });
+  const monthlyRecordDates = monthlyRecordDatesQuery.data?.monthlyRecordDates;
 
   useEffect(() => {
     if (!initialMonth) return;
@@ -39,23 +42,19 @@ export default function DashCalendarSection({
   const recordMap = useMemo(() => {
     const map = new Map<string, boolean>();
 
-    monthlyRecords?.record.forEach((item) => {
-      if (item.users.length > 0) {
-        map.set(item.date, true);
-      }
+    monthlyRecordDates?.recordedDates.forEach((date) => {
+      map.set(date, true);
     });
 
     return map;
-  }, [monthlyRecords]);
-
-  const timeZone = monthlyRecords?.viewerTimezone ?? "UTC";
+  }, [monthlyRecordDates]);
 
   const formatDate = (date: Date) => {
-    return toYmdWithTimezone(date, timeZone);
+    return toYmdWithTimezone(date, "UTC");
   };
 
-  if (monthlyRecordsQuery.isLoading) return <Loading />;
-  if (monthlyRecordsQuery.error) {
+  if (monthlyRecordDatesQuery.isLoading) return <Loading />;
+  if (monthlyRecordDatesQuery.error) {
     return <p>カレンダー情報の取得でエラーが発生しました。</p>;
   }
 

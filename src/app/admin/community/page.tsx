@@ -76,7 +76,7 @@ export default function CommunityPage() {
   const friendLists = friends.data?.friendList ?? [];
   const invitations = friendRequests.data?.invitations ?? [];
 
-  const handleFriendClick = (id: number) => {
+  const handleFriendClick = (id: string) => {
     actions.router.push(`/admin/users/${id}/dashboard`);
   };
 
@@ -143,12 +143,17 @@ export default function CommunityPage() {
           {friendLists.map((f) => {
             const isAccepted = f.status === "ACCEPTED";
             const displayName = f.friend?.name ?? f.inviteeEmail;
+            const friendId = f.friend?.id;
             return (
               <CommunityCardBase
                 key={f.id}
                 name={displayName}
                 mode={isAccepted ? "requestAccepted" : "requestSent"}
-                onClick={isAccepted ? () => handleFriendClick(f.id) : undefined}
+                onClick={
+                  isAccepted && friendId
+                    ? () => handleFriendClick(friendId)
+                    : undefined
+                }
                 rightSlot={
                   <button
                     type="button"

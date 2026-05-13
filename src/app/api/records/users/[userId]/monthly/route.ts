@@ -9,7 +9,7 @@ import {
   MonthlyRecordDatesResponse,
 } from "@/schemas/monthlyRecordDates";
 
-// GET: /api/records/${userId}/monthly?month=${month}
+// GET: /api/records/users/${userId}/monthly?month=${month}
 export const GET = async (
   request: NextRequest,
   { params }: { params: { userId: string } },

@@ -35,19 +35,6 @@ export const GET = async (
     const endDate = new Date(startDate);
     endDate.setUTCMonth(startDate.getUTCMonth() + 1);
 
-    // // 自分の友達一覧を取得
-    // const friendships = await prisma.friendship.findMany({
-    //   where: {
-    //     status: "ACCEPTED",
-    //     OR: [{ userId1: user.id }, { userId2: user.id }],
-    //   },
-    // });
-
-    // // 自分以外の相手のIDを取り出す
-    // const friendIds = friendships
-    //   .map((f) => (f.userId1 === user.id ? f.userId2 : f.userId1))
-    //   .filter((id): id is string => id !== null)
-
     // 閲覧権限チェック
     const isSelf = viewer.id === userId;
     if (!isSelf) {
@@ -83,20 +70,6 @@ export const GET = async (
         recordedDate: "asc",
       },
     });
-
-    // // 日付ごとにユーザーをグループ化
-    // const grouped = records.reduce(
-    //   (acc, record) => {
-    //     const date = toYmdFromDbDate(record.recordedDate);
-    //     if (!acc[date]) acc[date] = [];
-    //     acc[date].push({
-    //       id: record.user.id,
-    //       name: record.user.name,
-    //     });
-    //     return acc;
-    //   },
-    //   {} as Record<string, { id: string; name: string | null }[]>,
-    // );
 
     const recordedDates = records.map((record) =>
       toYmdFromDbDate(record.recordedDate),

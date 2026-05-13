@@ -1,7 +1,5 @@
 "use client";
-import Loading from "@/app/_components/Loading";
 import SectionTitle from "@/app/_components/SectionTitle";
-import { useProfileQuery } from "@/app/admin/_hooks/useProfileQuery";
 import DashCalendarSection from "@/app/admin/dashboard/_components/DashCalendarSection";
 import DashCommittimeSection from "@/app/admin/dashboard/_components/DashCommittimeSection";
 import DashGoalSection from "@/app/admin/dashboard/_components/DashGoalSection";

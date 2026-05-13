@@ -8,6 +8,6 @@ type Props = {
 
 export const useMonthlyRecordDatesQuery = ({ userId, month }: Props) => {
   return useFetch<{ monthlyRecordDates: MonthlyRecordDates }>(
-    `/api/records/${userId}/monthly?month=${month}`,
+    `/api/records/users/${userId}/monthly?month=${month}`,
   );
 };

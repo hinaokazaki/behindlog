@@ -1,31 +1,24 @@
 "use client";
-import Loading from "@/app/_components/Loading";
 import BlockTitle from "../../_components/BlockTitle";
-import { useCommittimeSummaryQuery } from "../../_hooks/useCommittimeSummaryQuery";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
-const DashCommittimeSection: React.FC = () => {
-  const committimeSummaryQuery = useCommittimeSummaryQuery();
+type DashCommittimeSectionProps = {
+  totalStudyTime: {
+    totalStudyTimeByPeriod: number;
+    targetTime: number;
+    startDate: string;
+    endDate: string;
+  } | null;
+};
 
-  if (committimeSummaryQuery.isLoading) return <Loading />;
+const DashCommittimeSection: React.FC<DashCommittimeSectionProps> = ({
+  totalStudyTime,
+}) => {
+  const committime = totalStudyTime;
 
-  if (committimeSummaryQuery.error)
-    return (
-      <p>
-        合計時間の取得でエラーが発生しました:{" "}
-        {committimeSummaryQuery.error.message}
-      </p>
-    );
+  const totalStudyTimeByPeriod = committime?.totalStudyTimeByPeriod ?? 0;
 
-  const committime = committimeSummaryQuery.data?.totalStudyTime
-    ? committimeSummaryQuery.data?.totalStudyTime
-    : null;
-
-  const totalStudyTimeByPeriod =
-    committimeSummaryQuery.data?.totalStudyTime.totalStudyTimeByPeriod ?? 0;
-
-  const targetTime =
-    committimeSummaryQuery.data?.totalStudyTime.targetTime ?? 0;
+  const targetTime = committime?.targetTime ?? 0;
 
   const studiedMinutes = Math.min(totalStudyTimeByPeriod, targetTime);
   const remainingMinutes = Math.max(targetTime - totalStudyTimeByPeriod, 0);

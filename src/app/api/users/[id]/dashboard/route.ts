@@ -5,24 +5,13 @@ import { withUserTimezone, withUserTimezoneMany } from "@/lib/timezone";
 import { Todos } from "@/schemas/todo";
 import { Goals } from "@/schemas/goal";
 import { ErrorResponse } from "@/schemas/common";
+import { TotalStudyTime } from "@/schemas/committime";
+import {
+  FriendDashboard,
+  FriendDashboardResponse,
+} from "@/schemas/friendDashboard";
 
-type FriendDashboardResponse = {
-  friendDashboard: {
-    todos: Todos;
-    goals: Goals;
-    committime: TotalStudyTime;
-  };
-};
-
-type TotalStudyTime = {
-  startDate: string;
-  endDate: string;
-  targetTime: number;
-  committimeId: number;
-  totalStudyTimeByPeriod: number;
-};
-
-// GET: /users/[userId]/dashboard 友達のダッシュボード用データ取得
+// GET: /users/[id]/dashboard 友達のダッシュボード用データ取得
 export const GET = async (
   request: NextRequest,
   { params }: { params: { id: string } },
@@ -101,7 +90,7 @@ export const GET = async (
 
     const safegoals: Goals = goalConverted;
 
-    // 友達のコミットタイムとミニカレンダー情報の取得、
+    // 友達のコミットタイム情報の取得
     const committime = await prisma.commitTime.findUnique({
       where: {
         userId: ownerId,
@@ -144,7 +133,7 @@ export const GET = async (
 
     const safeCommittime: TotalStudyTime = committimeConverted;
 
-    const friendDashboard = {
+    const friendDashboard: FriendDashboard = {
       todos: safeTodos,
       goals: safegoals,
       committime: safeCommittime,

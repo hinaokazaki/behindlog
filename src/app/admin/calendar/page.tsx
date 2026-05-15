@@ -27,6 +27,7 @@ export default function CalendarPage() {
   const [activeStartDate, setActiveStartDate] = useState<Date>(() =>
     ymToDate(initialMonth),
   ); // 表示している月
+
   // Modal
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);

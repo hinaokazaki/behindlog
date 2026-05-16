@@ -12,14 +12,25 @@ const DashTodoSection: React.FC<DashTodoSectionProps> = ({ todos }) => {
     <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
       <BlockTitle title="Todo" />
       <div className="space-y-2">
-        {todos.map((t) => (
-          <TodoCardBase
-            key={t.id}
-            todo={t.title}
-            dueDate={t.dueDate}
-            completed={t.isCompleted}
-          />
-        ))}
+        {todos.length === 0 ? (
+          <div className="flex flex-col">
+            <p className="text-base text-body font-semibold">
+              * Todoリストが登録されていません
+            </p>
+            <p className="text-base text-body font-semibold">
+              * 編集ページで作成してみましょう!
+            </p>
+          </div>
+        ) : (
+          todos.map((t) => (
+            <TodoCardBase
+              key={t.id}
+              todo={t.title}
+              dueDate={t.dueDate}
+              completed={t.isCompleted}
+            />
+          ))
+        )}
       </div>
     </section>
   );

@@ -8,19 +8,22 @@ import DashGoalSection from "@/app/admin/dashboard/_components/DashGoalSection";
 import DashTodoSection from "@/app/admin/dashboard/_components/DashTodoSection";
 import { useParams } from "next/navigation";
 
-export default function FriendsDashboardPage() {
-  const { id } = useParams<{ id: string }>();
-  const friendDashboardQuery = useFriendDashboardQuery({ id });
+export default function FriendsDashboardPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  // ページcomponentでuse clientとしている場合はuseParams()を使うべきかpropsのparamsでいいのか
+  // const { id } = useParams<{ id: string }>();
+  const id = params.id;
+  const { isLoading, error, data } = useFriendDashboardQuery({ id });
 
-  if (friendDashboardQuery.isLoading) return <Loading />;
+  if (isLoading) return <Loading />;
 
-  if (
-    friendDashboardQuery.error ||
-    !friendDashboardQuery.data?.friendDashboard
-  ) {
+  if (error || !data?.friendDashboard) {
     return <p>友達のダッシュボードの取得でエラーが発生しました。</p>;
   }
-  const friendDashboard = friendDashboardQuery.data.friendDashboard;
+  const friendDashboard = data.friendDashboard;
 
   return (
     <div className="h-auto min-h-[calc(100vh-120px)] px-4 py-4 sm:px-6 lg:h-[calc(100vh-120px)] lg:overflow-hidden lg:px-10">

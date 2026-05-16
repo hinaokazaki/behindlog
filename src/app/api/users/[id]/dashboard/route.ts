@@ -53,13 +53,6 @@ export const GET = async (
       },
     });
 
-    if (!friendTodo) {
-      return NextResponse.json(
-        { message: "friendTodo not found" },
-        { status: 404 },
-      );
-    }
-
     const converted = withUserTimezoneMany(
       friendTodo,
       ["createdAt", "updatedAt", "dueDate"],
@@ -74,13 +67,6 @@ export const GET = async (
         userId: ownerId,
       },
     });
-
-    if (!friendGoal) {
-      return NextResponse.json(
-        { message: "friendGoal not found" },
-        { status: 404 },
-      );
-    }
 
     const goalConverted = withUserTimezoneMany(
       friendGoal,

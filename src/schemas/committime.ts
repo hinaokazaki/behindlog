@@ -16,6 +16,7 @@ export const totalStudyTimeSchema = z.object({
   totalStudyTimeByPeriod: z.number(),
   startDate: z.string(),
   endDate: z.string(),
+  targetTime: z.number(),
 });
 
 // リクエスト用

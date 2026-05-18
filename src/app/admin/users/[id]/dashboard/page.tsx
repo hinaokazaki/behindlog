@@ -6,15 +6,12 @@ import DashCalendarSection from "@/app/admin/dashboard/_components/DashCalendarS
 import DashCommittimeSection from "@/app/admin/dashboard/_components/DashCommittimeSection";
 import DashGoalSection from "@/app/admin/dashboard/_components/DashGoalSection";
 import DashTodoSection from "@/app/admin/dashboard/_components/DashTodoSection";
-import { useParams } from "next/navigation";
 
 export default function FriendsDashboardPage({
   params,
 }: {
   params: { id: string };
 }) {
-  // ページcomponentでuse clientとしている場合はuseParams()を使うべきかpropsのparamsでいいのか
-  // const { id } = useParams<{ id: string }>();
   const id = params.id;
   const { isLoading, error, data } = useFriendDashboardQuery({ id });
 

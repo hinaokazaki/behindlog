@@ -21,6 +21,8 @@ import Textarea from "@/app/_components/Textarea";
 import BlockTitle from "../../_components/BlockTitle";
 import SectionTitle from "@/app/_components/SectionTitle";
 import CommittimeRecordForm from "./_components/CommittimeRecordForm";
+import { isCommittimeExpired } from "./_utils/isCommittimeExpired";
+import CommittimeAlert from "./_components/CommittimeAlert";
 
 type RecordForm = {
   memo: string;
@@ -179,6 +181,9 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
   const totalStudyTimeByPeriod =
     committimeSummaryQuery.data?.totalStudyTime.totalStudyTimeByPeriod ?? 0;
 
+  // Check committime's deadline
+  const isExpired = isCommittimeExpired(displayCommittime.endDate);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex items-center justify-between">
@@ -201,11 +206,19 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
       </section>
       <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
         <BlockTitle title="Commit time" />
-        <CommittimeRecordForm
-          displayCommittime={displayCommittime}
-          totalStudyTimeByPeriod={totalStudyTimeByPeriod}
-          register={register}
-        />
+        {isExpired ? (
+          <CommittimeAlert
+            targetTime={displayCommittime.targetTime}
+            endDate={displayCommittime.endDate}
+            onOpenModal={() => setIsModalOpen(true)}
+          />
+        ) : (
+          <CommittimeRecordForm
+            displayCommittime={displayCommittime}
+            totalStudyTimeByPeriod={totalStudyTimeByPeriod}
+            register={register}
+          />
+        )}
       </section>
       <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
         <BlockTitle title="Note" />

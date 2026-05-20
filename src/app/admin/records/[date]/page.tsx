@@ -23,6 +23,7 @@ import SectionTitle from "@/app/_components/SectionTitle";
 import CommittimeRecordForm from "./_components/CommittimeRecordForm";
 import { isCommittimeExpired } from "./_utils/isCommittimeExpired";
 import CommittimeAlert from "./_components/CommittimeAlert";
+import UpdateCommittimeModal from "./_components/UpdateCommittimeModal";
 
 type RecordForm = {
   memo: string;
@@ -50,6 +51,7 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
   const { callApi } = useApi();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { register, handleSubmit, reset, watch, setValue } =
     useForm<RecordForm>({
@@ -185,58 +187,71 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
   const isExpired = isCommittimeExpired(displayCommittime.endDate);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex items-center justify-between">
-        <SectionTitle title="Today's Record" />
-        <p className="text-heading-3 font-extrabold text-primary">{date}</p>
-      </div>
-      <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
-        <BlockTitle title="Todo list" />
-        <div className="space-y-2">
-          {todoItems.items.map((t, index) => (
-            <TodoCardBase
-              key={t.id}
-              todo={t.title}
-              dueDate={t.dueDate || ""}
-              completed={t.isCompleted}
-              onToggle={(next) => toggleTodo(index, next)}
-            />
-          ))}
+    <>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex items-center justify-between">
+          <SectionTitle title="Today's Record" />
+          <p className="text-heading-3 font-extrabold text-primary">{date}</p>
         </div>
-      </section>
-      <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
-        <BlockTitle title="Commit time" />
-        {isExpired ? (
-          <CommittimeAlert
-            targetTime={displayCommittime.targetTime}
-            endDate={displayCommittime.endDate}
-            onOpenModal={() => setIsModalOpen(true)}
+        <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
+          <BlockTitle title="Todo list" />
+          <div className="space-y-2">
+            {todoItems.items.map((t, index) => (
+              <TodoCardBase
+                key={t.id}
+                todo={t.title}
+                dueDate={t.dueDate || ""}
+                completed={t.isCompleted}
+                onToggle={(next) => toggleTodo(index, next)}
+              />
+            ))}
+          </div>
+        </section>
+        <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
+          <BlockTitle title="Commit time" />
+          {isExpired ? (
+            <CommittimeAlert
+              targetTime={displayCommittime.targetTime}
+              endDate={displayCommittime.endDate}
+              onOpenModal={() => setIsModalOpen(true)}
+            />
+          ) : (
+            <CommittimeRecordForm
+              displayCommittime={displayCommittime}
+              totalStudyTimeByPeriod={totalStudyTimeByPeriod}
+              register={register}
+            />
+          )}
+        </section>
+        <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
+          <BlockTitle title="Note" />
+          <Label name="memo" title="今日の記録" />
+          <Textarea
+            id="memo"
+            placeholder="今日の記録を記入してください。"
+            {...register("memo")}
           />
-        ) : (
-          <CommittimeRecordForm
-            displayCommittime={displayCommittime}
-            totalStudyTimeByPeriod={totalStudyTimeByPeriod}
-            register={register}
+        </section>
+        <div className="mt-8 flex justify-center">
+          <Button
+            type="submit"
+            children="今日の記録を保存"
+            color="red"
+            disabled={isSubmitting || isExpired}
           />
-        )}
-      </section>
-      <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
-        <BlockTitle title="Note" />
-        <Label name="memo" title="今日の記録" />
-        <Textarea
-          id="memo"
-          placeholder="今日の記録を記入してください。"
-          {...register("memo")}
-        />
-      </section>
-      <div className="mt-8 flex justify-center">
-        <Button
-          type="submit"
-          children="今日の記録を保存"
-          color="red"
-          disabled={isSubmitting}
-        />
-      </div>
-    </form>
+        </div>
+      </form>
+
+      <UpdateCommittimeModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        committime={displayCommittime}
+        onMutate={async () => {
+          await committimeQuery.mutate();
+          await committimeSummaryQuery.mutate();
+          await recordQuery.mutate();
+        }}
+      />
+    </>
   );
 }

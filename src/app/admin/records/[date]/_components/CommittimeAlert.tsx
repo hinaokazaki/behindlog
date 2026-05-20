@@ -17,7 +17,7 @@ const CommittimeAlert = ({
   return (
     <div className="mt-6 rounded-3xl bg-white px-10 py-8">
       <div className="flex items-center gap-3">
-        <Image src="/icons/alert.png" alt="alert icon" width={32} height={32} />
+        <Image src="/alert.png" alt="alert icon" width={32} height={32} />
 
         <p className="text-base text-subtitle font-bold">
           目標期間が終了しています

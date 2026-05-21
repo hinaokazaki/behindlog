@@ -7,7 +7,7 @@ type CommittimeAlertProps = {
   onOpenModal: () => void;
 };
 
-const CommittimeAlert = ({
+const CommittimeExpiredAlert = ({
   targetTime,
   endDate,
   onOpenModal,
@@ -42,4 +42,4 @@ const CommittimeAlert = ({
   );
 };
 
-export default CommittimeAlert;
+export default CommittimeExpiredAlert;

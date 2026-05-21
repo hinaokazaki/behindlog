@@ -22,8 +22,8 @@ import BlockTitle from "../../_components/BlockTitle";
 import SectionTitle from "@/app/_components/SectionTitle";
 import CommittimeRecordForm from "./_components/CommittimeRecordForm";
 import { isCommittimeExpired } from "./_utils/isCommittimeExpired";
-import CommittimeAlert from "./_components/CommittimeAlert";
 import UpdateCommittimeModal from "./_components/UpdateCommittimeModal";
+import CommittimeExpiredAlert from "./_components/CommittimeExpiredAlert";
 
 type RecordForm = {
   memo: string;
@@ -125,9 +125,6 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
     return <p>Todoの取得でエラーが発生しました: {todoQuery.error.message}</p>;
 
   // committime
-  // 開いた記録が過去の物であれば関係ないがリアルタイムの物の場合に記入日がstartDateとendDateの中にない場合（期限が切れている場合）
-  // は期限切れのアラートを出して再設定を促す。
-  // そのための期限切れを判定するロジックを作成
   const record = recordQuery.data?.dailyRecord ?? null;
   const displayCommittime = {
     targetTime:
@@ -210,7 +207,7 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
         <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
           <BlockTitle title="Commit time" />
           {isExpired ? (
-            <CommittimeAlert
+            <CommittimeExpiredAlert
               targetTime={displayCommittime.targetTime}
               endDate={displayCommittime.endDate}
               onOpenModal={() => setIsModalOpen(true)}

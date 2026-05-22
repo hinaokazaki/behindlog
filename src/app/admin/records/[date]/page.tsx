@@ -243,11 +243,7 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         committime={displayCommittime}
-        onMutate={async () => {
-          await committimeQuery.mutate();
-          await committimeSummaryQuery.mutate();
-          await recordQuery.mutate();
-        }}
+        date={date}
       />
     </>
   );

@@ -11,6 +11,10 @@ import { useApi } from "@/app/_hooks/useApi";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import BlockTitle from "@/app/admin/_components/BlockTitle";
+import { useCommittimeSummaryQuery } from "@/app/admin/_hooks/useCommittimeSummaryQuery";
+import { useCommittimeQuery } from "@/app/admin/_hooks/useCommittimeQuery";
+import useFetch from "@/app/admin/_hooks/useFetch";
+import { DailyRecord } from "@prisma/client";
 
 type CommitTimeForm = {
   targetTime: number;
@@ -25,18 +29,23 @@ type UpdateCommittimeModalProps = {
     startDate: string | null;
     endDate: string | null;
   };
-  onMutate?: () => Promise<unknown>;
+  date: string;
 };
 
 const UpdateCommittimeModal = ({
   isOpen,
   onClose,
   committime,
-  onMutate,
+  date,
 }: UpdateCommittimeModalProps) => {
   const { callApi } = useApi();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const committimeSummaryQuery = useCommittimeSummaryQuery();
+  const committimeQuery = useCommittimeQuery();
+  const recordQuery = useFetch<{ dailyRecord: DailyRecord }>(
+    `/api/records/${date}`,
+  );
 
   if (!isOpen) return null;
 
@@ -86,7 +95,11 @@ const UpdateCommittimeModal = ({
       setIsSubmitting(true);
       await callApi<CommittimeResponse>("/api/committime", "PATCH", payload);
       router.refresh();
-      await onMutate?.();
+      await Promise.all([
+        committimeQuery.mutate(),
+        committimeSummaryQuery.mutate(),
+        recordQuery.mutate(),
+      ]);
       onClose();
     } catch (error) {
       console.error("Update committime failed", error);

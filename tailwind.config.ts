@@ -13,6 +13,9 @@ const config: Config = {
         en: ["var(--font-en)", "sans-serif"],
       },
       colors: {
+        main: "var(--color-main)",
+        pageBg: "var(--color-bg)",
+        accent: "var(--color-accent)",
         background: "#FFF6E3",
         foreground: "#887A6D", // top page text color
         primary: {

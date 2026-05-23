@@ -207,6 +207,7 @@ export default function CommunityPage() {
       />
       <Modal isOpen={modals.isInviteOpen} onClose={modals.closeInvite}>
         <div>
+          <BlockTitle title="友達を招待する" mode="modal" />
           <Form
             fields={fields}
             buttons={buttons}

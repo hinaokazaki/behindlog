@@ -20,7 +20,10 @@ import Label from "@/app/_components/Label";
 import Textarea from "@/app/_components/Textarea";
 import BlockTitle from "../../_components/BlockTitle";
 import SectionTitle from "@/app/_components/SectionTitle";
-import Input from "@/app/_components/Input";
+import CommittimeRecordForm from "./_components/CommittimeRecordForm";
+import { isCommittimeExpired } from "./_utils/isCommittimeExpired";
+import UpdateCommittimeModal from "./_components/UpdateCommittimeModal";
+import CommittimeExpiredAlert from "./_components/CommittimeExpiredAlert";
 
 type RecordForm = {
   memo: string;
@@ -48,6 +51,7 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
   const { callApi } = useApi();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { register, handleSubmit, reset, watch, setValue } =
     useForm<RecordForm>({
@@ -176,111 +180,71 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
   const totalStudyTimeByPeriod =
     committimeSummaryQuery.data?.totalStudyTime.totalStudyTimeByPeriod ?? 0;
 
+  // Check committime's deadline
+  const isExpired = isCommittimeExpired(displayCommittime.endDate);
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex items-center justify-between">
-        <SectionTitle title="Today's Record" />
-        <p className="text-heading-3 font-extrabold text-primary">{date}</p>
-      </div>
-      <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
-        <BlockTitle title="Todo list" />
-        <div className="space-y-2">
-          {todoItems.items.map((t, index) => (
-            <TodoCardBase
-              key={t.id}
-              todo={t.title}
-              dueDate={t.dueDate || ""}
-              completed={t.isCompleted}
-              onToggle={(next) => toggleTodo(index, next)}
+    <>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex items-center justify-between">
+          <SectionTitle title="Today's Record" />
+          <p className="text-heading-3 font-extrabold text-primary">{date}</p>
+        </div>
+        <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
+          <BlockTitle title="Todo list" />
+          <div className="space-y-2">
+            {todoItems.items.map((t, index) => (
+              <TodoCardBase
+                key={t.id}
+                todo={t.title}
+                dueDate={t.dueDate || ""}
+                completed={t.isCompleted}
+                onToggle={(next) => toggleTodo(index, next)}
+              />
+            ))}
+          </div>
+        </section>
+        <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
+          <BlockTitle title="Commit time" />
+          {isExpired ? (
+            <CommittimeExpiredAlert
+              targetTime={displayCommittime.targetTime}
+              endDate={displayCommittime.endDate}
+              onOpenModal={() => setIsModalOpen(true)}
             />
-          ))}
+          ) : (
+            <CommittimeRecordForm
+              displayCommittime={displayCommittime}
+              totalStudyTimeByPeriod={totalStudyTimeByPeriod}
+              register={register}
+            />
+          )}
+        </section>
+        <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
+          <BlockTitle title="Note" />
+          <Label name="memo" title="今日の記録" />
+          <Textarea
+            id="memo"
+            placeholder="今日の記録を記入してください。"
+            {...register("memo")}
+          />
+        </section>
+        <div className="mt-8 flex justify-center">
+          <Button
+            type="submit"
+            children="今日の記録を保存"
+            color="red"
+            disabled={isSubmitting || isExpired}
+          />
         </div>
-      </section>
-      <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
-        <BlockTitle title="Commit time" />
-        <div className="mt-2 flex items-end justify-between">
-          <div>
-            <p className="text-base text-form-text">目標学習時間</p>
-            <p className="ml-4 mt-4 text-base font-bold">
-              {displayCommittime.targetTime
-                ? Math.floor(displayCommittime.targetTime / 60)
-                : 0}
-              <span className="ml-8 text-base text-form-text">時間</span>
-            </p>
-          </div>
+      </form>
 
-          <p className="text-base text-sm font-semibold">
-            [{displayCommittime.startDate ?? "----"} -{" "}
-            {displayCommittime.endDate ?? "----"}]
-          </p>
-        </div>
-
-        <div className="mt-4 border-t border-gray-200" />
-
-        <div className="mt-4 grid grid-cols-2 gap-8">
-          <div>
-            <p className="text-base text-form-text">今日の学習時間</p>
-
-            <div className="mt-4 flex items-center gap-3">
-              <div className="flex items-center gap-2">
-                <Input
-                  type="number"
-                  placeholder="0"
-                  className="w-20 rounded-md border-2 p-2 text-center"
-                  {...register("studyHours")}
-                />
-                <span className="text-base text-form-text font-medium">
-                  時間
-                </span>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <Input
-                  type="number"
-                  placeholder="0"
-                  inputMode="numeric"
-                  min={0}
-                  max={59}
-                  className="w-20 rounded-md border-2 p-2 text-center"
-                  {...register("studyMinutes")}
-                />
-                <span className="text-base text-form-text font-medium">分</span>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <p className="text-base text-form-text">合計学習時間</p>
-            <p className="mt-4 text-base font-semibold">
-              {Math.floor(totalStudyTimeByPeriod / 60)}
-              <span className="mx-4 text-base text-form-text font-medium">
-                時間
-              </span>
-              {totalStudyTimeByPeriod % 60}
-              <span className="mx-4 text-base text-form-text font-medium">
-                分
-              </span>
-            </p>
-          </div>
-        </div>
-      </section>
-      <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
-        <BlockTitle title="Note" />
-        <Label name="memo" title="今日の記録" />
-        <Textarea
-          id="memo"
-          placeholder="今日の記録を記入してください。"
-          {...register("memo")}
-        />
-      </section>
-      <div className="mt-8 flex justify-center">
-        <Button
-          type="submit"
-          children="今日の記録を保存"
-          color="red"
-          disabled={isSubmitting}
-        />
-      </div>
-    </form>
+      <UpdateCommittimeModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        committime={displayCommittime}
+        date={date}
+      />
+    </>
   );
 }

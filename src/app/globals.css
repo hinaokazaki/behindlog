@@ -292,13 +292,13 @@ body {
   height: 38px !important;
   margin: 0 auto;
   border-radius: 9999px;
-  background: #f7b4a8 !important;
-  color: #ea7f6b !important;
+  background: var(--color-secondary) !important;
+  color: var(--color-primary) !important;
 }
 
 .mini-calendar .has-record:enabled:hover,
 .mini-calendar .has-record:enabled:focus {
-  background: #f7b4a8 !important;
-  color: #ea7f6b !important;
+  background: var(--color-secondary) !important;
+  color: var(--color-primary) !important;
   box-shadow: none !important;
 }

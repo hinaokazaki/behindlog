@@ -16,7 +16,7 @@ export const colorThemeVariables = {
     "--color-primary": "#4F8FEA",
     "--color-primary-hover": "#3B78D1",
     "--color-secondary": "#B6C5FF",
-    "--color-secondary-hover": "#9DAFFF",
+    "--color-secondary-hover": "#BBD4FE",
   },
 
   [ColorThemeType.WARM]: {

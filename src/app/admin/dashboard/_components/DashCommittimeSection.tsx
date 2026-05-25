@@ -51,8 +51,8 @@ const DashCommittimeSection: React.FC<DashCommittimeSectionProps> = ({
                   startAngle={90}
                   endAngle={-270}
                 >
-                  <Cell fill="#F58C7B" />
-                  <Cell fill="#E9DB9B" />
+                  <Cell fill="var(--color-primary)" />
+                  <Cell fill="var(--color-secondary)" />
                 </Pie>
               </PieChart>
             </ResponsiveContainer>

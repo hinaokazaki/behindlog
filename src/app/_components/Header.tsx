@@ -6,7 +6,7 @@ import { supabase } from "@/utils/supabase";
 import { usePathname, useRouter } from "next/navigation";
 import Logo from "./Logo";
 import Button from "./Button";
-import Image from "next/image";
+import { User } from "lucide-react";
 
 const Header: React.FC = () => {
   const { session, isLoading } = useSupabaseSession();
@@ -32,12 +32,7 @@ const Header: React.FC = () => {
           {session ? (
             <>
               <Link href="/me">
-                <Image
-                  src="/Profile.png"
-                  alt="Profile icon"
-                  width={40}
-                  height={40}
-                />
+                <User className="h-9 w-9 text-primary" />
               </Link>
               <Button children="ログアウト" onClick={handleLogout} />
             </>

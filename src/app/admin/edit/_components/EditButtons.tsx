@@ -1,5 +1,5 @@
 "use client";
-import Image from "next/image";
+import { Pencil, CircleX } from "lucide-react";
 
 interface Props {
   handleEdit: () => void;
@@ -12,19 +12,19 @@ const GoalEditButtons: React.FC<Props> = ({ handleEdit, handleDelete }) => {
       <button
         type="button"
         onClick={handleEdit}
-        className="rounded-full p-2 hover:bg-[#FFF3F0]"
+        className="rounded-full p-2 hover:bg-secondary-hover"
         aria-label="編集"
       >
-        <Image src="/editRed.png" width={22} height={22} alt="編集" />
+        <Pencil className="h-5 w-5 text-primary" />
       </button>
 
       <button
         type="button"
         onClick={handleDelete}
-        className="rounded-full p-2 hover:bg-[#FFF3F0]"
+        className="rounded-full p-2 hover:bg-secondary-hover"
         aria-label="削除"
       >
-        <Image src="/delete.png" width={22} height={22} alt="削除" />
+        <CircleX className="h-5 w-5 text-primary" />
       </button>
     </div>
   );

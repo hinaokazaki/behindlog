@@ -19,6 +19,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^2.30.0",
     "date-fns-tz": "^2.0.1",
+    "lucide-react": "^1.16.0",
     "moment-timezone": "^0.6.0",
     "next": "^14.2.30",
     "react": "^18",

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { TriangleAlert } from "lucide-react";
 import Button from "@/app/_components/Button";
 
 type CommittimeAlertProps = {
@@ -17,7 +17,7 @@ const CommittimeExpiredAlert = ({
   return (
     <div className="mt-6 rounded-3xl bg-white px-10 py-8">
       <div className="flex items-center gap-3">
-        <Image src="/alert.png" alt="alert icon" width={32} height={32} />
+        <TriangleAlert className="h-6 w-6 text-primary" />
 
         <p className="text-base text-subtitle font-bold">
           目標期間が終了しています

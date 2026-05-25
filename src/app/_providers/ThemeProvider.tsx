@@ -3,7 +3,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 import type { CSSProperties } from "react";
 import { ColorThemeType } from "@prisma/client";
 import { colorThemeVariables } from "@/constants/colorThemes";
-
 import { Profile } from "@/schemas/me";
 import useFetch from "../admin/_hooks/useFetch";
 

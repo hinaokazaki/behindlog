@@ -3,7 +3,6 @@ import BlockTitle from "../_components/BlockTitle";
 import CommunityCardBase from "./_components/CommunityCardBase";
 import Loading from "@/app/_components/Loading";
 import { Modal } from "../_components/Modal";
-import Image from "next/image";
 import { CreateFriendRequest } from "@/schemas/friend";
 import SectionTitle from "@/app/_components/SectionTitle";
 import Form from "@/app/_components/Form";

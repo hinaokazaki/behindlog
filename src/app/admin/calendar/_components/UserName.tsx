@@ -1,5 +1,5 @@
 "use client";
-import Image from "next/image";
+import { User } from "lucide-react";
 import Link from "next/link";
 
 type Props = {
@@ -11,17 +11,12 @@ type Props = {
 const UserName: React.FC<Props> = ({ key, name, link }) => {
   return (
     <Link
+      key={key}
       href={link}
       className="flex cursor-pointer items-center border-secondary hover:rounded-lg hover:border-[2px]"
     >
       <div className="flex flex-row">
-        <Image
-          src="/profile-red.png"
-          width={20}
-          height={20}
-          alt="プロフィール"
-          className="mx-2"
-        />
+        <User className="h-5 w-5 text-primary" />
         <span className="font-body mr-2 text-base font-[12px]">{name}</span>
       </div>
     </Link>

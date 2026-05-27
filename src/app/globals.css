@@ -5,8 +5,14 @@
 /* stylelint-enable at-rule-no-unknown */
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fdfdfd;
+  --foreground: #3c4a5e;
+  --color-background: #fff6e3;
+  --color-foreground: #887a6d;
+  --color-primary: #55ceba;
+  --color-primary-hover: #3ebda9;
+  --color-secondary: #ff917d;
+  --color-secondary-hover: #ff7c6f;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -27,7 +27,11 @@ export default async function RootLayout({
   children: ReactNode;
 }) {
   return (
-    <html lang="ja" className={`${notoSansJP.variable} ${poppins.variable}`}>
+    <html
+      lang="ja"
+      className={`${notoSansJP.variable} ${poppins.variable}`}
+      suppressHydrationWarning
+    >
       <body id="body" className="m-0 p-0">
         <ThemeProvider>
           <Header />

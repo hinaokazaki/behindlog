@@ -50,13 +50,27 @@ export const GET = async (request: NextRequest) => {
     const targetTime = dailyRecord?.commitTargetTime ?? committime.targetTime;
     const committimeId = dailyRecord?.commitTimeId ?? committime.id;
 
+    const toUtcDateOnly = (value: Date, timezone: string) => {
+      const ymd = new Intl.DateTimeFormat("en-CA", {
+        timeZone: timezone,
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }).format(value);
+
+      return new Date(`${ymd}T00:00:00.000Z`);
+    };
+
+    const startDateForQuery = toUtcDateOnly(startDate, user.timezone);
+    const endDateForQuery = toUtcDateOnly(endDate, user.timezone);
+
     const totalStudyTime = await prisma.dailyRecord.aggregate({
       where: {
         userId: user.id,
         commitTimeId: committimeId,
         recordedDate: {
-          gte: startDate,
-          lte: endDate,
+          gte: startDateForQuery,
+          lte: endDateForQuery,
         },
       },
       _sum: {

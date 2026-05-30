@@ -180,12 +180,6 @@ export const PUT = async (
           totalStudyTime: body.totalStudyTime,
           memo: body.memo,
           todoSnapshot: safeSnapshot,
-          ...(committime
-            ? { commitTime: { connect: { id: committime.id } } }
-            : {}),
-          commitTargetTime: committime?.targetTime ?? null,
-          commitStartDate: committime?.startDate ?? null,
-          commitEndDate: committime?.endDate ?? null,
         },
         create: {
           user: {

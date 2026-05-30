@@ -1,14 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
-import { withUserTimezone } from "@/lib/timezone";
+import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
 import { TotalStudyTime, TotalStudyTimeResponse } from "@/schemas/committime";
 import { ErrorResponse } from "@/schemas/common";
 
-// GET: /committime/:id/summary ユーザー_合計学習時間取得
+// GET: /committime/summary?date=xxxx-xx-xx ユーザー_合計学習時間取得
 export const GET = async (request: NextRequest) => {
   try {
     const user = await getLoggedInUser(request);
+
+    const { searchParams } = new URL(request.url);
+    const date = searchParams.get("date");
 
     const committime = await prisma.commitTime.findUnique({
       where: {
@@ -23,12 +26,37 @@ export const GET = async (request: NextRequest) => {
       );
     }
 
+    const recordedDate = date
+      ? withUserDateParse(
+          { recordedDate: date },
+          ["recordedDate"],
+          user.timezone,
+        ).recordedDate
+      : null;
+
+    const dailyRecord = recordedDate
+      ? await prisma.dailyRecord.findUnique({
+          where: {
+            userId_recordedDate: {
+              userId: user.id,
+              recordedDate,
+            },
+          },
+        })
+      : null;
+
+    const startDate = dailyRecord?.commitStartDate ?? committime.startDate;
+    const endDate = dailyRecord?.commitEndDate ?? committime.endDate;
+    const targetTime = dailyRecord?.commitTargetTime ?? committime.targetTime;
+    const committimeId = dailyRecord?.commitTimeId ?? committime.id;
+
     const totalStudyTime = await prisma.dailyRecord.aggregate({
       where: {
-        userId: committime.userId,
+        userId: user.id,
+        commitTimeId: committimeId,
         recordedDate: {
-          gte: committime.startDate,
-          lte: committime.endDate,
+          gte: startDate,
+          lte: endDate,
         },
       },
       _sum: {
@@ -37,11 +65,11 @@ export const GET = async (request: NextRequest) => {
     });
 
     const result = {
-      committimeId: committime.id,
+      committimeId,
       totalStudyTimeByPeriod: totalStudyTime._sum.totalStudyTime ?? 0,
-      startDate: committime.startDate,
-      endDate: committime.endDate,
-      targetTime: committime.targetTime,
+      startDate,
+      endDate,
+      targetTime,
     };
 
     const converted = withUserTimezone(

@@ -49,7 +49,7 @@ const toDateOnly = (value: string | Date | null | undefined) => {
 
 export default function RecordsPage({ params }: { params: { date: string } }) {
   const date = params.date;
-  const committimeSummaryQuery = useCommittimeSummaryQuery();
+  const committimeSummaryQuery = useCommittimeSummaryQuery(date);
   const committimeQuery = useCommittimeQuery();
   const todoQuery = useTodoQuery();
   const recordQuery = useFetch<{ dailyRecord: DailyRecord }>(

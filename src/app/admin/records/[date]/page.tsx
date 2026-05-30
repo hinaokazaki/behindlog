@@ -181,7 +181,10 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
     committimeSummaryQuery.data?.totalStudyTime.totalStudyTimeByPeriod ?? 0;
 
   // Check committime's deadline
-  const isExpired = isCommittimeExpired(displayCommittime.endDate);
+  const today = new Date().toISOString().slice(0, 10);
+  const isTodayRecord = date === today;
+  const isExpired =
+    isTodayRecord && isCommittimeExpired(displayCommittime.endDate);
 
   return (
     <>

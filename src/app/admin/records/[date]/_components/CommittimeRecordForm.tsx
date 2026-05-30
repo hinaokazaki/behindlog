@@ -24,12 +24,14 @@ type CommittimeRecordFormProps = {
   };
   totalStudyTimeByPeriod: number;
   register: UseFormRegister<RecordForm>;
+  disabled?: boolean;
 };
 
 const CommittimeRecordForm = ({
   displayCommittime,
   totalStudyTimeByPeriod,
   register,
+  disabled = false,
 }: CommittimeRecordFormProps) => {
   return (
     <>
@@ -62,6 +64,7 @@ const CommittimeRecordForm = ({
                 type="number"
                 placeholder="0"
                 className="w-20 rounded-md border-2 p-2 text-center"
+                disabled={disabled}
                 {...register("studyHours")}
               />
               <span className="text-base text-form-text font-medium">時間</span>
@@ -75,11 +78,18 @@ const CommittimeRecordForm = ({
                 min={0}
                 max={59}
                 className="w-20 rounded-md border-2 p-2 text-center"
+                disabled={disabled}
                 {...register("studyMinutes")}
               />
               <span className="text-base text-form-text font-medium">分</span>
             </div>
           </div>
+
+          {disabled && (
+            <p className="mt-2 text-form-text text-primary">
+              この日の学習時間は記録時点の目標に紐づいているため編集できません
+            </p>
+          )}
         </div>
 
         <div>

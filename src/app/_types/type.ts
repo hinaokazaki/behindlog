@@ -21,7 +21,7 @@ export type FieldProps = {
 };
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  color?: "green" | "red";
+  color?: "green" | "red" | "main";
   variant?: "filled" | "outlined";
   type?: "button" | "submit";
   isLoading?: boolean;

@@ -25,6 +25,8 @@ const config: Config = {
           DEFAULT: "var(--color-secondary)",
           hover: "var(--color-secondary-hover)",
         },
+        buttonMain: "var(--color-button-main)",
+        buttonMainHover: "var(--color-button-main-hover)",
         base: "#3C4A5E", // text main color
         muted: "#8E98A7", // text placeholder color
         white: "#FDFDFD",

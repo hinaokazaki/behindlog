@@ -24,6 +24,16 @@ const COLORS = {
       hover: "hover:text-secondary-hover hover:border-secondary-hover",
     },
   },
+  main: {
+    filled: {
+      base: "bg-buttonMain text-white border-buttonMain",
+      hover: "hover:bg-buttonMainHover",
+    },
+    outlined: {
+      base: "bg-background text-buttonMain border-buttonMain",
+      hover: "hover:text-buttonMainHover hover:border-buttonMainHover",
+    },
+  },
 };
 
 const Button: React.FC<ButtonProps> = ({

@@ -4,6 +4,7 @@ import { getLoggedInUser } from "@/utils/auth";
 import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
 import { TotalStudyTime, TotalStudyTimeResponse } from "@/schemas/committime";
 import { ErrorResponse } from "@/schemas/common";
+import { toYmdWithTimezone } from "@/lib/date";
 
 // GET: /committime/summary?date=xxxx-xx-xx ユーザー_合計学習時間取得
 export const GET = async (request: NextRequest) => {
@@ -51,13 +52,7 @@ export const GET = async (request: NextRequest) => {
     const committimeId = dailyRecord?.commitTimeId ?? committime.id;
 
     const toUtcDateOnly = (value: Date, timezone: string) => {
-      const ymd = new Intl.DateTimeFormat("en-CA", {
-        timeZone: timezone,
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-      }).format(value);
-
+      const ymd = toYmdWithTimezone(value, timezone);
       return new Date(`${ymd}T00:00:00.000Z`);
     };
 

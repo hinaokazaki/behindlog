@@ -9,8 +9,9 @@ import {
   TodoSnapshot,
   todoSnapshotSchema,
 } from "@/schemas/dailyRecord";
-import { withUserTimezone } from "@/lib/timezone";
+import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
 import { ErrorResponse, ValidationErrorResponse } from "@/schemas/common";
+import { toYmdWithTimezone } from "@/lib/date";
 
 // GET: /records ユーザー_記録取得（特定日）
 export const GET = async (
@@ -79,8 +80,11 @@ export const PUT = async (
   try {
     const user = await getLoggedInUser(request);
     const body = createDailyRecordSchema.parse(await request.json());
-    const [year, month, day] = params.date.split("-").map(Number);
-    const recordedDate = new Date(Date.UTC(year, month - 1, day));
+    const recordedDate = withUserDateParse(
+      { recordedDate: params.date },
+      ["recordedDate"],
+      user.timezone,
+    ).recordedDate;
 
     // todoのsnapshot
     // requestにsnapshotが含まれていなかった場合、サーバ側でsnapshotを作成
@@ -132,17 +136,14 @@ export const PUT = async (
 
     const isRecordedDateInCurrentCommittime =
       committime &&
-      recordedDate >= committime.startDate &&
-      recordedDate <= committime.endDate;
+      toYmdWithTimezone(recordedDate, user.timezone) >=
+        toYmdWithTimezone(committime.startDate, user.timezone) &&
+      toYmdWithTimezone(recordedDate, user.timezone) <=
+        toYmdWithTimezone(committime.endDate, user.timezone);
 
     const commitSnapshotData =
       committime && isRecordedDateInCurrentCommittime
         ? {
-            commitTime: {
-              connect: {
-                id: committime.id,
-              },
-            },
             commitTargetTime: committime.targetTime,
             commitStartDate: committime.startDate,
             commitEndDate: committime.endDate,
@@ -211,6 +212,16 @@ export const PUT = async (
           totalStudyTime: body.totalStudyTime,
           memo: body.memo,
           todoSnapshot: safeSnapshot,
+          ...(committime
+            ? {
+                commitTime: {
+                  connect: {
+                    id: committime.id,
+                  },
+                },
+              }
+            : {}),
+
           ...commitSnapshotData,
         },
       });

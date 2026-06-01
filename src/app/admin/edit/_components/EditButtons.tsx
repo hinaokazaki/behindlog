@@ -15,7 +15,7 @@ const GoalEditButtons: React.FC<Props> = ({ handleEdit, handleDelete }) => {
         className="rounded-full p-2 hover:bg-secondary-hover"
         aria-label="編集"
       >
-        <Pencil className="h-5 w-5 text-primary" />
+        <Pencil className="h-5 w-5 text-secondary hover:text-white" />
       </button>
 
       <button
@@ -24,7 +24,7 @@ const GoalEditButtons: React.FC<Props> = ({ handleEdit, handleDelete }) => {
         className="rounded-full p-2 hover:bg-secondary-hover"
         aria-label="削除"
       >
-        <CircleX className="h-5 w-5 text-primary" />
+        <CircleX className="h-5 w-5 text-secondary hover:text-white" />
       </button>
     </div>
   );

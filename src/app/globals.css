@@ -13,6 +13,18 @@
   --color-primary-hover: #3ebda9;
   --color-secondary: #ff917d;
   --color-secondary-hover: #ff7c6f;
+
+  /* button main color */
+  --color-button-main: var(--color-secondary);
+  --color-button-main-hover: var(--color-secondary-hover);
+}
+
+[data-theme="COOL"],
+[data-theme="WARM"],
+[data-theme="NATURE"],
+[data-theme="SUNSHINE"] {
+  --color-button-main: var(--color-primary);
+  --color-button-main-hover: var(--color-primary-hover);
 }
 
 @media (prefers-color-scheme: dark) {

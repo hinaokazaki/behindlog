@@ -8,6 +8,8 @@ export const colorThemeVariables = {
     "--color-primary-hover": "#3EBDA9",
     "--color-secondary": "#FF917D",
     "--color-secondary-hover": "#FF7C6F",
+    "--color-button-main": "#FF917D",
+    "--color-button-main-hover": "#FF7C6F",
   },
 
   [ColorThemeType.COOL]: {
@@ -17,6 +19,8 @@ export const colorThemeVariables = {
     "--color-primary-hover": "#3B78D1",
     "--color-secondary": "#B6C5FF",
     "--color-secondary-hover": "#BBD4FE",
+    "--color-button-main": "#4F8FEA",
+    "--color-button-main-hover": "#3B78D1",
   },
 
   [ColorThemeType.WARM]: {
@@ -26,6 +30,8 @@ export const colorThemeVariables = {
     "--color-primary-hover": "#D85D50",
     "--color-secondary": "#FFB5A8",
     "--color-secondary-hover": "#FFA092",
+    "--color-button-main": "#E86F61",
+    "--color-button-main-hover": "#D85D50",
   },
 
   [ColorThemeType.NATURE]: {
@@ -35,6 +41,8 @@ export const colorThemeVariables = {
     "--color-primary-hover": "#209E86",
     "--color-secondary": "#AEEBDD",
     "--color-secondary-hover": "#91E0CE",
+    "--color-button-main": "#2AB89D",
+    "--color-button-main-hover": "#209E86",
   },
 
   [ColorThemeType.SUNSHINE]: {
@@ -44,5 +52,7 @@ export const colorThemeVariables = {
     "--color-primary-hover": "#C99C18",
     "--color-secondary": "#FFE17A",
     "--color-secondary-hover": "#FFD95A",
+    "--color-button-main": "#E3B11D",
+    "--color-button-main-hover": "#C99C18",
   },
 } as const;

@@ -130,6 +130,25 @@ export const PUT = async (
       },
     });
 
+    const isRecordedDateInCurrentCommittime =
+      committime &&
+      recordedDate >= committime.startDate &&
+      recordedDate <= committime.endDate;
+
+    const commitSnapshotData =
+      committime && isRecordedDateInCurrentCommittime
+        ? {
+            commitTime: {
+              connect: {
+                id: committime.id,
+              },
+            },
+            commitTargetTime: committime.targetTime,
+            commitStartDate: committime.startDate,
+            commitEndDate: committime.endDate,
+          }
+        : {};
+
     const dailyRecordPostResult = await prisma.$transaction(async (tx) => {
       //フラグがtrueの時だけtodo本体を更新
       if (body.applyTodoUpdates) {
@@ -180,6 +199,7 @@ export const PUT = async (
           totalStudyTime: body.totalStudyTime,
           memo: body.memo,
           todoSnapshot: safeSnapshot,
+          ...commitSnapshotData,
         },
         create: {
           user: {
@@ -191,12 +211,7 @@ export const PUT = async (
           totalStudyTime: body.totalStudyTime,
           memo: body.memo,
           todoSnapshot: safeSnapshot,
-          ...(committime
-            ? { commitTime: { connect: { id: committime.id } } }
-            : {}),
-          commitTargetTime: committime?.targetTime ?? null,
-          commitStartDate: committime?.startDate ?? null,
-          commitEndDate: committime?.endDate ?? null,
+          ...commitSnapshotData,
         },
       });
 

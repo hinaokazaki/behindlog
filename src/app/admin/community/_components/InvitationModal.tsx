@@ -61,7 +61,7 @@ const InvitationModal: React.FC<Props> = ({
               type="button"
               disabled={isSubmitting}
               onClick={onDecline}
-              color="red"
+              color="main"
               variant="outlined"
               children="拒否"
             />
@@ -69,7 +69,7 @@ const InvitationModal: React.FC<Props> = ({
               type="button"
               disabled={isSubmitting}
               onClick={onAccept}
-              color="red"
+              color="main"
               variant="filled"
               children="承認"
             />

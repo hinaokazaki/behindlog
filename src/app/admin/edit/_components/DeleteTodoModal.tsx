@@ -30,14 +30,18 @@ const DeleteTodoModal: React.FC<Props> = ({
             <p className="mb-2 flex items-center text-base text-body">
               このTodoを削除しますか？
             </p>
-            <TodoCardBase todo={todo.title} dueDate={todo.dueDate} completed={todo.isCompleted} />
+            <TodoCardBase
+              todo={todo.title}
+              dueDate={todo.dueDate}
+              completed={todo.isCompleted}
+            />
           </div>
           <div className="mt-8 flex items-center justify-evenly">
             <Button
               type="button"
               disabled={isSubmitting}
               onClick={onClose}
-              color="red"
+              color="main"
               variant="outlined"
               children="キャンセル"
             />
@@ -45,7 +49,7 @@ const DeleteTodoModal: React.FC<Props> = ({
               type="button"
               disabled={isSubmitting}
               onClick={onConfirm}
-              color="red"
+              color="main"
               variant="filled"
               children="削除"
             />

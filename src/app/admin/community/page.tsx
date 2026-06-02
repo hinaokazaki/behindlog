@@ -50,7 +50,7 @@ export default function CommunityPage() {
       type: "button",
       disabled: actions.isSubmitting,
       onClick: modals.closeInvite,
-      color: "red",
+      color: "main",
       variant: "outlined",
     },
     {
@@ -58,7 +58,7 @@ export default function CommunityPage() {
       className: "",
       type: "submit",
       disabled: actions.isSubmitting,
-      color: "red",
+      color: "main",
       variant: "filled",
     },
   ];

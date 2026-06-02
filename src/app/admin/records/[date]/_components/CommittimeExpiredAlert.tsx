@@ -34,7 +34,7 @@ const CommittimeExpiredAlert = ({
       </div>
 
       <div className="mt-8 flex justify-center">
-        <Button color="red" className="px-10 py-3" onClick={onOpenModal}>
+        <Button color="main" className="px-10 py-3" onClick={onOpenModal}>
           新しい目標時間を設定する
         </Button>
       </div>

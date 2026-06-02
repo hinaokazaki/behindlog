@@ -68,7 +68,7 @@ const UpdateCommittimeModal = ({
       children: "新しい目標時間設定を保存",
       type: "submit",
       disabled: isSubmitting,
-      color: "red",
+      color: "main",
       variant: "filled",
       className: "mt-4 px-8",
     },

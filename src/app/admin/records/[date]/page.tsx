@@ -252,7 +252,7 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
           <Button
             type="submit"
             children="今日の記録を保存"
-            color="red"
+            color="main"
             disabled={isSubmitting || isExpired}
           />
         </div>

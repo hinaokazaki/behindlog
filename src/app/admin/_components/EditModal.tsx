@@ -2,7 +2,6 @@
 import Form from "@/app/_components/Form";
 import { Modal } from "./Modal";
 import { ButtonProps, FieldProps } from "@/app/_types/type";
-import { modalItemForm, modalItemSchema } from "@/schemas/modalItemSchema";
 import { ZodTypeAny } from "zod";
 
 interface Props<TFormValues> {

@@ -47,7 +47,7 @@ const DeleteFriendModal: React.FC<Props> = ({
               type="button"
               disabled={isSubmitting}
               onClick={onClose}
-              color="red"
+              color="main"
               variant="outlined"
               children="キャンセル"
             />
@@ -55,7 +55,7 @@ const DeleteFriendModal: React.FC<Props> = ({
               type="button"
               disabled={isSubmitting}
               onClick={onConfirm}
-              color="red"
+              color="main"
               variant="filled"
               children="友達リストから削除"
             />

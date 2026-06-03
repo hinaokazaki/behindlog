@@ -23,7 +23,7 @@ export default function FriendsDashboardPage({
   const friendDashboard = data.friendDashboard;
   return (
     <div className="h-auto min-h-[calc(100vh-120px)] px-4 py-4 sm:px-6 lg:h-[calc(100vh-120px)] lg:overflow-hidden lg:px-10">
-      <SectionTitle title="Dashboard" />
+      <SectionTitle title={`${friendDashboard.name}'s Dashboard`} />
       <div className="mt-4 grid gap-6 lg:h-[calc(100%-80px)] lg:grid-cols-[1.8fr_1.2fr]">
         <div className="grid gap-6 lg:h-full lg:min-h-0 lg:grid-rows-[0.8fr_1.6fr]">
           <DashGoalSection goals={friendDashboard.goals} isOwnPage={false} />

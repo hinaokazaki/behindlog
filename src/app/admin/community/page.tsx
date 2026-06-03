@@ -165,7 +165,7 @@ export default function CommunityPage() {
                       "flex items-center justify-center rounded-full p-2 hover:bg-secondary-hover"
                     }
                   >
-                    <CircleX className="h-5 w-5 text-primary" />
+                    <CircleX className="h-5 w-5 text-buttonMain hover:text-white" />
                   </button>
                 }
               />

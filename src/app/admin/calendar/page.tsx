@@ -141,7 +141,7 @@ export default function CalendarPage() {
                   className="calendar-add-btn absolute right-1 top-1 z-10 flex h-7 w-7 items-center justify-center rounded-full p-1 opacity-0 transition-opacity duration-200 hover:bg-secondary-hover focus:opacity-100 group-hover:opacity-100"
                   aria-label="create new record"
                 >
-                  <CirclePlus className="h-5 w-5 text-primary" />
+                  <CirclePlus className="h-5 w-5 text-buttonMain" />
                 </div>
 
                 {records.length > 0 && (
@@ -179,7 +179,7 @@ export default function CalendarPage() {
                         className="mt-1 rounded-full p-1 hover:bg-secondary-hover"
                         aria-label="More"
                       >
-                        <CircleEllipsis className="mx-2 h-5 w-5 text-primary" />
+                        <CircleEllipsis className="mx-2 h-5 w-5 text-buttonMain" />
                       </div>
                     )}
                   </>

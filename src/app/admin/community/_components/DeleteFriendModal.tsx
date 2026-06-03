@@ -29,7 +29,7 @@ const DeleteFriendModal: React.FC<Props> = ({
               友達の削除
             </h1>
             <p className="mb-2 flex items-center text-base text-body">
-              <User className="mr-2 h-5 w-5 text-primary" />
+              <User className="mr-2 h-5 w-5 text-buttonMain" />
               <span className="mr-2 text-base font-bold">
                 {friend.friend ? friend.friend.name : friend.inviteeEmail}
               </span>

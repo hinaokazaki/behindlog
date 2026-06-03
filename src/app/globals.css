@@ -311,12 +311,12 @@ body {
   margin: 0 auto;
   border-radius: 9999px;
   background: var(--color-secondary) !important;
-  color: var(--color-primary) !important;
+  color: white !important;
 }
 
 .mini-calendar .has-record:enabled:hover,
 .mini-calendar .has-record:enabled:focus {
   background: var(--color-secondary) !important;
-  color: var(--color-primary) !important;
+  color: white !important;
   box-shadow: none !important;
 }

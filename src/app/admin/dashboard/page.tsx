@@ -60,14 +60,14 @@ export default function DashboardPage() {
       <SectionTitle title="Dashboard" />
       <div className="mt-4 grid gap-6 lg:h-[calc(100%-80px)] lg:grid-cols-[1.8fr_1.2fr]">
         <div className="grid gap-6 lg:h-full lg:min-h-0 lg:grid-rows-[0.8fr_1.6fr]">
-          <DashGoalSection goals={goals} />
+          <DashGoalSection goals={goals} isOwnPage={true} />
           <DashCalendarSection
             userId={profile.id}
             timezone={profile.timezone}
           />
         </div>
         <div className="grid gap-6 lg:h-full lg:min-h-0 lg:grid-rows-[1.5fr_0.55fr]">
-          <DashTodoSection todos={todos} />
+          <DashTodoSection todos={todos} isOwnPage={true} />
           <DashCommittimeSection totalStudyTime={totalStudyTime} />
         </div>
       </div>

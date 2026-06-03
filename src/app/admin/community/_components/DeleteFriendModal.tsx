@@ -1,5 +1,5 @@
 "use client";
-import Image from "next/image";
+import { User } from "lucide-react";
 import React from "react";
 import { Modal } from "../../_components/Modal";
 import { FriendList } from "@/schemas/friend";
@@ -29,13 +29,7 @@ const DeleteFriendModal: React.FC<Props> = ({
               友達の削除
             </h1>
             <p className="mb-2 flex items-center text-base text-body">
-              <Image
-                src="/profile-red.png"
-                width={30}
-                height={30}
-                alt="プロフィール"
-                className="mx-2"
-              />
+              <User className="mr-2 h-5 w-5 text-primary" />
               <span className="mr-2 text-base font-bold">
                 {friend.friend ? friend.friend.name : friend.inviteeEmail}
               </span>

@@ -5,6 +5,7 @@ import { totalStudyTimeSchema } from "./committime";
 
 // 共通のFriendDashboardモデル
 export const friendDashboardSchema = z.object({
+  timezone: z.string(),
   todos: todosSchema,
   goals: goalsSchema,
   committime: totalStudyTimeSchema.nullable(),

@@ -36,15 +36,17 @@ export const GET = async (
       return NextResponse.json({ message: "Forbidden" }, { status: 403 });
     }
 
-    // 記録の持ち主（友達）の timezone を取得（検索に必要）
+    // 記録の持ち主（友達）の timezoneと名前 を取得（検索に必要）
     const owner = await prisma.user.findUnique({
       where: { id: ownerId },
-      select: { timezone: true },
+      select: { timezone: true, name: true },
     });
 
     if (!owner) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
+
+    const ownerName = owner.name ?? "Friend";
 
     // 友達のTodoリスト取得
     const friendTodo = await prisma.todo.findMany({
@@ -120,6 +122,7 @@ export const GET = async (
     const safeCommittime: TotalStudyTime = committimeConverted;
 
     const friendDashboard: FriendDashboard = {
+      name: ownerName,
       timezone: owner.timezone,
       todos: safeTodos,
       goals: safegoals,

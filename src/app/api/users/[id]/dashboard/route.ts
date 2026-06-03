@@ -120,6 +120,7 @@ export const GET = async (
     const safeCommittime: TotalStudyTime = committimeConverted;
 
     const friendDashboard: FriendDashboard = {
+      timezone: owner.timezone,
       todos: safeTodos,
       goals: safegoals,
       committime: safeCommittime,

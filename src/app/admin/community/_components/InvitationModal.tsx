@@ -1,6 +1,6 @@
 "use client";
 import { Modal } from "../../_components/Modal";
-import Image from "next/image";
+import { User, Mail } from "lucide-react";
 import Button from "@/app/_components/Button";
 import { FriendRequestrecord } from "@/schemas/friendRequest";
 
@@ -31,26 +31,14 @@ const InvitationModal: React.FC<Props> = ({
             </h1>
             <p className="mb-2 flex items-center text-base text-body">
               あなたに
-              <Image
-                src="/profile-red.png"
-                width={30}
-                height={30}
-                alt="プロフィール"
-                className="mx-2"
-              />
+              <User className="mx-2 h-5 w-5 text-buttonMain" />
               <span className="mr-2 text-base font-bold">
                 {invitation.inviter.name}
               </span>
               から招待が届いています!
             </p>
             <p className="mb-2 flex items-center text-base text-body">
-              <Image
-                src="/message.png"
-                width={30}
-                height={30}
-                alt="メッセージ"
-                className="mx-2"
-              />
+              <Mail className="mx-2 h-5 w-5 text-buttonMain" />
               <span className="mr-2 text-base font-bold">
                 {invitation.message}
               </span>

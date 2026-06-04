@@ -153,10 +153,9 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
     date <= currentEndDate;
 
   // Check committime's deadline
-  const today = new Date().toISOString().slice(0, 10);
-  const isTodayRecord = date === today;
+  const isExistingRecord = !!record;
   const isExpired =
-    isTodayRecord && isCommittimeExpired(displayCommittime.endDate);
+    !isExistingRecord && !!currentEndDate && date > currentEndDate;
   const canEditStudyTime = isWithinCurrentCommittimePeriod && !isExpired;
 
   // todo checkbox state

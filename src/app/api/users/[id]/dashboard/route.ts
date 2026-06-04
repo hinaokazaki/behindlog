@@ -10,6 +10,7 @@ import {
   FriendDashboard,
   FriendDashboardResponse,
 } from "@/schemas/friendDashboard";
+import { toYmdWithTimezone } from "@/lib/date";
 
 // GET: /users/[id]/dashboard 友達のダッシュボード用データ取得
 export const GET = async (
@@ -92,19 +93,30 @@ export const GET = async (
       );
     }
 
+    const toUtcDateOnly = (value: Date, timezone: string) => {
+      const ymd = toYmdWithTimezone(value, timezone);
+      return new Date(`${ymd}T00:00:00.000Z`);
+    };
+
+    const startDateForQuery = toUtcDateOnly(
+      committime.startDate,
+      owner.timezone,
+    );
+    const endDateForQuery = toUtcDateOnly(committime.endDate, owner.timezone);
+
     const totalStudyTime = await prisma.dailyRecord.aggregate({
       where: {
-        userId: committime.userId,
+        userId: ownerId,
+        commitTimeId: committime.id,
         recordedDate: {
-          gte: committime.startDate,
-          lte: committime.endDate,
+          gte: startDateForQuery,
+          lte: endDateForQuery,
         },
       },
       _sum: {
         totalStudyTime: true,
       },
     });
-
     const result = {
       committimeId: committime.id,
       totalStudyTimeByPeriod: totalStudyTime._sum.totalStudyTime ?? 0,

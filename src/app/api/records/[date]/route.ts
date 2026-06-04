@@ -80,11 +80,8 @@ export const PUT = async (
   try {
     const user = await getLoggedInUser(request);
     const body = createDailyRecordSchema.parse(await request.json());
-    const recordedDate = withUserDateParse(
-      { recordedDate: params.date },
-      ["recordedDate"],
-      user.timezone,
-    ).recordedDate;
+    const [year, month, day] = params.date.split("-").map(Number);
+    const recordedDate = new Date(Date.UTC(year, month - 1, day));
 
     // todoのsnapshot
     // requestにsnapshotが含まれていなかった場合、サーバ側でsnapshotを作成
@@ -136,10 +133,8 @@ export const PUT = async (
 
     const isRecordedDateInCurrentCommittime =
       committime &&
-      toYmdWithTimezone(recordedDate, user.timezone) >=
-        toYmdWithTimezone(committime.startDate, user.timezone) &&
-      toYmdWithTimezone(recordedDate, user.timezone) <=
-        toYmdWithTimezone(committime.endDate, user.timezone);
+      params.date >= toYmdWithTimezone(committime.startDate, user.timezone) &&
+      params.date <= toYmdWithTimezone(committime.endDate, user.timezone);
 
     const commitSnapshotData =
       committime && isRecordedDateInCurrentCommittime

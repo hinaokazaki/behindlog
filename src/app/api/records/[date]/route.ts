@@ -83,8 +83,7 @@ export const PUT = async (
     const [year, month, day] = params.date.split("-").map(Number);
     const recordedDate = new Date(Date.UTC(year, month - 1, day));
 
-    // todoのsnapshot
-    // requestにsnapshotが含まれていなかった場合、サーバ側でsnapshotを作成
+    // todoのsnapshot,requestにsnapshotが含まれていなかった場合、サーバ側でsnapshotを作成
     let snapshot = body.todoSnapshot ?? null;
     if (snapshot === null || snapshot === undefined) {
       const todos = await prisma.todo.findMany({

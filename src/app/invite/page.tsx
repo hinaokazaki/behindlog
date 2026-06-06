@@ -5,7 +5,7 @@ import useFetch from "../admin/_hooks/useFetch";
 import Loading from "../_components/Loading";
 import Link from "next/link";
 import { HeroSection } from "../_components/HeroSection";
-import Image from "next/image";
+import { User, Mail } from "lucide-react";
 
 // 中間ページ
 // GET /api/friends/invite?inviteToken=xxxx ユーザー_招待お知らせ情報取得から情報取得
@@ -40,26 +40,14 @@ export default function InvitePage() {
           </h1>
           <p className="mb-2 flex items-center text-body text-foreground">
             あなたに
-            <Image
-              src="/profile-red.png"
-              width={30}
-              height={30}
-              alt="プロフィール"
-              className="mx-2"
-            />
+            <User className="mx-2 h-5 w-5 text-buttonMain" />
             <span className="mr-2 font-bold text-foreground">
               {invitation.inviterName}
             </span>
             から招待が届いています!
           </p>
           <p className="flex items-center text-body text-foreground">
-            <Image
-              src="/message.png"
-              width={30}
-              height={30}
-              alt="メッセージ"
-              className="mx-2"
-            />
+            <Mail className="mx-2 h-5 w-5 text-buttonMain" />
             <span className="mr-2 font-bold text-foreground">
               {invitation.message}
             </span>

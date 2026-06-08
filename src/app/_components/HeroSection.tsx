@@ -1,6 +1,7 @@
 "use Client";
 import Link from "next/link";
 import { HeroImage } from "./HeroImage";
+import Button from "./Button";
 
 type HeroSectionProps = {
   mode?: "lp" | "invite" | "mobile";
@@ -32,7 +33,7 @@ export const HeroSection = ({ mode = "lp" }: HeroSectionProps) => {
       className={`flex ${
         isvertical
           ? "flex-col-reverse items-center text-center"
-          : "flex-row items-center justify-center gap-[150px]"
+          : "my-24 flex-row items-center justify-center gap-[150px]"
       } gap-4`}
     >
       <div className={`text-center md:text-left ${text.fontCenter}`}>
@@ -59,18 +60,15 @@ export const HeroSection = ({ mode = "lp" }: HeroSectionProps) => {
           </p>
         </div>
         {showButtons && (
-          <div className="mt-6 flex justify-center gap-4 md:justify-start">
-            <Link
-              href="/signup"
-              className="rounded-xl border-[2px] border-primary bg-primary px-4 py-2 text-body font-semibold text-white transition-colors duration-200 hover:bg-primary-hover md:text-form-text"
-            >
-              無料で始める
+          <div className="mt-10 flex gap-20">
+            <Link href="/signup">
+              <Button className="w-[220px]">無料で始める</Button>
             </Link>
-            <Link
-              href="/signup"
-              className="rounded-xl border-[2px] border-primary bg-background px-4 py-2 text-body font-semibold text-primary transition-colors duration-200 hover:border-primary-hover hover:text-primary-hover md:text-form-text"
-            >
-              ゲストログイン
+
+            <Link href="/login">
+              <Button variant="outlined" className="w-[220px]">
+                ゲストログイン
+              </Button>
             </Link>
           </div>
         )}

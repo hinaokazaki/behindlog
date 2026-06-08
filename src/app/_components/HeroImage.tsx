@@ -7,7 +7,7 @@ type HeroImageProps = {
 
 export const HeroImage = ({ mode = "lp" }: HeroImageProps) => {
   const imageSize = {
-    lp: { width: 300, height: 262, fontSize: "text-[70px]" },
+    lp: { width: 300, height: 262, fontSize: "text-[71px]" },
     invite: { width: 200, height: 174, fontSize: "text-[50px]" },
     mobile: { width: 200, height: 174, fontSize: "text-[50px]" },
   }[mode];

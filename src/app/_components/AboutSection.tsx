@@ -5,7 +5,7 @@ import { HeroImage } from "./HeroImage";
 
 const AboutSection = () => {
   return (
-    <section className="mx-auto grid max-w-6xl grid-cols-2 items-center gap-20 px-8 py-32">
+    <section className="mx-auto grid max-w-6xl grid-cols-2 items-center gap-20 px-8 pb-64 pt-32">
       <HeroImage />
 
       <div>

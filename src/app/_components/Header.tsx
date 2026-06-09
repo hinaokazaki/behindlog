@@ -31,7 +31,7 @@ const Header: React.FC = () => {
         <div className="flex items-center gap-5">
           {session ? (
             <>
-              <Link href="/me">
+              <Link href="/admin/dashboard">
                 <User className="h-9 w-9 text-primary" />
               </Link>
               <Button children="ログアウト" onClick={handleLogout} />

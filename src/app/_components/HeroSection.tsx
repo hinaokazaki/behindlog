@@ -33,7 +33,7 @@ export const HeroSection = ({ mode = "lp" }: HeroSectionProps) => {
       className={`flex ${
         isvertical
           ? "flex-col-reverse items-center text-center"
-          : "my-24 flex-row items-center justify-center gap-[150px]"
+          : "my-24 flex-row items-center justify-center gap-[150px] pt-[255px]"
       } gap-4`}
     >
       <div className={`text-center md:text-left ${text.fontCenter}`}>

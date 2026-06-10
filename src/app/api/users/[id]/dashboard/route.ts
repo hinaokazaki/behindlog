@@ -10,7 +10,7 @@ import {
   FriendDashboard,
   FriendDashboardResponse,
 } from "@/schemas/friendDashboard";
-import { toYmdWithTimezone } from "@/lib/date";
+import { toUtcDateOnly } from "@/lib/date";
 
 // GET: /users/[id]/dashboard 友達のダッシュボード用データ取得
 export const GET = async (
@@ -92,11 +92,6 @@ export const GET = async (
         { status: 200 },
       );
     }
-
-    const toUtcDateOnly = (value: Date, timezone: string) => {
-      const ymd = toYmdWithTimezone(value, timezone);
-      return new Date(`${ymd}T00:00:00.000Z`);
-    };
 
     const startDateForQuery = toUtcDateOnly(
       committime.startDate,

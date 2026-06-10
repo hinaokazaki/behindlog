@@ -5,7 +5,7 @@ import Button from "./Button";
 
 type HeroSectionProps = {
   mode?: "lp" | "invite" | "mobile";
-  handleGuestLogin: () => void;
+  handleGuestLogin?: () => void;
 };
 
 export const HeroSection = ({

@@ -5,9 +5,13 @@ import Button from "./Button";
 
 type HeroSectionProps = {
   mode?: "lp" | "invite" | "mobile";
+  handleGuestLogin: () => void;
 };
 
-export const HeroSection = ({ mode = "lp" }: HeroSectionProps) => {
+export const HeroSection = ({
+  mode = "lp",
+  handleGuestLogin,
+}: HeroSectionProps) => {
   const isvertical = mode !== "lp";
   const showButtons = mode !== "invite";
   const text = {
@@ -65,11 +69,13 @@ export const HeroSection = ({ mode = "lp" }: HeroSectionProps) => {
               <Button className="w-[220px]">無料で始める</Button>
             </Link>
 
-            <Link href="/login">
-              <Button variant="outlined" className="w-[220px]">
-                ゲストログイン
-              </Button>
-            </Link>
+            <Button
+              variant="outlined"
+              className="w-[220px]"
+              onClick={handleGuestLogin}
+            >
+              ゲストログイン
+            </Button>
           </div>
         )}
       </div>

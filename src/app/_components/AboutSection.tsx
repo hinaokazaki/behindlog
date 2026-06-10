@@ -3,7 +3,11 @@ import SectionTitle from "./SectionTitle";
 import Button from "./Button";
 import { HeroImage } from "./HeroImage";
 
-const AboutSection = () => {
+type Props = {
+  handleGuestLogin: () => void;
+};
+
+const AboutSection = ({ handleGuestLogin }: Props) => {
   return (
     <section className="mx-auto grid max-w-6xl grid-cols-2 items-center gap-20 px-8 pb-64 pt-32">
       <HeroImage />
@@ -40,11 +44,13 @@ const AboutSection = () => {
             <Button className="w-[220px]">無料で始める</Button>
           </Link>
 
-          <Link href="/login">
-            <Button variant="outlined" className="w-[220px]">
-              ゲストログイン
-            </Button>
-          </Link>
+          <Button
+            variant="outlined"
+            className="w-[220px]"
+            onClick={handleGuestLogin}
+          >
+            ゲストログイン
+          </Button>
         </div>
       </div>
     </section>

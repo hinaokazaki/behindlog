@@ -20,18 +20,6 @@ export default function Home() {
       return;
     }
 
-    await fetch("/api/me", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${data.session.access_token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: "Guest",
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-      }),
-    });
-
     router.replace("/admin/dashboard");
   };
 

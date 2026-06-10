@@ -27,8 +27,12 @@ export default function Home() {
     <div className="min-h-screen">
       <main className="flex flex-col">
         <HeroSection mode="lp" handleGuestLogin={handleGuestLogin} />
-        <HowtoUseSection />
-        <AboutSection handleGuestLogin={handleGuestLogin} />
+        <section id="how-to-use">
+          <HowtoUseSection />
+        </section>
+        <section id="about">
+          <AboutSection handleGuestLogin={handleGuestLogin} />
+        </section>
       </main>
       <Footer />
     </div>

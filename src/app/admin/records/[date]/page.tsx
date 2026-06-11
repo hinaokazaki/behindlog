@@ -200,13 +200,20 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex items-center justify-between">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="px-4 pb-24 sm:px-6 lg:px-10"
+      >
+        <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <SectionTitle title="Today's Record" />
-          <p className="text-heading-3 font-extrabold text-primary">{date}</p>
+          <p className="text-subtitle-top font-extrabold text-primary sm:text-heading-3">
+            {date}
+          </p>
         </div>
-        <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
+
+        <section className="mx-auto mb-4 w-full min-w-0 max-w-[760px] rounded-3xl bg-white p-4 shadow-md sm:p-6">
           <BlockTitle title="Todo list" />
+
           <div className="space-y-2">
             {todoItems.items.map((t, index) => (
               <TodoCardBase
@@ -219,8 +226,10 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
             ))}
           </div>
         </section>
-        <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
+
+        <section className="mx-auto mb-4 w-full min-w-0 max-w-[760px] rounded-3xl bg-white p-4 shadow-md sm:p-6">
           <BlockTitle title="Commit time" />
+
           {isExpired ? (
             <CommittimeExpiredAlert
               targetTime={displayCommittime.targetTime}
@@ -228,25 +237,27 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
               onOpenModal={() => setIsModalOpen(true)}
             />
           ) : (
-            <>
-              <CommittimeRecordForm
-                displayCommittime={displayCommittime}
-                totalStudyTimeByPeriod={totalStudyTimeByPeriod}
-                register={register}
-                disabled={!canEditStudyTime}
-              />
-            </>
+            <CommittimeRecordForm
+              displayCommittime={displayCommittime}
+              totalStudyTimeByPeriod={totalStudyTimeByPeriod}
+              register={register}
+              disabled={!canEditStudyTime}
+            />
           )}
         </section>
-        <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
+
+        <section className="mx-auto mb-4 w-full min-w-0 max-w-[760px] rounded-3xl bg-white p-4 shadow-md sm:p-6">
           <BlockTitle title="Note" />
+
           <Label name="memo" title="今日の記録" />
+
           <Textarea
             id="memo"
             placeholder="今日の記録を記入してください。"
             {...register("memo")}
           />
         </section>
+
         <div className="mt-8 flex justify-center">
           <Button
             type="submit"

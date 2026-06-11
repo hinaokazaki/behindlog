@@ -35,8 +35,20 @@ const Header: React.FC = () => {
           <div className="flex items-center gap-2 md:gap-5">
             {session ? (
               <>
-                <Link href="/admin/dashboard" aria-label="ダッシュボードへ移動">
-                  <User className="h-8 w-8 text-primary md:h-9 md:w-9" />
+                <Link
+                  href="/admin/me"
+                  aria-label="プロフィールへ移動"
+                  className="md:hidden"
+                >
+                  <User className="h-8 w-8 text-primary" />
+                </Link>
+
+                <Link
+                  href="/admin/dashboard"
+                  aria-label="ダッシュボードへ移動"
+                  className="hidden md:block"
+                >
+                  <User className="h-9 w-9 text-primary" />
                 </Link>
 
                 <div className="hidden md:block">

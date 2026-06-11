@@ -1,5 +1,5 @@
 "use client";
-import Image from "next/image";
+import { User, SendHorizontal } from "lucide-react";
 import React from "react";
 
 type Props = {
@@ -38,24 +38,12 @@ const CommunityCardBase: React.FC<Props> = ({
         className={`flex items-center gap-2 rounded-lg p-3 ${onClick ? "min-w-52 cursor-pointer rounded-xl border-[2px] border-secondary px-4 py-2 font-semibold text-secondary hover:bg-background" : ""}`}
       >
         <div className="flex">
-          <Image
-            src="/profile-red.png"
-            width={30}
-            height={30}
-            alt="プロフィール"
-            className="mx-2"
-          />
+          <User className="mx-2 h-5 w-5 text-buttonMain" />
           <span className="mr-2 text-base font-bold">{name}</span>
         </div>
         {message && (
           <div className="flex">
-            <Image
-              src={message.imageSrc}
-              width={30}
-              height={30}
-              alt={message.imageAlt}
-              className="mx-2"
-            />
+            <SendHorizontal className="mx-2 h-5 w-5 text-buttonMain" />
             <span className="mr-2 text-base">{message.comment}</span>
           </div>
         )}

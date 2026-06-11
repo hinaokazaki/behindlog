@@ -6,7 +6,6 @@ import {
   createProfileRequestSchema,
   Profile,
   ProfileResponse,
-  profileSchema,
   UpdateProfileRequest,
   updateProfileRequestSchema,
 } from "@/schemas/me";

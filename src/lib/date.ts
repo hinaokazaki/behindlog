@@ -44,3 +44,8 @@ export const toYmdFromDbDate = (d: Date) => {
   const day = String(d.getUTCDate()).padStart(2, "0");
   return `${y}-${m}-${day}`;
 };
+
+export const toUtcDateOnly = (value: Date, timezone: string): Date => {
+  const ymd = toYmdWithTimezone(value, timezone);
+  return new Date(`${ymd}T00:00:00.000Z`);
+};

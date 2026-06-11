@@ -37,7 +37,7 @@ const DeleteGoalModal: React.FC<Props> = ({
               type="button"
               disabled={isSubmitting}
               onClick={onClose}
-              color="red"
+              color="main"
               variant="outlined"
               children="キャンセル"
             />
@@ -45,7 +45,7 @@ const DeleteGoalModal: React.FC<Props> = ({
               type="button"
               disabled={isSubmitting}
               onClick={onConfirm}
-              color="red"
+              color="main"
               variant="filled"
               children="削除"
             />

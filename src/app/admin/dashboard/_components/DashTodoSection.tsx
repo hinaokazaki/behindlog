@@ -7,9 +7,13 @@ import { useRouter } from "next/navigation";
 
 type DashTodoSectionProps = {
   todos: Todos;
+  isOwnPage?: boolean;
 };
 
-const DashTodoSection: React.FC<DashTodoSectionProps> = ({ todos }) => {
+const DashTodoSection: React.FC<DashTodoSectionProps> = ({
+  todos,
+  isOwnPage = true,
+}) => {
   const router = useRouter();
 
   return (
@@ -17,24 +21,32 @@ const DashTodoSection: React.FC<DashTodoSectionProps> = ({ todos }) => {
       <BlockTitle title="Todo" />
       <div className="space-y-2">
         {todos.length === 0 ? (
-          <div className="flex flex-col items-center">
-            <div className="flex flex-col">
+          isOwnPage ? (
+            <div className="flex flex-col items-center">
+              <div className="flex flex-col">
+                <p className="text-base text-subtitle font-semibold">
+                  Todoリストが登録されていません
+                </p>
+                <p className="text-base text-subtitle font-semibold">
+                  編集ページで作成してみましょう!
+                </p>
+              </div>
+              <div className="mt-4">
+                <Button
+                  onClick={() => router.push("/admin/edit")}
+                  type="button"
+                  color="red"
+                  children="編集ページでTodoを作成する"
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="flex justify-center">
               <p className="text-base text-subtitle font-semibold">
-                Todoリストが登録されていません
-              </p>
-              <p className="text-base text-subtitle font-semibold">
-                編集ページで作成してみましょう!
+                Todoはまだ登録されていません
               </p>
             </div>
-            <div className="mt-4">
-              <Button
-                onClick={() => router.push("/admin/edit")}
-                type="button"
-                color="red"
-                children="編集ページでTodoを作成する"
-              />
-            </div>
-          </div>
+          )
         ) : (
           todos.map((t) => (
             <TodoCardBase

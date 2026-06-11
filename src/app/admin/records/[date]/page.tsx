@@ -40,9 +40,16 @@ type RecordForm = {
   };
 };
 
+const toDateOnly = (value: string | Date | null | undefined) => {
+  if (!value) return null;
+  return typeof value === "string"
+    ? value.slice(0, 10)
+    : value.toISOString().slice(0, 10);
+};
+
 export default function RecordsPage({ params }: { params: { date: string } }) {
   const date = params.date;
-  const committimeSummaryQuery = useCommittimeSummaryQuery();
+  const committimeSummaryQuery = useCommittimeSummaryQuery(date);
   const committimeQuery = useCommittimeQuery();
   const todoQuery = useTodoQuery();
   const recordQuery = useFetch<{ dailyRecord: DailyRecord }>(
@@ -126,20 +133,30 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
 
   // committime
   const record = recordQuery.data?.dailyRecord ?? null;
+  const currentCommittime = committimeQuery.data?.committime ?? null;
+
   const displayCommittime = {
     targetTime:
-      record?.commitTargetTime ??
-      committimeQuery.data?.committime?.targetTime ??
-      null,
-    startDate:
-      record?.commitStartDate ??
-      committimeQuery.data?.committime?.startDate ??
-      null,
-    endDate:
-      record?.commitEndDate ??
-      committimeQuery.data?.committime?.endDate ??
-      null,
+      record?.commitTargetTime ?? currentCommittime?.targetTime ?? null,
+    startDate: record?.commitStartDate ?? currentCommittime?.startDate ?? null,
+    endDate: record?.commitEndDate ?? currentCommittime?.endDate ?? null,
   };
+
+  // committime編集可能期間チェック
+  const currentStartDate = toDateOnly(currentCommittime?.startDate);
+  const currentEndDate = toDateOnly(currentCommittime?.endDate);
+
+  const isWithinCurrentCommittimePeriod =
+    !!currentStartDate &&
+    !!currentEndDate &&
+    date >= currentStartDate &&
+    date <= currentEndDate;
+
+  // Check committime's deadline
+  const isExistingRecord = !!record;
+  const isExpired =
+    !isExistingRecord && !!currentEndDate && date > currentEndDate;
+  const canEditStudyTime = isWithinCurrentCommittimePeriod && !isExpired;
 
   // todo checkbox state
   const todoItems = watch("todoItems");
@@ -149,8 +166,9 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
 
   // submit
   const onSubmit = async (data: RecordForm) => {
-    const total =
-      Number(data.studyHours || 0) * 60 + Number(data.studyMinutes || 0);
+    const total = canEditStudyTime
+      ? Number(data.studyHours || 0) * 60 + Number(data.studyMinutes || 0)
+      : (record?.totalStudyTime ?? 0);
 
     const payload: CreateDailyRecord = {
       memo: data.memo,
@@ -179,9 +197,6 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
   // totalStudyTimeByPeriod
   const totalStudyTimeByPeriod =
     committimeSummaryQuery.data?.totalStudyTime.totalStudyTimeByPeriod ?? 0;
-
-  // Check committime's deadline
-  const isExpired = isCommittimeExpired(displayCommittime.endDate);
 
   return (
     <>
@@ -213,11 +228,14 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
               onOpenModal={() => setIsModalOpen(true)}
             />
           ) : (
-            <CommittimeRecordForm
-              displayCommittime={displayCommittime}
-              totalStudyTimeByPeriod={totalStudyTimeByPeriod}
-              register={register}
-            />
+            <>
+              <CommittimeRecordForm
+                displayCommittime={displayCommittime}
+                totalStudyTimeByPeriod={totalStudyTimeByPeriod}
+                register={register}
+                disabled={!canEditStudyTime}
+              />
+            </>
           )}
         </section>
         <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
@@ -233,7 +251,7 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
           <Button
             type="submit"
             children="今日の記録を保存"
-            color="red"
+            color="main"
             disabled={isSubmitting || isExpired}
           />
         </div>

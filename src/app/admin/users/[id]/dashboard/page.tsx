@@ -21,17 +21,19 @@ export default function FriendsDashboardPage({
     return <p>友達のダッシュボードの取得でエラーが発生しました。</p>;
   }
   const friendDashboard = data.friendDashboard;
-
   return (
     <div className="h-auto min-h-[calc(100vh-120px)] px-4 py-4 sm:px-6 lg:h-[calc(100vh-120px)] lg:overflow-hidden lg:px-10">
-      <SectionTitle title="Dashboard" />
+      <SectionTitle title={`${friendDashboard.name}'s Dashboard`} />
       <div className="mt-4 grid gap-6 lg:h-[calc(100%-80px)] lg:grid-cols-[1.8fr_1.2fr]">
         <div className="grid gap-6 lg:h-full lg:min-h-0 lg:grid-rows-[0.8fr_1.6fr]">
-          <DashGoalSection goals={friendDashboard.goals} />
-          <DashCalendarSection userId={id} />
+          <DashGoalSection goals={friendDashboard.goals} isOwnPage={false} />
+          <DashCalendarSection
+            userId={id}
+            timezone={friendDashboard.timezone}
+          />
         </div>
         <div className="grid gap-6 lg:h-full lg:min-h-0 lg:grid-rows-[1.5fr_0.55fr]">
-          <DashTodoSection todos={friendDashboard.todos} />
+          <DashTodoSection todos={friendDashboard.todos} isOwnPage={false} />
           <DashCommittimeSection totalStudyTime={friendDashboard.committime} />
         </div>
       </div>

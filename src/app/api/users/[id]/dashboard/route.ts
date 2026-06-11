@@ -10,6 +10,7 @@ import {
   FriendDashboard,
   FriendDashboardResponse,
 } from "@/schemas/friendDashboard";
+import { toUtcDateOnly } from "@/lib/date";
 
 // GET: /users/[id]/dashboard 友達のダッシュボード用データ取得
 export const GET = async (
@@ -36,15 +37,17 @@ export const GET = async (
       return NextResponse.json({ message: "Forbidden" }, { status: 403 });
     }
 
-    // 記録の持ち主（友達）の timezone を取得（検索に必要）
+    // 記録の持ち主（友達）の timezoneと名前 を取得（検索に必要）
     const owner = await prisma.user.findUnique({
       where: { id: ownerId },
-      select: { timezone: true },
+      select: { timezone: true, name: true },
     });
 
     if (!owner) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
+
+    const ownerName = owner.name ?? "Friend";
 
     // 友達のTodoリスト取得
     const friendTodo = await prisma.todo.findMany({
@@ -90,19 +93,25 @@ export const GET = async (
       );
     }
 
+    const startDateForQuery = toUtcDateOnly(
+      committime.startDate,
+      owner.timezone,
+    );
+    const endDateForQuery = toUtcDateOnly(committime.endDate, owner.timezone);
+
     const totalStudyTime = await prisma.dailyRecord.aggregate({
       where: {
-        userId: committime.userId,
+        userId: ownerId,
+        commitTimeId: committime.id,
         recordedDate: {
-          gte: committime.startDate,
-          lte: committime.endDate,
+          gte: startDateForQuery,
+          lte: endDateForQuery,
         },
       },
       _sum: {
         totalStudyTime: true,
       },
     });
-
     const result = {
       committimeId: committime.id,
       totalStudyTimeByPeriod: totalStudyTime._sum.totalStudyTime ?? 0,
@@ -120,6 +129,8 @@ export const GET = async (
     const safeCommittime: TotalStudyTime = committimeConverted;
 
     const friendDashboard: FriendDashboard = {
+      name: ownerName,
+      timezone: owner.timezone,
       todos: safeTodos,
       goals: safegoals,
       committime: safeCommittime,

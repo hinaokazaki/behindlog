@@ -13,16 +13,20 @@ const config: Config = {
         en: ["var(--font-en)", "sans-serif"],
       },
       colors: {
-        background: "#FFF6E3",
-        foreground: "#887A6D", // top page text color
+        background: "var(--color-background)",
+        foreground: "var(--color-foreground)",
+
         primary: {
-          DEFAULT: "#55CEBA",
-          hover: "#3EBDA9",
+          DEFAULT: "var(--color-primary)",
+          hover: "var(--color-primary-hover)",
         },
+
         secondary: {
-          DEFAULT: "#FF917D",
-          hover: "#FF7C6F",
+          DEFAULT: "var(--color-secondary)",
+          hover: "var(--color-secondary-hover)",
         },
+        buttonMain: "var(--color-button-main)",
+        buttonMainHover: "var(--color-button-main-hover)",
         base: "#3C4A5E", // text main color
         muted: "#8E98A7", // text placeholder color
         white: "#FDFDFD",

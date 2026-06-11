@@ -7,9 +7,13 @@ import { useRouter } from "next/navigation";
 
 type DashGoalSectionProps = {
   goals: Goals;
+  isOwnPage?: boolean;
 };
 
-const DashGoalSection: React.FC<DashGoalSectionProps> = ({ goals }) => {
+const DashGoalSection: React.FC<DashGoalSectionProps> = ({
+  goals,
+  isOwnPage = true,
+}) => {
   const router = useRouter();
 
   return (
@@ -17,24 +21,34 @@ const DashGoalSection: React.FC<DashGoalSectionProps> = ({ goals }) => {
       <BlockTitle title="Goal" />
       <div className="space-y-2">
         {goals.length === 0 ? (
-          <div className="flex flex-col items-center">
-            <div className="flex flex-col">
+          isOwnPage ? (
+            <div className="flex flex-col items-center">
+              <div className="flex flex-col">
+                <p className="text-base text-subtitle font-semibold">
+                  Goalが登録されていません
+                </p>
+                <p className="text-base text-subtitle font-semibold">
+                  編集ページで作成してみましょう!
+                </p>
+              </div>
+
+              <div className="mt-4">
+                <Button
+                  onClick={() => router.push("/admin/edit")}
+                  type="button"
+                  color="red"
+                >
+                  編集ページでGoalを作成する
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className="flex justify-center">
               <p className="text-base text-subtitle font-semibold">
-                Goalが登録されていません
-              </p>
-              <p className="text-base text-subtitle font-semibold">
-                編集ページで作成してみましょう!
+                Goalはまだ登録されていません
               </p>
             </div>
-            <div className="mt-4">
-              <Button
-                onClick={() => router.push("/admin/edit")}
-                type="button"
-                color="red"
-                children="編集ページでGoalを作成する"
-              />
-            </div>
-          </div>
+          )
         ) : (
           goals.map((g) => (
             <GoalCardBase key={g.id} goal={g.title} deadline={g.deadline} />

@@ -45,7 +45,7 @@ const CommitTimeSection = () => {
       className: "",
       type: "submit",
       disabled: isSubmitting,
-      color: "red",
+      color: "main",
       variant: "filled",
     },
   ];

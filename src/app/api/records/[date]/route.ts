@@ -9,8 +9,9 @@ import {
   TodoSnapshot,
   todoSnapshotSchema,
 } from "@/schemas/dailyRecord";
-import { withUserTimezone } from "@/lib/timezone";
+import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
 import { ErrorResponse, ValidationErrorResponse } from "@/schemas/common";
+import { toYmdWithTimezone } from "@/lib/date";
 
 // GET: /records ユーザー_記録取得（特定日）
 export const GET = async (
@@ -82,8 +83,7 @@ export const PUT = async (
     const [year, month, day] = params.date.split("-").map(Number);
     const recordedDate = new Date(Date.UTC(year, month - 1, day));
 
-    // todoのsnapshot
-    // requestにsnapshotが含まれていなかった場合、サーバ側でsnapshotを作成
+    // todoのsnapshot,requestにsnapshotが含まれていなかった場合、サーバ側でsnapshotを作成
     let snapshot = body.todoSnapshot ?? null;
     if (snapshot === null || snapshot === undefined) {
       const todos = await prisma.todo.findMany({
@@ -129,6 +129,20 @@ export const PUT = async (
         endDate: true,
       },
     });
+
+    const isRecordedDateInCurrentCommittime =
+      committime &&
+      params.date >= toYmdWithTimezone(committime.startDate, user.timezone) &&
+      params.date <= toYmdWithTimezone(committime.endDate, user.timezone);
+
+    const commitSnapshotData =
+      committime && isRecordedDateInCurrentCommittime
+        ? {
+            commitTargetTime: committime.targetTime,
+            commitStartDate: committime.startDate,
+            commitEndDate: committime.endDate,
+          }
+        : {};
 
     const dailyRecordPostResult = await prisma.$transaction(async (tx) => {
       //フラグがtrueの時だけtodo本体を更新
@@ -180,12 +194,7 @@ export const PUT = async (
           totalStudyTime: body.totalStudyTime,
           memo: body.memo,
           todoSnapshot: safeSnapshot,
-          ...(committime
-            ? { commitTime: { connect: { id: committime.id } } }
-            : {}),
-          commitTargetTime: committime?.targetTime ?? null,
-          commitStartDate: committime?.startDate ?? null,
-          commitEndDate: committime?.endDate ?? null,
+          ...commitSnapshotData,
         },
         create: {
           user: {
@@ -198,11 +207,16 @@ export const PUT = async (
           memo: body.memo,
           todoSnapshot: safeSnapshot,
           ...(committime
-            ? { commitTime: { connect: { id: committime.id } } }
+            ? {
+                commitTime: {
+                  connect: {
+                    id: committime.id,
+                  },
+                },
+              }
             : {}),
-          commitTargetTime: committime?.targetTime ?? null,
-          commitStartDate: committime?.startDate ?? null,
-          commitEndDate: committime?.endDate ?? null,
+
+          ...commitSnapshotData,
         },
       });
 

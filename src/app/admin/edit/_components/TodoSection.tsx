@@ -51,7 +51,7 @@ const TodoSection: React.FC = () => {
       onClick: modals.selectedTodo
         ? modals.closeUpdateTodo
         : modals.closeCreateTodo,
-      color: "red",
+      color: "main",
       variant: "outlined",
     },
     {
@@ -59,7 +59,7 @@ const TodoSection: React.FC = () => {
       className: "",
       type: "submit",
       disabled: actions.isSubmitting,
-      color: "red",
+      color: "main",
       variant: "filled",
     },
   ];

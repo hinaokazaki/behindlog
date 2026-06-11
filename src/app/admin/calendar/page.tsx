@@ -8,9 +8,9 @@ import { toYmdWithTimezone, toYmLocal } from "@/lib/date";
 import Loading from "@/app/_components/Loading";
 import SectionTitle from "@/app/_components/SectionTitle";
 import UserName from "./_components/UserName";
-import Image from "next/image";
 import { Modal } from "../_components/Modal";
 import "react-calendar/dist/Calendar.css";
+import { CircleEllipsis, CirclePlus } from "lucide-react";
 
 // "YYYY-MM" -> Date(その月の1日) にする
 const ymToDate = (ym: string) => {
@@ -138,15 +138,10 @@ export default function CalendarPage() {
                       router.push(`/admin/records/${dateString}`),
                     )
                   }
-                  className="calendar-add-btn absolute right-1 top-1 z-10 flex h-7 w-7 items-center justify-center rounded-full p-1 opacity-0 transition-opacity duration-200 hover:bg-[#FFF3F0] focus:opacity-100 group-hover:opacity-100"
+                  className="calendar-add-btn absolute right-1 top-1 z-10 flex h-7 w-7 items-center justify-center rounded-full p-1 opacity-0 transition-opacity duration-200 hover:bg-secondary-hover focus:opacity-100 group-hover:opacity-100"
                   aria-label="create new record"
                 >
-                  <Image
-                    src="/add.png"
-                    width={20}
-                    height={20}
-                    alt="add new page"
-                  />
+                  <CirclePlus className="h-5 w-5 text-buttonMain" />
                 </div>
 
                 {records.length > 0 && (
@@ -181,16 +176,10 @@ export default function CalendarPage() {
                             setIsOpen(true);
                           })
                         }
-                        className="mt-1 rounded-full p-1 hover:bg-[#FFF3F0]"
+                        className="mt-1 rounded-full p-1 hover:bg-secondary-hover"
                         aria-label="More"
                       >
-                        <Image
-                          src="/more.png"
-                          width={20}
-                          height={20}
-                          alt="more"
-                          className="mx-2"
-                        />
+                        <CircleEllipsis className="mx-2 h-5 w-5 text-buttonMain" />
                       </div>
                     )}
                   </>

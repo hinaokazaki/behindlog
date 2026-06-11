@@ -15,11 +15,13 @@ const ymToDate = (ym: string) => {
 type CalendarSectionProps = {
   userId: string;
   initialMonth?: string;
+  timezone: string;
 };
 
 export default function DashCalendarSection({
   userId,
   initialMonth,
+  timezone,
 }: CalendarSectionProps) {
   const defaultMonth = initialMonth ?? toYmLocal(new Date());
 
@@ -49,7 +51,7 @@ export default function DashCalendarSection({
   }, [monthlyRecordDates]);
 
   const formatDate = (date: Date) => {
-    return toYmdWithTimezone(date, "UTC");
+    return toYmdWithTimezone(date, timezone);
   };
 
   if (monthlyRecordDatesQuery.isLoading) return <Loading />;

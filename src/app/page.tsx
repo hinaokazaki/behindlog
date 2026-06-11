@@ -1,12 +1,40 @@
-import Image from "next/image";
+"use client";
+import { supabase } from "@/utils/supabase";
+import AboutSection from "./_components/AboutSection";
+import Footer from "./_components/Footer";
+import { HeroSection } from "./_components/HeroSection";
+import HowtoUseSection from "./_components/HowtoUseSection";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
+
+  const handleGuestLogin = async () => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: process.env.NEXT_PUBLIC_GUEST_EMAIL!,
+      password: process.env.NEXT_PUBLIC_GUEST_PASSWORD!,
+    });
+
+    if (error || !data.session) {
+      alert("Guest login failed");
+      return;
+    }
+
+    router.replace("/admin/dashboard");
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+    <div className="min-h-screen">
+      <main className="flex flex-col">
+        <HeroSection mode="lp" handleGuestLogin={handleGuestLogin} />
+        <section id="how-to-use">
+          <HowtoUseSection />
+        </section>
+        <section id="about">
+          <AboutSection handleGuestLogin={handleGuestLogin} />
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-      </footer>
+      <Footer />
     </div>
   );
 }

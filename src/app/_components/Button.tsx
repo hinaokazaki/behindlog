@@ -24,10 +24,20 @@ const COLORS = {
       hover: "hover:text-secondary-hover hover:border-secondary-hover",
     },
   },
+  main: {
+    filled: {
+      base: "bg-buttonMain text-white border-buttonMain",
+      hover: "hover:bg-buttonMainHover",
+    },
+    outlined: {
+      base: "bg-background text-buttonMain border-buttonMain",
+      hover: "hover:text-buttonMainHover hover:border-buttonMainHover",
+    },
+  },
 };
 
 const Button: React.FC<ButtonProps> = ({
-  children, 
+  children,
   color = "green",
   variant = "filled",
   className = "",
@@ -49,7 +59,7 @@ const Button: React.FC<ButtonProps> = ({
         styleSet.base,
         !disabled && styleSet.hover,
         disabled &&
-          "cursor-not-allowed opacity-50 hover:border-inherit hover:bg-inherit hover:text-inherit",
+          "cursor-not-allowed hover:border-inherit hover:bg-inherit hover:text-inherit",
         className,
       )}
     >

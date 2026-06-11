@@ -3,7 +3,6 @@ import BlockTitle from "../_components/BlockTitle";
 import CommunityCardBase from "./_components/CommunityCardBase";
 import Loading from "@/app/_components/Loading";
 import { Modal } from "../_components/Modal";
-import Image from "next/image";
 import { CreateFriendRequest } from "@/schemas/friend";
 import SectionTitle from "@/app/_components/SectionTitle";
 import Form from "@/app/_components/Form";
@@ -16,6 +15,7 @@ import InvitationModal from "./_components/InvitationModal";
 import { useFriendList } from "./_hook/useFriendList";
 import { useFriendInvitations } from "./_hook/useFriendInvitations";
 import AddNewButton from "../_components/AddNewButton";
+import { CircleX } from "lucide-react";
 
 const requestSchema = z.object({
   message: z.string().min(1, "メッセージを入力してください"),
@@ -50,7 +50,7 @@ export default function CommunityPage() {
       type: "button",
       disabled: actions.isSubmitting,
       onClick: modals.closeInvite,
-      color: "red",
+      color: "main",
       variant: "outlined",
     },
     {
@@ -58,7 +58,7 @@ export default function CommunityPage() {
       className: "",
       type: "submit",
       disabled: actions.isSubmitting,
-      color: "red",
+      color: "main",
       variant: "filled",
     },
   ];
@@ -162,16 +162,10 @@ export default function CommunityPage() {
                       modals.openDelete(f);
                     }}
                     className={
-                      "flex items-center justify-center rounded-full p-2 hover:bg-[#FFF3F0]"
+                      "flex items-center justify-center rounded-full p-2 hover:bg-secondary-hover"
                     }
                   >
-                    <Image
-                      src="/delete.png"
-                      width={25}
-                      height={25}
-                      alt="削除"
-                      className="mx-2"
-                    />
+                    <CircleX className="h-5 w-5 text-buttonMain hover:text-white" />
                   </button>
                 }
               />

@@ -28,15 +28,15 @@ const DeleteFriendModal: React.FC<Props> = ({
             <h1 className="mb-6 text-base text-subtitle-top font-bold">
               友達の削除
             </h1>
-            <p className="mb-2 flex items-center text-base text-body">
-              <User className="mr-2 h-5 w-5 text-buttonMain" />
-              <span className="mr-2 text-base font-bold">
+            <p className="mb-2 flex flex-wrap items-center text-body sm:text-base">
+              <User className="mr-2 h-5 w-5 shrink-0 text-buttonMain" />
+              <span className="mr-2 break-words font-bold">
                 {friend.friend ? friend.friend.name : friend.inviteeEmail}
               </span>
               を友達リストから削除しますか？
             </p>
           </div>
-          <div className="mt-8 flex items-center justify-evenly">
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-evenly">
             <Button
               type="button"
               disabled={isSubmitting}

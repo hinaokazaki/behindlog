@@ -29,22 +29,20 @@ const InvitationModal: React.FC<Props> = ({
             <h1 className="mb-6 text-base text-subtitle-top font-bold">
               友達からの招待
             </h1>
-            <p className="mb-2 flex items-center text-base text-body">
+            <p className="mb-2 flex flex-wrap items-center text-body sm:text-base">
               あなたに
               <User className="mx-2 h-5 w-5 text-buttonMain" />
-              <span className="mr-2 text-base font-bold">
-                {invitation.inviter.name}
-              </span>
+              <span className="mr-2 font-bold">{invitation.inviter.name}</span>
               から招待が届いています!
             </p>
-            <p className="mb-2 flex items-center text-base text-body">
-              <Mail className="mx-2 h-5 w-5 text-buttonMain" />
-              <span className="mr-2 text-base font-bold">
+            <p className="mb-2 flex items-start text-body sm:text-base">
+              <Mail className="mx-2 h-5 w-5 shrink-0 text-buttonMain" />
+              <span className="mr-2 break-words font-bold">
                 {invitation.message}
               </span>
             </p>
           </div>
-          <div className="mt-8 flex items-center justify-evenly">
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-evenly">
             <Button
               type="button"
               disabled={isSubmitting}

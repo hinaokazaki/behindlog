@@ -92,15 +92,18 @@ export default function FriendRecordsPage({
     committimeSummaryQuery.data?.totalStudyTime.totalStudyTimeByPeriod ?? 0;
 
   return (
-    <form>
-      <div className="flex items-center justify-between">
+    <form className="px-4 pb-24 sm:px-6 lg:px-10">
+      <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <SectionTitle title="Today's Record" />
-        <p className="text-heading-3 font-extrabold text-primary">{date}</p>
+        <p className="text-subtitle-top font-extrabold text-primary sm:text-heading-3">
+          {date}
+        </p>
       </div>
-      <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
+
+      <section className="mx-auto mb-4 w-full min-w-0 max-w-[760px] rounded-3xl bg-white p-4 shadow-md sm:p-6">
         <BlockTitle title="Todo list" />
         <div className="space-y-2">
-          {snapshot?.items.map((t, index) => (
+          {snapshot?.items.map((t) => (
             <TodoCardBase
               key={t.id}
               todo={t.title}
@@ -110,20 +113,24 @@ export default function FriendRecordsPage({
           ))}
         </div>
       </section>
-      <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
+
+      <section className="mx-auto mb-4 w-full min-w-0 max-w-[760px] rounded-3xl bg-white p-4 shadow-md sm:p-6">
         <BlockTitle title="Commit time" />
-        <div className="mt-2 flex items-end justify-between">
+
+        <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-base text-form-text">目標学習時間</p>
-            <p className="ml-4 mt-4 text-base font-bold">
+            <p className="text-form-text sm:text-base">目標学習時間</p>
+            <p className="mt-3 text-base font-bold sm:ml-4 sm:mt-4">
               {displayCommittime.targetTime
                 ? Math.floor(displayCommittime.targetTime / 60)
                 : 0}
-              <span className="ml-8 text-base text-form-text">時間</span>
+              <span className="ml-3 text-form-text sm:ml-8 sm:text-base">
+                時間
+              </span>
             </p>
           </div>
 
-          <p className="text-base text-sm font-semibold">
+          <p className="text-xs font-semibold sm:text-sm">
             [{displayCommittime.startDate ?? "----"} -{" "}
             {displayCommittime.endDate ?? "----"}]
           </p>
@@ -131,11 +138,11 @@ export default function FriendRecordsPage({
 
         <div className="mt-4 border-t border-gray-200" />
 
-        <div className="mt-4 grid grid-cols-2 gap-8">
+        <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
           <div>
-            <p className="text-base text-form-text">今日の学習時間</p>
+            <p className="text-form-text sm:text-base">今日の学習時間</p>
 
-            <div className="mt-4 flex items-center gap-3">
+            <div className="mt-4 flex flex-wrap items-center gap-3">
               <div className="flex items-center gap-2">
                 <Input
                   type="number"
@@ -144,7 +151,7 @@ export default function FriendRecordsPage({
                   className="w-20 cursor-default rounded-md border-2 bg-gray-50 p-2 text-center text-base"
                   {...register("studyHours")}
                 />
-                <span className="text-base text-form-text font-medium">
+                <span className="text-form-text font-medium sm:text-base">
                   時間
                 </span>
               </div>
@@ -160,27 +167,30 @@ export default function FriendRecordsPage({
                   className="w-20 rounded-md border-2 bg-gray-50 p-2 text-center text-base"
                   {...register("studyMinutes")}
                 />
-                <span className="text-base text-form-text font-medium">分</span>
+                <span className="text-form-text font-medium sm:text-base">
+                  分
+                </span>
               </div>
             </div>
           </div>
 
           <div>
-            <p className="text-base text-form-text">合計学習時間</p>
+            <p className="text-form-text sm:text-base">合計学習時間</p>
             <p className="mt-4 text-base font-semibold">
               {Math.floor(totalStudyTimeByPeriod / 60)}
-              <span className="mx-4 text-base text-form-text font-medium">
+              <span className="mx-2 text-form-text font-medium sm:mx-4 sm:text-base">
                 時間
               </span>
               {totalStudyTimeByPeriod % 60}
-              <span className="mx-4 text-base text-form-text font-medium">
+              <span className="mx-2 text-form-text font-medium sm:mx-4 sm:text-base">
                 分
               </span>
             </p>
           </div>
         </div>
       </section>
-      <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
+
+      <section className="mx-auto mb-4 w-full min-w-0 max-w-[760px] rounded-3xl bg-white p-4 shadow-md sm:p-6">
         <BlockTitle title="Note" />
         <Label name="memo" title="今日の記録" />
         <Textarea

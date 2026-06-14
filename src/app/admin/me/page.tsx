@@ -81,8 +81,9 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="m-auto my-[84px] w-[450px] p-1">
+    <div className="mx-auto w-full max-w-[450px] px-4 py-6 pb-24 sm:px-6 md:py-[84px]">
       <SectionTitle title="Profile" isPublic />
+
       <Form
         fields={fields}
         buttons={buttons}

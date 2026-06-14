@@ -3,6 +3,7 @@ import Form from "@/app/_components/Form";
 import { Modal } from "./Modal";
 import { ButtonProps, FieldProps } from "@/app/_types/type";
 import { ZodTypeAny } from "zod";
+import BlockTitle from "./BlockTitle";
 
 interface Props<TFormValues> {
   modalTitle: string;
@@ -27,10 +28,8 @@ export const EditModal = <TFormValues,>({
 }: Props<TFormValues>) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div>
-        <h1 className="mb-6 text-base text-subtitle-top font-bold">
-          {modalTitle}
-        </h1>
+      <div className="w-full max-w-[520px] px-1 sm:px-2">
+        <BlockTitle title={modalTitle} mode="modal" />
         <Form
           fields={fields}
           buttons={buttons}

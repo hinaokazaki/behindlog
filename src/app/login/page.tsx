@@ -57,7 +57,7 @@ export default function Login() {
   };
 
   return (
-    <div className="m-auto my-[168px] w-[450px] p-1">
+    <div className="mx-auto w-full max-w-[450px] px-4 pb-16 pt-32 sm:px-6 lg:pt-[168px]">
       <SectionTitle title="Login" isPublic />
       <Form
         fields={fields}
@@ -68,7 +68,7 @@ export default function Login() {
       />
       <Link
         href="/signup"
-        className="mt-3 block text-center text-form-text text-primary hover:underline"
+        className="mt-3 block text-center text-primary hover:underline sm:text-form-text"
       >
         アカウントをお持ちでない方はこちら
       </Link>

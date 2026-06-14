@@ -21,8 +21,11 @@ const Logo: React.FC<Props> = ({
         alt="Behindlog logo"
         width={iconWidth}
         height={iconHeight}
+        className="h-[52px] w-[60px] object-contain"
       />
-      <span className={`font-bold text-primary ${fontSize} font-en`}>
+      <span
+        className={`hidden font-bold text-primary sm:inline ${fontSize} font-en`}
+      >
         Behindlog
       </span>
     </Link>

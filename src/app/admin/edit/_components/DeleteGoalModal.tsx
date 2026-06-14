@@ -27,12 +27,15 @@ const DeleteGoalModal: React.FC<Props> = ({
             <h1 className="mb-6 text-base text-subtitle-top font-bold">
               目標の削除
             </h1>
-            <p className="mb-2 flex items-center text-base text-body">
+
+            <p className="mb-2 flex items-center text-body sm:text-base">
               この目標を削除しますか？
             </p>
+
             <GoalCardBase goal={goal.title} deadline={goal.deadline} />
           </div>
-          <div className="mt-8 flex items-center justify-evenly">
+
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-evenly">
             <Button
               type="button"
               disabled={isSubmitting}
@@ -41,6 +44,7 @@ const DeleteGoalModal: React.FC<Props> = ({
               variant="outlined"
               children="キャンセル"
             />
+
             <Button
               type="button"
               disabled={isSubmitting}

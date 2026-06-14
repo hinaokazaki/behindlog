@@ -99,8 +99,9 @@ const CommitTimeSection = () => {
   };
 
   return (
-    <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
+    <section className="mx-auto mb-4 w-full min-w-0 max-w-[760px] rounded-3xl bg-white p-4 shadow-md sm:p-6">
       <BlockTitle title="Commit Time" />
+
       <Form
         fields={fields}
         buttons={Buttons}

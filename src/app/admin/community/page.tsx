@@ -135,9 +135,10 @@ export default function CommunityPage() {
   };
 
   return (
-    <div>
+    <div className="px-4 pb-24 sm:px-6 lg:px-10">
       <SectionTitle title="Community" />
-      <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
+
+      <section className="mx-auto mb-4 w-full min-w-0 max-w-[760px] rounded-3xl bg-white p-4 shadow-md sm:p-6">
         <BlockTitle title="Friends" />
         <div className="space-y-2">
           {friendLists.map((f) => {
@@ -161,9 +162,7 @@ export default function CommunityPage() {
                       e.stopPropagation();
                       modals.openDelete(f);
                     }}
-                    className={
-                      "flex items-center justify-center rounded-full p-2 hover:bg-secondary-hover"
-                    }
+                    className="flex items-center justify-center rounded-full p-2 hover:bg-secondary-hover"
                   >
                     <CircleX className="h-5 w-5 text-buttonMain hover:text-white" />
                   </button>
@@ -174,11 +173,14 @@ export default function CommunityPage() {
         </div>
         <AddNewButton handleAdding={modals.openInvite} label="友達を招待" />
       </section>
-      <section className="mx-auto w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
+
+      <section className="mx-auto w-full min-w-0 max-w-[760px] rounded-3xl bg-white p-4 shadow-md sm:p-6">
         <BlockTitle title="Invitations" />
         <div className="space-y-2">
           {invitations.length === 0 ? (
-            <p className="mx-2 text-base font-bold">まだ招待状はありません</p>
+            <p className="mx-2 text-sm font-bold sm:text-base">
+              まだ招待状はありません
+            </p>
           ) : (
             invitations.map((invitation) => (
               <CommunityCardBase

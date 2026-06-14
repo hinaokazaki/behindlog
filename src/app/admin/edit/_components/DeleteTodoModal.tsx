@@ -27,16 +27,19 @@ const DeleteTodoModal: React.FC<Props> = ({
             <h1 className="mb-6 text-base text-subtitle-top font-bold">
               Todoの削除
             </h1>
-            <p className="mb-2 flex items-center text-base text-body">
+
+            <p className="mb-2 flex items-center text-body sm:text-base">
               このTodoを削除しますか？
             </p>
+
             <TodoCardBase
               todo={todo.title}
               dueDate={todo.dueDate}
               completed={todo.isCompleted}
             />
           </div>
-          <div className="mt-8 flex items-center justify-evenly">
+
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-evenly">
             <Button
               type="button"
               disabled={isSubmitting}
@@ -45,6 +48,7 @@ const DeleteTodoModal: React.FC<Props> = ({
               variant="outlined"
               children="キャンセル"
             />
+
             <Button
               type="button"
               disabled={isSubmitting}

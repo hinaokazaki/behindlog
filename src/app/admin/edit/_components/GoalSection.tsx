@@ -11,7 +11,10 @@ import { useGoalActions } from "../../_hooks/useGoalActions";
 import { useEditModals } from "../_hooks/useEditModals";
 import { EditModal } from "../../_components/EditModal";
 import { ButtonProps, FieldProps } from "@/app/_types/type";
-import { GoalModalFormValues, goalModalSchema } from "@/schemas/goalModalSchema";
+import {
+  GoalModalFormValues,
+  goalModalSchema,
+} from "@/schemas/goalModalSchema";
 
 const GoalSection: React.FC = () => {
   const goalsData = useGoalQuery();
@@ -39,8 +42,10 @@ const GoalSection: React.FC = () => {
       className: "",
       type: "button",
       disabled: actions.isSubmitting,
-      onClick: modals.selectedGoal ? modals.closeUpdateGoal : modals.closeCreateGoal,
-      color: "red",
+      onClick: modals.selectedGoal
+        ? modals.closeUpdateGoal
+        : modals.closeCreateGoal,
+      color: "main",
       variant: "outlined",
     },
     {
@@ -48,7 +53,7 @@ const GoalSection: React.FC = () => {
       className: "",
       type: "submit",
       disabled: actions.isSubmitting,
-      color: "red",
+      color: "main",
       variant: "filled",
     },
   ];
@@ -99,7 +104,7 @@ const GoalSection: React.FC = () => {
   };
 
   return (
-    <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
+    <section className="mx-auto mb-4 w-full min-w-0 max-w-[760px] rounded-3xl bg-white p-4 shadow-md sm:p-6">
       <BlockTitle title="Goal" />
       <div className="space-y-2">
         {goals.map((g) => (
@@ -137,8 +142,8 @@ const GoalSection: React.FC = () => {
           isOpen={modals.isUpdateGoalOpen}
           onClose={() => modals.closeUpdateGoal()}
           onSubmit={(data) => {
-            handleEdit(modals.selectedGoal!.id, data)}
-          }
+            handleEdit(modals.selectedGoal!.id, data);
+          }}
           defaultValues={{
             title: modals.selectedGoal.title,
             deadline: modals.selectedGoal.deadline,
@@ -148,15 +153,15 @@ const GoalSection: React.FC = () => {
           schema={goalModalSchema}
         />
       )}
-      
+
       {modals.selectedGoal && (
         <DeleteGoalModal
           isOpen={modals.isDeleteGoalOpen}
           goal={modals.selectedGoal}
           onClose={() => modals.closeDeleteGoal()}
           onConfirm={() => {
-            handleDelete(modals.selectedGoal!.id)}
-          }
+            handleDelete(modals.selectedGoal!.id);
+          }}
           isSubmitting={actions.isSubmitting}
         />
       )}

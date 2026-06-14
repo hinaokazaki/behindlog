@@ -1,6 +1,7 @@
 "use client";
 import React, { ReactNode, FC } from "react";
 import ReactModal from "react-modal";
+import { X } from "lucide-react";
 
 interface Props {
   isOpen: boolean;
@@ -16,20 +17,18 @@ export const Modal: FC<Props> = ({ isOpen, onClose, children }) => {
       contentLabel="Modal"
       closeTimeoutMS={300}
       ariaHideApp={false}
-      className={`relative rounded-2xl bg-white px-[60px] py-11 shadow-xl outline-none`}
-      overlayClassName="fixed inset-0 bg-gray-900/50 flex items-center justify-center z-50"
+      className="relative mx-4 w-full max-w-[600px] rounded-2xl bg-white px-5 py-8 shadow-xl outline-none sm:px-10 sm:py-10"
+      overlayClassName="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50"
     >
-      <div
-        className="flex size-full items-center justify-center"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="relative" onClick={(e) => e.stopPropagation()}>
         <button
-          className={`absolute right-0 top-0 z-[999] p-3 text-base`}
+          className="absolute -right-2 -top-2 rounded-full p-2 text-primary transition-colors hover:bg-background"
           onClick={onClose}
           aria-label="Close"
         >
-          x
+          <X className="h-6 w-6" />
         </button>
+
         {children}
       </div>
     </ReactModal>

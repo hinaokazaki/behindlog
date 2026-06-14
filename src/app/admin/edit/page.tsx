@@ -6,11 +6,14 @@ import CommitTimeSection from "./_components/CommitTimeSection";
 
 export default function EditPage() {
   return (
-    <div>
+    <div className="px-4 pb-24 sm:px-6 lg:px-10">
       <SectionTitle title="Edit your record - 編集" />
-      <GoalSection />
-      <TodoSection />
-      <CommitTimeSection />
+
+      <div className="mt-4 flex flex-col gap-4 sm:gap-6">
+        <GoalSection />
+        <TodoSection />
+        <CommitTimeSection />
+      </div>
     </div>
   );
 }

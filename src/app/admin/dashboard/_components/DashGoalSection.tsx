@@ -17,22 +17,23 @@ const DashGoalSection: React.FC<DashGoalSectionProps> = ({
   const router = useRouter();
 
   return (
-    <section className="mx-auto mb-4 w-full min-w-[580px] max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
+    <section className="mx-auto mb-4 w-full min-w-0 max-w-[760px] rounded-3xl bg-white p-4 shadow-md sm:p-6">
       <BlockTitle title="Goal" />
+
       <div className="space-y-2">
         {goals.length === 0 ? (
           isOwnPage ? (
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center text-center">
               <div className="flex flex-col">
-                <p className="text-base text-subtitle font-semibold">
+                <p className="text-subtitle font-semibold sm:text-base">
                   Goalが登録されていません
                 </p>
-                <p className="text-base text-subtitle font-semibold">
+                <p className="text-subtitle font-semibold sm:text-base">
                   編集ページで作成してみましょう!
                 </p>
               </div>
 
-              <div className="mt-4">
+              <div className="mt-4 w-full sm:w-auto">
                 <Button
                   onClick={() => router.push("/admin/edit")}
                   type="button"
@@ -43,8 +44,8 @@ const DashGoalSection: React.FC<DashGoalSectionProps> = ({
               </div>
             </div>
           ) : (
-            <div className="flex justify-center">
-              <p className="text-base text-subtitle font-semibold">
+            <div className="flex justify-center text-center">
+              <p className="text-subtitle font-semibold sm:text-base">
                 Goalはまだ登録されていません
               </p>
             </div>

@@ -110,9 +110,10 @@ const UpdateCommittimeModal = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay">
-      <div className="w-[520px] rounded-3xl bg-white px-10 py-8 shadow-md">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay px-4">
+      <div className="max-h-[90vh] w-full max-w-[520px] overflow-y-auto rounded-3xl bg-white px-4 py-6 shadow-md sm:px-10 sm:py-8">
         <BlockTitle title="新しい目標時間を設定する" mode="modal" />
+
         <Form
           fields={fields}
           buttons={buttons}

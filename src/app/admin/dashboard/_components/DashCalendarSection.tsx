@@ -60,40 +60,42 @@ export default function DashCalendarSection({
   }
 
   return (
-    <section className="mx-auto mb-4 w-full min-w-0 max-w-[760px] rounded-3xl bg-white p-6 shadow-md">
+    <section className="mx-auto mb-4 w-full min-w-0 max-w-[760px] overflow-hidden rounded-3xl bg-white p-4 shadow-md sm:p-6">
       <BlockTitle title="Calendar" />
 
-      <p className="mb-6 text-2xl font-bold text-[#2F2F2F]">
+      <p className="mb-4 text-lg font-bold text-[#2F2F2F] sm:mb-6 sm:text-2xl">
         {activeStartDate.getFullYear()}年{activeStartDate.getMonth() + 1}月
       </p>
 
-      <Calendar
-        className="mini-calendar"
-        value={value}
-        locale="en-US"
-        onChange={(val) => setValue(val as Date)}
-        activeStartDate={activeStartDate}
-        onActiveStartDateChange={({ activeStartDate }) => {
-          if (!activeStartDate) return;
-          setActiveStartDate(activeStartDate);
-        }}
-        prev2Label={null}
-        next2Label={null}
-        showNeighboringMonth={false}
-        formatDay={(_, date) => String(date.getDate())}
-        formatShortWeekday={(_, date) => {
-          const weekDays = ["S", "M", "T", "W", "T", "F", "S"];
-          return weekDays[date.getDay()];
-        }}
-        tileClassName={({ date, view }) => {
-          if (view !== "month") return "";
+      <div className="w-full overflow-x-auto">
+        <Calendar
+          className="mini-calendar"
+          value={value}
+          locale="en-US"
+          onChange={(val) => setValue(val as Date)}
+          activeStartDate={activeStartDate}
+          onActiveStartDateChange={({ activeStartDate }) => {
+            if (!activeStartDate) return;
+            setActiveStartDate(activeStartDate);
+          }}
+          prev2Label={null}
+          next2Label={null}
+          showNeighboringMonth={false}
+          formatDay={(_, date) => String(date.getDate())}
+          formatShortWeekday={(_, date) => {
+            const weekDays = ["S", "M", "T", "W", "T", "F", "S"];
+            return weekDays[date.getDay()];
+          }}
+          tileClassName={({ date, view }) => {
+            if (view !== "month") return "";
 
-          const dateString = formatDate(date);
-          const hasRecord = recordMap.has(dateString);
+            const dateString = formatDate(date);
+            const hasRecord = recordMap.has(dateString);
 
-          return hasRecord ? "has-record" : "no-record";
-        }}
-      />
+            return hasRecord ? "has-record" : "no-record";
+          }}
+        />
+      </div>
     </section>
   );
 }

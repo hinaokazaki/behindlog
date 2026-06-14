@@ -25,7 +25,10 @@ export default function ContactPage() {
       name: "email",
       title: "メールアドレス",
       type: "email",
-      inputProps: { placeholder: "メールアドレス", autoComplete: "email" },
+      inputProps: {
+        placeholder: "メールアドレス",
+        autoComplete: "email",
+      },
     },
     {
       name: "message",
@@ -36,7 +39,11 @@ export default function ContactPage() {
   ];
 
   const buttons: ButtonProps[] = [
-    { children: "お問い合わせ", className: "w-full", type: "submit" },
+    {
+      children: "お問い合わせ",
+      className: "w-full",
+      type: "submit",
+    },
   ];
 
   // POST お問い合わせ送信処理
@@ -48,11 +55,8 @@ export default function ContactPage() {
     };
 
     try {
-      const res = await apiReq<ContactResponse>(
-        "/api/contact",
-        "POST",
-        normalizedData,
-      );
+      await apiReq<ContactResponse>("/api/contact", "POST", normalizedData);
+
       alert("お問い合わせを送信しました");
       router.replace("/signup");
     } catch (error) {
@@ -61,7 +65,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="m-auto my-[168px] w-[450px] p-1">
+    <div className="mx-auto w-full max-w-[520px] px-4 pb-16 pt-32 sm:px-6 lg:pt-[168px]">
       <SectionTitle title="Contact us" isPublic />
       <Form
         fields={fields}

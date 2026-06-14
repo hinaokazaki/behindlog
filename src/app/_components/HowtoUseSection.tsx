@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import SectionTitle from "./SectionTitle";
 
@@ -21,28 +22,34 @@ const items = [
 
 const HowtoUseSection = () => {
   return (
-    <section className="mx-auto max-w-6xl px-8 py-32">
+    <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8 lg:py-32">
       <SectionTitle title="How to use" isPublic />
 
-      <p className="mb-20 text-center font-bold text-foreground">
+      <p className="mb-12 text-center font-bold text-foreground lg:mb-20">
         Behindlogの3つの主要機能
       </p>
 
-      <div className="grid grid-cols-3 gap-20">
+      <div className="grid grid-cols-1 gap-14 sm:grid-cols-2 lg:grid-cols-3 lg:gap-20">
         {items.map((item) => (
-          <div key={item.title}>
-            <div className="mb-12 flex justify-center">
+          <div
+            key={item.title}
+            className="flex flex-col items-center text-center"
+          >
+            <div className="mb-8 flex justify-center lg:mb-12">
               <Image
                 src={item.image}
                 alt={item.title}
                 width={170}
                 height={170}
+                className="h-[120px] w-[120px] object-contain sm:h-[140px] sm:w-[140px] lg:h-[170px] lg:w-[170px]"
               />
             </div>
 
-            <h3 className="mb-3 font-bold text-foreground">{item.title}</h3>
+            <h3 className="mb-3 text-base font-bold text-foreground sm:text-lg">
+              {item.title}
+            </h3>
 
-            <p className="whitespace-pre-line text-body font-bold leading-relaxed text-foreground">
+            <p className="whitespace-pre-line text-sm font-bold leading-relaxed text-foreground sm:text-body">
               {item.text}
             </p>
           </div>

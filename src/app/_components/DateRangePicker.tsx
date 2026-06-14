@@ -14,21 +14,31 @@ export const DateRangePicker = ({ value, onChange }: Props) => {
       : undefined;
 
   return (
-    <div className="rounded-lg border p-3">
-      <DayPicker
-        mode="range"
-        selected={selected}
-        onSelect={(range) =>
-          onChange({
-            from: range?.from ?? null,
-            to: range?.to ?? null,
-          })
-        }
-      />
-      <div className="mt-2 text-sm">
-        {value.from ? value.from.toLocaleDateString() : "開始日未選択"}
-        {"~"}
-        {value.to ? value.to.toLocaleDateString() : "終了日未選択"}
+    <div className="overflow-x-auto rounded-xl border border-base p-3 sm:p-4">
+      <div className="min-w-[280px]">
+        <DayPicker
+          mode="range"
+          selected={selected}
+          onSelect={(range) =>
+            onChange({
+              from: range?.from ?? null,
+              to: range?.to ?? null,
+            })
+          }
+          className="mx-auto text-sm sm:text-base"
+        />
+      </div>
+
+      <div className="mt-4 flex flex-col gap-1 text-form-text font-semibold sm:text-sm">
+        <span>
+          開始日：
+          {value.from ? value.from.toLocaleDateString() : "未選択"}
+        </span>
+
+        <span>
+          終了日：
+          {value.to ? value.to.toLocaleDateString() : "未選択"}
+        </span>
       </div>
     </div>
   );

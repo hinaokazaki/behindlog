@@ -4,17 +4,17 @@ import SectionTitle from "./SectionTitle";
 
 const items = [
   {
-    image: "/dashboard.png",
+    image: "/dashboard-m.png",
     title: "📊 ダッシュボード",
     text: "目標や進捗を一目で確認。\n自分の頑張りがすぐに見える化されます。",
   },
   {
-    image: "/record.png",
+    image: "/record-m.png",
     title: "📝 毎日の記録",
     text: "日々のToDoや実績、気づきを手軽に入力。\n続ける習慣づくりに最適です。",
   },
   {
-    image: "/community.png",
+    image: "/community-m.png",
     title: "🤝 コミュニティ",
     text: "仲間の記録をチェックして励まし合い、\nモチベーションを高めます。",
   },
@@ -39,9 +39,9 @@ const HowtoUseSection = () => {
               <Image
                 src={item.image}
                 alt={item.title}
-                width={170}
-                height={170}
-                className="h-[120px] w-[120px] object-contain sm:h-[140px] sm:w-[140px] lg:h-[170px] lg:w-[170px]"
+                width={250}
+                height={250}
+                className="h-[200px] w-[220px] object-contain sm:h-[200px] sm:w-[220px] lg:h-[250px] lg:w-[450px]"
               />
             </div>
 

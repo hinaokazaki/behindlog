@@ -45,7 +45,7 @@ const GoalSection: React.FC = () => {
       onClick: modals.selectedGoal
         ? modals.closeUpdateGoal
         : modals.closeCreateGoal,
-      color: "red",
+      color: "main",
       variant: "outlined",
     },
     {
@@ -53,7 +53,7 @@ const GoalSection: React.FC = () => {
       className: "",
       type: "submit",
       disabled: actions.isSubmitting,
-      color: "red",
+      color: "main",
       variant: "filled",
     },
   ];

@@ -7,64 +7,77 @@ import Link from "next/link";
 import { HeroSection } from "../_components/HeroSection";
 import { User, Mail } from "lucide-react";
 
-// 中間ページ
-// GET /api/friends/invite?inviteToken=xxxx ユーザー_招待お知らせ情報取得から情報取得
-
 export default function InvitePage() {
   const searchParams = useSearchParams();
   const token = searchParams.get("inviteToken");
 
   if (!token) {
-    return <p>無効なリンクです。</p>;
+    return (
+      <div className="flex min-h-screen items-center justify-center px-4">
+        <p className="text-center font-semibold text-foreground">
+          無効なリンクです。
+        </p>
+      </div>
+    );
   }
+
   const { data, error, isLoading } = useFetch<FriendInviteResponse>(
     `/api/friends/invite?inviteToken=${token}`,
   );
 
   if (isLoading) return <Loading />;
-  if (error) return <p>エラーが発生しました: {error.message}</p>;
+  if (error)
+    return (
+      <p className="px-4 text-center">エラーが発生しました: {error.message}</p>
+    );
 
-  console.log("data:", data);
   if (!data?.friendInvite) {
-    return <p>招待データが見つかりませんでした。</p>;
+    return (
+      <p className="px-4 text-center">招待データが見つかりませんでした。</p>
+    );
   }
+
   const invitation = data.friendInvite;
 
   return (
-    <div className="my-[84px] flex flex-row items-center justify-center gap-[80px]">
+    <div className="flex flex-col items-center justify-center gap-10 px-4 pb-16 pt-28 sm:px-6 lg:my-[84px] lg:flex-row lg:gap-[80px] lg:px-8">
       <HeroSection mode="invite" />
-      <div className="my-[84px] flex w-[550px] flex-col items-center gap-10 rounded-xl border-[2.5px] border-foreground px-8 py-6">
-        <div>
-          <h1 className="mb-6 text-subtitle-top font-bold text-foreground">
+
+      <div className="flex w-full max-w-[550px] flex-col items-center gap-8 rounded-2xl border-[2.5px] border-foreground px-5 py-6 sm:px-8">
+        <div className="w-full">
+          <h1 className="mb-6 text-center text-subtitle-top font-bold text-foreground lg:text-left">
             友達からの招待
           </h1>
-          <p className="mb-2 flex items-center text-body text-foreground">
+
+          <p className="mb-4 flex flex-wrap items-center justify-center text-center text-foreground sm:text-body lg:justify-start lg:text-left">
             あなたに
-            <User className="mx-2 h-5 w-5 text-buttonMain" />
+            <User className="mx-2 h-5 w-5 shrink-0 text-buttonMain" />
             <span className="mr-2 font-bold text-foreground">
               {invitation.inviterName}
             </span>
             から招待が届いています!
           </p>
-          <p className="flex items-center text-body text-foreground">
-            <Mail className="mx-2 h-5 w-5 text-buttonMain" />
-            <span className="mr-2 font-bold text-foreground">
+
+          <p className="flex flex-wrap items-center justify-center text-center text-foreground sm:text-body lg:justify-start lg:text-left">
+            <Mail className="mx-2 h-5 w-5 shrink-0 text-buttonMain" />
+            <span className="font-bold text-foreground">
               {invitation.message}
             </span>
           </p>
         </div>
-        <div className="mb-3">
+
+        <div className="w-full sm:w-auto">
           {invitation.alreadyRegistered ? (
             <Link
               href="/login"
-              className="rounded-xl border-[2px] border-secondary bg-secondary px-4 py-2 text-body font-semibold text-white transition-colors duration-200 hover:bg-secondary-hover md:text-form-text"
+              className="flex w-full items-center justify-center rounded-xl border-[2px] border-secondary bg-secondary px-4 py-2 font-semibold text-white transition-colors duration-200 hover:bg-secondary-hover sm:text-form-text"
             >
               ログインして参加
             </Link>
           ) : (
             <Link
               href={`/signup?inviteToken=${token}`}
-              className="rounded-xl border-[2px] border-secondary bg-secondary px-4 py-2 text-body font-semibold text-white transition-colors duration-200 hover:bg-secondary-hover md:text-form-text"
+              className="flex w-full items-center justify-center rounded-xl border-[2px] border-secondary bg-secondary px-4 py-2 font-semibold text-white transition-colors duration-200 hover:bg-secondary-hover sm:text-form-text"
             >
               新規登録して参加
             </Link>

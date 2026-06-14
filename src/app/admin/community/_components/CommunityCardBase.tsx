@@ -30,32 +30,32 @@ const CommunityCardBase: React.FC<Props> = ({
 
   const message = mode !== "requestAccepted" ? messageMap[mode] : null;
   return (
-    <div className="flex items-start gap-2">
-      <button
-        type="button"
-        onClick={onClick}
-        className={`flex w-full min-w-0 flex-col gap-2 rounded-lg p-3 text-left sm:flex-row sm:items-center ${
-          onClick
-            ? "cursor-pointer rounded-xl border-[2px] border-secondary px-4 py-2 font-semibold text-secondary hover:bg-background"
-            : ""
-        }`}
-      >
-        <div className="flex min-w-0 items-center">
-          <User className="mx-2 h-5 w-5 shrink-0 text-buttonMain" />
-          <span className="truncate text-base font-bold sm:text-base">
-            {name}
-          </span>
-        </div>
+    <div className="flex items-center justify-between gap-4">
+      <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+        <button
+          type="button"
+          onClick={onClick}
+          className={`flex w-full min-w-[150px] flex-col gap-2 rounded-lg p-3 text-left sm:min-w-[220px] sm:flex-row sm:items-center ${
+            onClick
+              ? "cursor-pointer rounded-xl border-[2px] border-secondary px-4 py-2 font-semibold text-secondary hover:bg-background"
+              : ""
+          }`}
+        >
+          <div className="flex min-w-0 items-center">
+            <User className="mx-2 h-5 w-5 shrink-0 text-buttonMain" />
+
+            <span className="truncate text-base font-bold">{name}</span>
+          </div>
+        </button>
 
         {message && (
-          <div className="flex items-center sm:ml-4">
-            <SendHorizontal className="mx-2 h-5 w-5 shrink-0 text-buttonMain" />
-            <span className="text-base text-xs sm:text-base">
-              {message.comment}
-            </span>
+          <div className="flex shrink-0 items-center">
+            <SendHorizontal className="mx-2 h-5 w-5 text-buttonMain" />
+
+            <span className="text-xs sm:text-base">{message.comment}</span>
           </div>
         )}
-      </button>
+      </div>
 
       {rightSlot ? <div className="shrink-0">{rightSlot}</div> : null}
     </div>

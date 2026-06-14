@@ -1,18 +1,22 @@
 "use client";
 import React, { useEffect } from "react";
-import { FieldValues, useForm, DefaultValues, Path } from "react-hook-form";
-import { ButtonProps } from "../_types/type";
-import { FieldProps } from "../_types/type";
-import { ZodType } from "zod";
+import {
+  FieldValues,
+  useForm,
+  DefaultValues,
+  Path,
+  Resolver,
+} from "react-hook-form";
+import { ButtonProps, FieldProps } from "../_types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "./Button";
 import FormField from "./FormField";
 
-type FormProps<T> = {
+type FormProps<T extends FieldValues> = {
   fields: FieldProps[];
   buttons: ButtonProps[];
   onSubmit: (data: T) => void;
-  schema: ZodType<T, any, any>;
+  schema: Parameters<typeof zodResolver>[0];
   defaultValues?: DefaultValues<T>;
 };
 
@@ -30,7 +34,7 @@ const Form = <T extends FieldValues>({
     reset,
     formState: { errors, isSubmitting },
   } = useForm<T>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(schema) as Resolver<T>,
     defaultValues,
   });
 
@@ -47,18 +51,22 @@ const Form = <T extends FieldValues>({
           key={name}
           name={name as Path<T>}
           title={title}
-          type={type as any}
+          type={type}
           register={register}
           control={control}
           inputProps={inputProps}
           options={options}
-          error={(errors[name as keyof T] as any)?.message}
+          error={errors[name as Path<T>]?.message as string | undefined}
         />
       ))}
 
       <div className="flex size-full items-center justify-center gap-8">
         {buttons.map((btn, index) => (
-          <Button key={index} {...btn} />
+          <Button
+            key={index}
+            {...btn}
+            disabled={isSubmitting || btn.disabled}
+          />
         ))}
       </div>
     </form>

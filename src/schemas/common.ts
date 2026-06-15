@@ -1,4 +1,4 @@
-import { z, ZodError, ZodIssue } from "zod";
+import { z } from "zod";
 
 // 共通レスポンススキーマ
 export const statusResponseSchema = z.object({

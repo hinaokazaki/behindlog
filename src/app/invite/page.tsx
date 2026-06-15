@@ -11,6 +11,10 @@ export default function InvitePage() {
   const searchParams = useSearchParams();
   const token = searchParams.get("inviteToken");
 
+  const { data, error, isLoading } = useFetch<FriendInviteResponse>(
+    token ? `/api/friends/invite?inviteToken=${token}` : null,
+  );
+
   if (!token) {
     return (
       <div className="flex min-h-screen items-center justify-center px-4">
@@ -20,10 +24,6 @@ export default function InvitePage() {
       </div>
     );
   }
-
-  const { data, error, isLoading } = useFetch<FriendInviteResponse>(
-    `/api/friends/invite?inviteToken=${token}`,
-  );
 
   if (isLoading) return <Loading />;
   if (error)

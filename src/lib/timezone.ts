@@ -2,18 +2,26 @@ import { formatUserDate, parseUserDate } from "./date";
 
 // レスポンス用（UTC → ユーザーのタイムゾーン）
 // 単一レコード用
-type ReplaceFields<T, K extends keyof T, V> = Omit<T, K> & { [key in K]: V };
+type ReplaceFields<T, K extends keyof T, V> = Omit<T, K> & {
+  [key in K]: V;
+};
+
+type DateFieldValue = string | Date;
 
 export function withUserTimezone<
-  T extends Record<string, any>,
+  T extends Record<string, unknown>,
   K extends keyof T,
 >(record: T, fields: K[], timezone: string): ReplaceFields<T, K, string> {
   const formatted = { ...record } as ReplaceFields<T, K, string>;
+
   for (const field of fields) {
-    if (record[field]) {
-      (formatted as any)[field] = formatUserDate(record[field], timezone);
+    const value = record[field];
+
+    if (value instanceof Date) {
+      (formatted as Record<K, string>)[field] = formatUserDate(value, timezone);
     }
   }
+
   return formatted;
 }
 

@@ -11,7 +11,7 @@ export default function AuthCallback() {
   const postedRef = useRef(false);
   const searchParams = useSearchParams();
   const inviteToken = searchParams.get("inviteToken");
-  const { callApi, error, isLoading, token: useApiToken } = useApi();
+  const { callApi, token: useApiToken } = useApi();
 
   useEffect(() => {
     if (!useApiToken || postedRef.current) return;

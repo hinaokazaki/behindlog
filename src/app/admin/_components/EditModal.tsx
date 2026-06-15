@@ -2,21 +2,22 @@
 import Form from "@/app/_components/Form";
 import { Modal } from "./Modal";
 import { ButtonProps, FieldProps } from "@/app/_types/type";
-import { ZodTypeAny } from "zod";
+import { FieldValues, DefaultValues } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import BlockTitle from "./BlockTitle";
 
-interface Props<TFormValues> {
+interface Props<T extends FieldValues> {
   modalTitle: string;
   isOpen: boolean;
   onClose: () => void;
   fields: FieldProps[];
   buttons: ButtonProps[];
-  schema: ZodTypeAny;
-  onSubmit: (data: TFormValues) => void;
-  defaultValues?: TFormValues;
+  schema: Parameters<typeof zodResolver>[0];
+  onSubmit: (data: T) => void;
+  defaultValues?: DefaultValues<T>;
 }
 
-export const EditModal = <TFormValues,>({
+export const EditModal = <T extends FieldValues>({
   modalTitle,
   isOpen,
   onClose,
@@ -25,7 +26,7 @@ export const EditModal = <TFormValues,>({
   schema,
   onSubmit,
   defaultValues,
-}: Props<TFormValues>) => {
+}: Props<T>) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="w-full max-w-[520px] px-1 sm:px-2">

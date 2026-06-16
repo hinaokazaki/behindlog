@@ -9,7 +9,6 @@ import Loading from "@/app/_components/Loading";
 import SectionTitle from "@/app/_components/SectionTitle";
 import UserName from "./_components/UserName";
 import { Modal } from "../_components/Modal";
-import Button from "@/app/_components/Button";
 import "react-calendar/dist/Calendar.css";
 import { CircleEllipsis, CirclePlus } from "lucide-react";
 

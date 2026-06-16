@@ -3,7 +3,7 @@ import Form from "@/app/_components/Form";
 import { Modal } from "./Modal";
 import { ButtonProps, FieldProps } from "@/app/_types/type";
 import { FieldValues, DefaultValues } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import type { ZodType, ZodTypeDef } from "zod";
 import BlockTitle from "./BlockTitle";
 
 interface Props<T extends FieldValues> {
@@ -12,7 +12,7 @@ interface Props<T extends FieldValues> {
   onClose: () => void;
   fields: FieldProps[];
   buttons: ButtonProps[];
-  schema: Parameters<typeof zodResolver>[0];
+  schema: ZodType<T, ZodTypeDef, unknown>;
   onSubmit: (data: T) => void;
   defaultValues?: DefaultValues<T>;
 }

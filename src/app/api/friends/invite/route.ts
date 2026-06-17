@@ -174,7 +174,6 @@ export const POST = async (request: NextRequest) => {
 // GET /api/friends/invite?token=xxxx ユーザー_招待お知らせ情報取得
 export const GET = async (request: NextRequest) => {
   try {
-    const user = await getLoggedInUser(request);
     const token = request.nextUrl.searchParams.get("inviteToken");
     if (!token) {
       return NextResponse.json({ error: "token required" }, { status: 400 });

@@ -33,10 +33,10 @@ export const GET = async (
     }
 
     const converted = withUserTimezone(
-        todo,
-        ["dueDate", "createdAt", "updatedAt"],
-        user.timezone,
-      );
+      todo,
+      ["dueDate", "createdAt", "updatedAt"],
+      user.timezone,
+    );
 
     const safeTodo: Todo = converted;
 
@@ -74,10 +74,10 @@ export const PATCH = async (
     });
 
     const converted = withUserTimezone(
-        todo,
-        ["dueDate", "createdAt", "updatedAt"],
-        user.timezone,
-      );
+      todo,
+      ["dueDate", "createdAt", "updatedAt"],
+      user.timezone,
+    );
 
     const safeTodo: Todo = converted;
 
@@ -100,7 +100,7 @@ export const DELETE = async (
   const { id } = params;
   try {
     const user = await getLoggedInUser(request);
-    const todo = await prisma.todo.delete({
+    await prisma.todo.delete({
       where: {
         id: Number(id),
         userId: user.id,

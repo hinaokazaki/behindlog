@@ -39,8 +39,9 @@ const DashTodoSection: React.FC<DashTodoSectionProps> = ({
                   onClick={() => router.push("/admin/edit")}
                   type="button"
                   color="red"
-                  children="編集ページでTodoを作成する"
-                />
+                >
+                  編集ページでTodoを作成する
+                </Button>
               </div>
             </div>
           ) : (

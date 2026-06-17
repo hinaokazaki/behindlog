@@ -52,7 +52,7 @@ const Header: React.FC = () => {
                 </Link>
 
                 <div className="hidden md:block">
-                  <Button children="ログアウト" onClick={handleLogout} />
+                  <Button onClick={handleLogout}>ログアウト</Button>
                 </div>
 
                 <button

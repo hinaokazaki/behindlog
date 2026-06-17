@@ -88,7 +88,7 @@ export default function CommunityPage() {
           await friends.mutate();
         },
       });
-    } catch (error) {
+    } catch {
       console.log("友達リクエストの送信に失敗しました");
     }
   };
@@ -102,7 +102,7 @@ export default function CommunityPage() {
           await friendRequests.mutate();
         },
       });
-    } catch (error) {
+    } catch {
       console.log("友達の承認に失敗しました");
     }
   };
@@ -115,7 +115,7 @@ export default function CommunityPage() {
           await friends.mutate();
         },
       });
-    } catch (error) {
+    } catch {
       console.log("友達リクエストの拒否に失敗しました");
     }
   };
@@ -129,7 +129,7 @@ export default function CommunityPage() {
           await friends.mutate();
         },
       });
-    } catch (error) {
+    } catch {
       console.log("友達の削除に失敗しました");
     }
   };

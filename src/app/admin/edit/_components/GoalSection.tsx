@@ -72,7 +72,7 @@ const GoalSection: React.FC = () => {
           await goalsData.mutate();
         },
       });
-    } catch (error) {
+    } catch {
       console.log("目標の作成に失敗しました");
     }
   };
@@ -85,7 +85,7 @@ const GoalSection: React.FC = () => {
           await goalsData.mutate();
         },
       });
-    } catch (error) {
+    } catch {
       console.log("目標の更新に失敗しました");
     }
   };
@@ -98,7 +98,7 @@ const GoalSection: React.FC = () => {
           await goalsData.mutate();
         },
       });
-    } catch (error) {
+    } catch {
       console.log("目標の更新に失敗しました");
     }
   };
@@ -109,6 +109,7 @@ const GoalSection: React.FC = () => {
       <div className="space-y-2">
         {goals.map((g) => (
           <GoalCardBase
+            key={g.id}
             goal={g.title}
             deadline={g.deadline}
             onClick={() => modals.openUpdateGoal(g)}

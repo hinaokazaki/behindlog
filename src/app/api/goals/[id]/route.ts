@@ -5,7 +5,6 @@ import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
 import {
   Goal,
   GoalResponse,
-  goalSchema,
   updateGoalRequest,
   updateGoalRequestSchema,
 } from "@/schemas/goal";
@@ -100,7 +99,7 @@ export const DELETE = async (
   const { id } = params;
   try {
     const user = await getLoggedInUser(request);
-    const goal = await prisma.goal.delete({
+    await prisma.goal.delete({
       where: {
         id: parseInt(id),
         userId: user.id,

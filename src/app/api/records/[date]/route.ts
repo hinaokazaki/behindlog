@@ -9,7 +9,7 @@ import {
   TodoSnapshot,
   todoSnapshotSchema,
 } from "@/schemas/dailyRecord";
-import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
+import { withUserTimezone } from "@/lib/timezone";
 import { ErrorResponse, ValidationErrorResponse } from "@/schemas/common";
 import { toYmdWithTimezone } from "@/lib/date";
 

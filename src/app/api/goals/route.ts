@@ -11,9 +11,7 @@ import {
   CreateGoalRequest,
   createGoalRequestSchema,
   Goals,
-  goalSchema,
   GoalsResponse,
-  goalsSchema,
   GoalResponse,
 } from "@/schemas/goal";
 import { ErrorResponse } from "@/schemas/common";

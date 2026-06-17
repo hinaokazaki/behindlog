@@ -2,7 +2,7 @@
 import useSWR from "swr";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 
-const useFetch = <T = any>(url: string | null) => {
+const useFetch = <T = unknown>(url: string | null) => {
   const { token, isLoading: sessionLoading } = useSupabaseSession();
 
   const fetcher = async (): Promise<T> => {

@@ -6,8 +6,9 @@ import Loading from "../_components/Loading";
 import Link from "next/link";
 import { HeroSection } from "../_components/HeroSection";
 import { User, Mail } from "lucide-react";
+import { Suspense } from "react";
 
-export default function InvitePage() {
+function InvitePageContent() {
   const searchParams = useSearchParams();
   const token = searchParams.get("inviteToken");
 
@@ -85,5 +86,13 @@ export default function InvitePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function InvitePage() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <InvitePageContent />
+    </Suspense>
   );
 }

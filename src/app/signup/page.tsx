@@ -6,6 +6,8 @@ import { z } from "zod";
 import Link from "next/link";
 import SectionTitle from "../_components/SectionTitle";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+import Loading from "../_components/Loading";
 
 const fields: FieldProps[] = [
   {
@@ -38,7 +40,7 @@ const defaultValues: SignupFormValues = {
   password: "",
 };
 
-export default function Signup() {
+function SignupContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const inviteToken = searchParams.get("inviteToken");
@@ -80,5 +82,13 @@ export default function Signup() {
         アカウントをお持ちの方はこちら
       </Link>
     </div>
+  );
+}
+
+export default function Signup() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <SignupContent />
+    </Suspense>
   );
 }

@@ -1,12 +1,13 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/utils/supabase";
 import { useApi } from "@/app/_hooks/useApi";
 import { FriendLinkResponse } from "@/schemas/friend";
 import { ProfileResponse } from "@/schemas/me";
+import Loading from "@/app/_components/Loading";
 
-export default function AuthCallback() {
+function AuthCallbackContent() {
   const router = useRouter();
   const postedRef = useRef(false);
   const searchParams = useSearchParams();
@@ -68,4 +69,12 @@ export default function AuthCallback() {
     })();
   }, [router, inviteToken, callApi, useApiToken]);
   return null;
+}
+
+export default function AuthCallback() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <AuthCallbackContent />
+    </Suspense>
+  );
 }

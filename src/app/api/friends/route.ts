@@ -4,6 +4,8 @@ import { getLoggedInUser } from "@/utils/auth";
 import { FriendLists, FriendListsResponse } from "@/schemas/friend";
 import { ErrorResponse } from "@/schemas/common";
 
+export const dynamic = "force-dynamic";
+
 // GET: /friends ユーザー_友達一覧取得
 export const GET = async (request: NextRequest) => {
   try {

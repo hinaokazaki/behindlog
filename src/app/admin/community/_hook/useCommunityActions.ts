@@ -59,10 +59,7 @@ export const useCommunityActions = () => {
   const deleteFriend = async (friendshipId: number, opts?: Options) => {
     try {
       setIsSubmitting(true);
-      const res = await callApi<FriendResponse>(
-        `/api/friends/${friendshipId}`,
-        "DELETE",
-      );
+      await callApi<FriendResponse>(`/api/friends/${friendshipId}`, "DELETE");
       router.refresh();
       opts?.onSuccess?.();
     } catch (error) {

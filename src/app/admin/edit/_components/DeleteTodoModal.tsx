@@ -46,17 +46,18 @@ const DeleteTodoModal: React.FC<Props> = ({
               onClick={onClose}
               color="main"
               variant="outlined"
-              children="キャンセル"
-            />
-
+            >
+              キャンセル
+            </Button>
             <Button
               type="button"
               disabled={isSubmitting}
               onClick={onConfirm}
               color="main"
               variant="filled"
-              children="削除"
-            />
+            >
+              削除
+            </Button>
           </div>
         </div>
       )}

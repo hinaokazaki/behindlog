@@ -78,7 +78,7 @@ const TodoSection: React.FC = () => {
           await todosData.mutate();
         },
       });
-    } catch (error) {
+    } catch {
       console.log("Todoの作成に失敗しました");
     }
   };
@@ -91,7 +91,7 @@ const TodoSection: React.FC = () => {
           await todosData.mutate();
         },
       });
-    } catch (error) {
+    } catch {
       console.log("Todoの更新に失敗しました");
     }
   };
@@ -104,7 +104,7 @@ const TodoSection: React.FC = () => {
           await todosData.mutate();
         },
       });
-    } catch (error) {
+    } catch {
       console.log("Todoの削除に失敗しました");
     }
   };
@@ -115,6 +115,7 @@ const TodoSection: React.FC = () => {
       <div className="space-y-2">
         {todos.map((t) => (
           <TodoCardBase
+            key={t.id}
             todo={t.title}
             dueDate={t.dueDate}
             completed={t.isCompleted}

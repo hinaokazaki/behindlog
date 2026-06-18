@@ -76,7 +76,7 @@ export const DELETE = async (
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
-    const friendship = await prisma.friendship.delete({
+    await prisma.friendship.delete({
       where: {
         id: Number(id),
         OR: [{ userId2: user.id }, { userId1: user.id }],

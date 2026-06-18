@@ -1,7 +1,7 @@
 "use client";
 import Calendar from "react-calendar";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { UserSummary } from "@/schemas/monthlyRecords";
 import { useMonthlyRecordsQuery } from "../_hooks/useMonthlyRecordsQuery";
 import { toYmdWithTimezone, toYmLocal } from "@/lib/date";
@@ -9,7 +9,6 @@ import Loading from "@/app/_components/Loading";
 import SectionTitle from "@/app/_components/SectionTitle";
 import UserName from "./_components/UserName";
 import { Modal } from "../_components/Modal";
-import Button from "@/app/_components/Button";
 import "react-calendar/dist/Calendar.css";
 import { CircleEllipsis, CirclePlus } from "lucide-react";
 
@@ -18,7 +17,7 @@ const ymToDate = (ym: string) => {
   return new Date(y, m - 1, 1);
 };
 
-export default function CalendarPage() {
+function CalendarPageFunction() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const monthParam = searchParams.get("month");
@@ -279,5 +278,13 @@ export default function CalendarPage() {
         </div>
       </Modal>
     </div>
+  );
+}
+
+export default function CalendarPage() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <CalendarPageFunction />
+    </Suspense>
   );
 }

@@ -7,8 +7,9 @@ import {
   Path,
   Resolver,
 } from "react-hook-form";
-import { ButtonProps, FieldProps } from "../_types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ButtonProps, FieldProps } from "../_types/type";
+import type { ZodType, ZodTypeDef } from "zod";
 import Button from "./Button";
 import FormField from "./FormField";
 
@@ -16,7 +17,7 @@ type FormProps<T extends FieldValues> = {
   fields: FieldProps[];
   buttons: ButtonProps[];
   onSubmit: (data: T) => void;
-  schema: Parameters<typeof zodResolver>[0];
+  schema: ZodType<T, ZodTypeDef, unknown>;
   defaultValues?: DefaultValues<T>;
 };
 
@@ -34,7 +35,9 @@ const Form = <T extends FieldValues>({
     reset,
     formState: { errors, isSubmitting },
   } = useForm<T>({
-    resolver: zodResolver(schema) as Resolver<T>,
+    resolver: zodResolver(
+      schema as unknown as Parameters<typeof zodResolver>[0],
+    ) as Resolver<T>,
     defaultValues,
   });
 

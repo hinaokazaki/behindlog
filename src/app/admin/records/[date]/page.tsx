@@ -21,7 +21,6 @@ import Textarea from "@/app/_components/Textarea";
 import BlockTitle from "../../_components/BlockTitle";
 import SectionTitle from "@/app/_components/SectionTitle";
 import CommittimeRecordForm from "./_components/CommittimeRecordForm";
-import { isCommittimeExpired } from "./_utils/isCommittimeExpired";
 import UpdateCommittimeModal from "./_components/UpdateCommittimeModal";
 import CommittimeExpiredAlert from "./_components/CommittimeExpiredAlert";
 
@@ -261,10 +260,11 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
         <div className="mt-8 flex justify-center">
           <Button
             type="submit"
-            children="今日の記録を保存"
             color="main"
             disabled={isSubmitting || isExpired}
-          />
+          >
+            今日の記録を保存
+          </Button>
         </div>
       </form>
 

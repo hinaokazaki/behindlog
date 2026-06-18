@@ -6,10 +6,15 @@ import Loading from "../_components/Loading";
 import Link from "next/link";
 import { HeroSection } from "../_components/HeroSection";
 import { User, Mail } from "lucide-react";
+import { Suspense } from "react";
 
-export default function InvitePage() {
+function InvitePageContent() {
   const searchParams = useSearchParams();
   const token = searchParams.get("inviteToken");
+
+  const { data, error, isLoading } = useFetch<FriendInviteResponse>(
+    token ? `/api/friends/invite?inviteToken=${token}` : null,
+  );
 
   if (!token) {
     return (
@@ -20,10 +25,6 @@ export default function InvitePage() {
       </div>
     );
   }
-
-  const { data, error, isLoading } = useFetch<FriendInviteResponse>(
-    `/api/friends/invite?inviteToken=${token}`,
-  );
 
   if (isLoading) return <Loading />;
   if (error)
@@ -85,5 +86,13 @@ export default function InvitePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function InvitePage() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <InvitePageContent />
+    </Suspense>
   );
 }

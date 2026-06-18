@@ -33,6 +33,7 @@ type FormFieldProps<T extends FieldValues> = {
   control: Control<T>;
   error?: string;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+  textareaProps?: React.TextareaHTMLAttributes<HTMLTextAreaElement>;
   options?: Option[];
 };
 
@@ -44,13 +45,14 @@ const FormField = <T extends FieldValues>({
   control,
   error,
   inputProps,
+  textareaProps,
   options,
 }: FormFieldProps<T>) => {
   return (
     <div>
       <Label name={name} title={title} />
       {type === "textarea" ? (
-        <Textarea id={name} {...register(name)} {...(inputProps as any)} />
+        <Textarea id={name} {...register(name)} {...textareaProps} />
       ) : type === "select" ? (
         <Controller
           name={name}

@@ -19,6 +19,7 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Behindlog",
   description: "学習記録型の継続支援アプリ",
+  themeColor: "#fdfdfd",
 };
 
 export default async function RootLayout({

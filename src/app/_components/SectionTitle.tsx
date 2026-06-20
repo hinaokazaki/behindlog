@@ -12,7 +12,7 @@ const SectionTitle: React.FC<Props> = ({ title, isPublic = false }) => {
 
   return (
     <div className={textPlace}>
-      <p className="inline-block font-en text-heading-1 font-bold text-primary">
+      <p className="inline-block font-en text-heading-3 font-bold text-primary sm:text-heading-1">
         {title}
         <span className={`mx-auto mt-4 block h-1 ${lineWidth} bg-secondary`} />
       </p>

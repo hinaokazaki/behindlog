@@ -204,7 +204,7 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
         className="px-4 pb-24 sm:px-6 lg:px-10"
       >
         <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <SectionTitle title="Today's Record" />
+          <SectionTitle title="Record" />
           <p className="text-subtitle-top font-extrabold text-primary sm:text-heading-3">
             {date}
           </p>
@@ -263,7 +263,7 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
             color="main"
             disabled={isSubmitting || isExpired}
           >
-            今日の記録を保存
+            記録を保存
           </Button>
         </div>
       </form>

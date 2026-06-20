@@ -204,8 +204,8 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
         className="px-4 pb-24 sm:px-6 lg:px-10"
       >
         <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <SectionTitle title="Record" />
-          <p className="text-subtitle-top font-extrabold text-primary sm:text-heading-3">
+          <SectionTitle title="Record-記録" />
+          <p className="text-subtitle font-extrabold text-primary sm:text-heading-3">
             {date}
           </p>
         </div>

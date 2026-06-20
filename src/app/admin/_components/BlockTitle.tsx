@@ -8,7 +8,7 @@ type Props = {
 
 const BlockTitle: React.FC<Props> = ({ title, mode = "section" }) => {
   const styles = {
-    section: "text-primary text-heading-2 font-en",
+    section: "text-primary text-subtitle-top font-en sm:text-heading-2",
     modal: "text-base text-subtitle-top font-jp",
   };
 

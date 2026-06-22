@@ -68,10 +68,9 @@ export const GET = async (request: NextRequest) => {
     const totalStudyTime = await prisma.dailyRecord.aggregate({
       where: {
         userId: user.id,
-        // commitTimeId: committimeId,
         recordedDate: {
           gte: startDateForQuery,
-          lte: endDateForQuery,
+          lte: recordedDate ?? endDateForQuery,
         },
       },
       _sum: {

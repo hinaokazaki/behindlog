@@ -28,8 +28,7 @@ export const GET = async (
 
   try {
     const user = await getLoggedInUser(request);
-    const [year, month, day] = params.date.split("-").map(Number);
-    const recordedDate = new Date(Date.UTC(year, month - 1, day));
+    const recordedDate = new Date(`${params.date}T00:00:00.000Z`);
     const dailyRecord = await prisma.dailyRecord.findUnique({
       where: {
         userId_recordedDate: {
@@ -80,8 +79,7 @@ export const PUT = async (
   try {
     const user = await getLoggedInUser(request);
     const body = createDailyRecordSchema.parse(await request.json());
-    const [year, month, day] = params.date.split("-").map(Number);
-    const recordedDate = new Date(Date.UTC(year, month - 1, day));
+    const recordedDate = new Date(`${params.date}T00:00:00.000Z`);
 
     // todoのsnapshot,requestにsnapshotが含まれていなかった場合、サーバ側でsnapshotを作成
     let snapshot = body.todoSnapshot ?? null;

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
-import { UserRecord, UserRecordResponse } from "@/schemas/userRecord";
+import { UserRecord } from "@/schemas/userRecord";
 import { withUserTimezone } from "@/lib/timezone";
 import { ErrorResponse } from "@/schemas/common";
 
@@ -61,6 +61,22 @@ export const GET = async (
       );
     }
 
+    const totalStudyTimeByPeriod =
+      record.commitStartDate && record.commitEndDate
+        ? await prisma.dailyRecord.aggregate({
+            where: {
+              userId: ownerId,
+              recordedDate: {
+                gte: record.commitStartDate,
+                lte: recordedDate,
+              },
+            },
+            _sum: {
+              totalStudyTime: true,
+            },
+          })
+        : null;
+
     const converted = withUserTimezone(
       record,
       ["createdAt", "updatedAt", "commitStartDate", "commitEndDate"],
@@ -72,8 +88,14 @@ export const GET = async (
       recordedDate: record.recordedDate.toISOString(),
     };
 
-    return NextResponse.json<UserRecordResponse>(
-      { dailyRecord: safeDailyRecord },
+    return NextResponse.json(
+      {
+        dailyRecord: safeDailyRecord,
+        totalStudyTime: {
+          totalStudyTimeByPeriod:
+            totalStudyTimeByPeriod?._sum.totalStudyTime ?? 0,
+        },
+      },
       { status: 200 },
     );
   } catch (error) {

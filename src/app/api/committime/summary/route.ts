@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getLoggedInUser } from "@/utils/auth";
-import { withUserDateParse, withUserTimezone } from "@/lib/timezone";
+import { withUserTimezone } from "@/lib/timezone";
 import { TotalStudyTime, TotalStudyTimeResponse } from "@/schemas/committime";
 import { ErrorResponse } from "@/schemas/common";
-import { toUtcDateOnly } from "@/lib/date";
 
 // GET: /committime/summary?date=xxxx-xx-xx ユーザー_合計学習時間取得
 export const GET = async (request: NextRequest) => {
@@ -27,13 +26,7 @@ export const GET = async (request: NextRequest) => {
       );
     }
 
-    const recordedDate = date
-      ? withUserDateParse(
-          { recordedDate: date },
-          ["recordedDate"],
-          user.timezone,
-        ).recordedDate
-      : null;
+    const recordedDate = date ? new Date(`${date}T00:00:00.000Z`) : null;
 
     const dailyRecord = recordedDate
       ? await prisma.dailyRecord.findUnique({
@@ -46,21 +39,39 @@ export const GET = async (request: NextRequest) => {
         })
       : null;
 
+    console.log({
+      date,
+      recordedDate,
+      dailyRecordId: dailyRecord?.id,
+      commitStartDate: dailyRecord?.commitStartDate,
+      commitEndDate: dailyRecord?.commitEndDate,
+      commitTargetTime: dailyRecord?.commitTargetTime,
+      currentStartDate: committime.startDate,
+      currentEndDate: committime.endDate,
+    });
+
     const startDate = dailyRecord?.commitStartDate ?? committime.startDate;
     const endDate = dailyRecord?.commitEndDate ?? committime.endDate;
     const targetTime = dailyRecord?.commitTargetTime ?? committime.targetTime;
     const committimeId = dailyRecord?.commitTimeId ?? committime.id;
 
-    const startDateForQuery = toUtcDateOnly(startDate, user.timezone);
-    const endDateForQuery = toUtcDateOnly(endDate, user.timezone);
+    // const startDateForQuery = toUtcDateOnly(startDate, user.timezone);
+    // const endDateForQuery = toUtcDateOnly(endDate, user.timezone);
+
+    // console.log({
+    //   startDate,
+    //   startDateForQuery,
+    //   endDate,
+    //   endDateForQuery,
+    //   recordedDate,
+    // });
 
     const totalStudyTime = await prisma.dailyRecord.aggregate({
       where: {
         userId: user.id,
-        commitTimeId: committimeId,
         recordedDate: {
-          gte: startDateForQuery,
-          lte: endDateForQuery,
+          gte: startDate,
+          lte: recordedDate ?? endDate,
         },
       },
       _sum: {

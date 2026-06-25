@@ -5,7 +5,6 @@ import Loading from "@/app/_components/Loading";
 import SectionTitle from "@/app/_components/SectionTitle";
 import Textarea from "@/app/_components/Textarea";
 import BlockTitle from "@/app/admin/_components/BlockTitle";
-import { useCommittimeSummaryQuery } from "@/app/admin/_hooks/useCommittimeSummaryQuery";
 import useFetch from "@/app/admin/_hooks/useFetch";
 import TodoCardBase from "@/app/admin/edit/_components/TodoCardBase";
 import { todoSnapshotSchema } from "@/schemas/dailyRecord";
@@ -36,10 +35,12 @@ export default function FriendRecordsPage({
   const id = params.id;
   const date = params.date;
 
-  const committimeSummaryQuery = useCommittimeSummaryQuery();
-  const friendRecordData = useFetch<{ dailyRecord: UserRecord }>(
-    `/api/users/${id}/records/${date}`,
-  );
+  const friendRecordData = useFetch<{
+    dailyRecord: UserRecord;
+    totalStudyTime: {
+      totalStudyTimeByPeriod: number;
+    };
+  }>(`/api/users/${id}/records/${date}`);
 
   const { register, reset } = useForm<RecordForm>({
     defaultValues: {
@@ -89,7 +90,7 @@ export default function FriendRecordsPage({
 
   // totalStudyTimeByPeriod
   const totalStudyTimeByPeriod =
-    committimeSummaryQuery.data?.totalStudyTime.totalStudyTimeByPeriod ?? 0;
+    friendRecordData.data?.totalStudyTime.totalStudyTimeByPeriod ?? 0;
 
   return (
     <form className="px-4 pb-24 sm:px-6 lg:px-10">

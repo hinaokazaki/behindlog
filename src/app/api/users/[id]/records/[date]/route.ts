@@ -32,10 +32,10 @@ export const GET = async (
       return NextResponse.json({ message: "Forbidden" }, { status: 403 });
     }
 
-    // 記録の持ち主（友達）の timezone を取得（検索に必要）
+    // 記録の持ち主（友達）の timezoneと名前を取得（検索に必要）
     const owner = await prisma.user.findUnique({
       where: { id: ownerId },
-      select: { timezone: true },
+      select: { timezone: true, name: true },
     });
 
     if (!owner) {
@@ -91,6 +91,7 @@ export const GET = async (
     return NextResponse.json(
       {
         dailyRecord: safeDailyRecord,
+        userName: owner.name,
         totalStudyTime: {
           totalStudyTimeByPeriod:
             totalStudyTimeByPeriod?._sum.totalStudyTime ?? 0,

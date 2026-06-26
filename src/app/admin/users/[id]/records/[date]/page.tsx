@@ -40,6 +40,7 @@ export default function FriendRecordsPage({
     totalStudyTime: {
       totalStudyTimeByPeriod: number;
     };
+    userName: string;
   }>(`/api/users/${id}/records/${date}`);
 
   const { register, reset } = useForm<RecordForm>({
@@ -95,7 +96,7 @@ export default function FriendRecordsPage({
   return (
     <form className="px-4 pb-24 sm:px-6 lg:px-10">
       <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <SectionTitle title="Today's Record" />
+        <SectionTitle title={`${friendRecordData.data.userName}'s Record`} />
         <p className="text-subtitle-top font-extrabold text-primary sm:text-heading-3">
           {date}
         </p>

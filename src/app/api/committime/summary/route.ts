@@ -39,32 +39,10 @@ export const GET = async (request: NextRequest) => {
         })
       : null;
 
-    console.log({
-      date,
-      recordedDate,
-      dailyRecordId: dailyRecord?.id,
-      commitStartDate: dailyRecord?.commitStartDate,
-      commitEndDate: dailyRecord?.commitEndDate,
-      commitTargetTime: dailyRecord?.commitTargetTime,
-      currentStartDate: committime.startDate,
-      currentEndDate: committime.endDate,
-    });
-
     const startDate = dailyRecord?.commitStartDate ?? committime.startDate;
     const endDate = dailyRecord?.commitEndDate ?? committime.endDate;
     const targetTime = dailyRecord?.commitTargetTime ?? committime.targetTime;
     const committimeId = dailyRecord?.commitTimeId ?? committime.id;
-
-    // const startDateForQuery = toUtcDateOnly(startDate, user.timezone);
-    // const endDateForQuery = toUtcDateOnly(endDate, user.timezone);
-
-    // console.log({
-    //   startDate,
-    //   startDateForQuery,
-    //   endDate,
-    //   endDateForQuery,
-    //   recordedDate,
-    // });
 
     const totalStudyTime = await prisma.dailyRecord.aggregate({
       where: {

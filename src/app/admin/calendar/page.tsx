@@ -170,7 +170,7 @@ function CalendarPageFunction() {
               const remaining = records.length - maxVisible;
 
               return (
-                <div className="tile-content group relative h-full w-full text-xs">
+                <>
                   <div
                     role="button"
                     tabIndex={0}
@@ -180,54 +180,58 @@ function CalendarPageFunction() {
                         router.push(`/admin/records/${dateString}`),
                       )
                     }
-                    className="calendar-add-btn absolute right-1 top-1 z-10 flex h-7 w-7 items-center justify-center rounded-full p-1 opacity-0 transition-opacity duration-200 hover:bg-secondary-hover focus:opacity-100 group-hover:opacity-100"
+                    className="calendar-add-btn absolute right-2 top-2 z-10 flex h-7 w-7 items-center justify-center rounded-full p-1 opacity-0 transition-opacity duration-200 hover:bg-secondary-hover focus:opacity-100 group-hover:opacity-100"
                     aria-label="create new record"
                   >
                     <CirclePlus className="h-5 w-5 text-buttonMain" />
                   </div>
 
-                  {records.length > 0 && (
-                    <>
-                      <div className="space-y-1 pt-2">
-                        {visibleRecords.map((record) => {
-                          const isMe =
-                            record.id === monthlyRecords?.viewerUserId;
+                  <div className="tile-content group relative h-full w-full text-xs">
+                    {records.length > 0 && (
+                      <>
+                        <div className="space-y-1 pt-4">
+                          {visibleRecords.map((record) => {
+                            const isMe =
+                              record.id === monthlyRecords?.viewerUserId;
 
-                          const href = isMe
-                            ? `/admin/records/${dateString}`
-                            : `/admin/users/${record.id}/records/${dateString}`;
+                            const href = isMe
+                              ? `/admin/records/${dateString}`
+                              : `/admin/users/${record.id}/records/${dateString}`;
 
-                          return (
-                            <UserName
-                              key={record.id}
-                              name={record.name ?? ""}
-                              link={href}
-                            />
-                          );
-                        })}
-                      </div>
-
-                      {remaining > 0 && (
-                        <div
-                          role="button"
-                          tabIndex={0}
-                          onClick={(e) => openMoreModal(e, dateString, records)}
-                          onKeyDown={(e) =>
-                            handleEnterOrSpace(e, () => {
-                              setSelectedDate(dateString);
-                              setSelectedUsers(records);
-                              setIsOpen(true);
-                            })
-                          }
-                          className="mt-1 rounded-full p-1 hover:bg-secondary-hover"
-                          aria-label="More"
-                        >
-                          <CircleEllipsis className="mx-2 h-5 w-5 text-buttonMain" />
+                            return (
+                              <UserName
+                                key={record.id}
+                                name={record.name ?? ""}
+                                link={href}
+                              />
+                            );
+                          })}
                         </div>
-                      )}
-                    </>
-                  )}
-                </div>
+
+                        {remaining > 0 && (
+                          <div
+                            role="button"
+                            tabIndex={0}
+                            onClick={(e) =>
+                              openMoreModal(e, dateString, records)
+                            }
+                            onKeyDown={(e) =>
+                              handleEnterOrSpace(e, () => {
+                                setSelectedDate(dateString);
+                                setSelectedUsers(records);
+                                setIsOpen(true);
+                              })
+                            }
+                            className="mt-1 rounded-full p-1 hover:bg-secondary-hover"
+                            aria-label="More"
+                          >
+                            <CircleEllipsis className="mx-2 h-5 w-5 text-buttonMain" />
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+                </>
               );
             }}
           />

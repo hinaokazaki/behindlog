@@ -301,17 +301,31 @@ body {
 }
 
 .mini-calendar .has-record {
-  width: 38px !important;
-  height: 38px !important;
-  margin: 0 auto;
-  border-radius: 9999px;
-  background: var(--color-secondary) !important;
+  background: transparent !important;
   color: white !important;
+}
+
+.mini-calendar .has-record abbr {
+  width: 38px;
+  height: 38px;
+  border-radius: 9999px;
+  background: var(--color-secondary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
 }
 
 .mini-calendar .has-record:enabled:hover,
 .mini-calendar .has-record:enabled:focus {
-  background: var(--color-secondary) !important;
+  background: transparent !important;
   color: white !important;
   box-shadow: none !important;
+}
+
+.mini-calendar .has-record:enabled:hover abbr,
+.mini-calendar .has-record:enabled:focus abbr {
+  background: var(--color-secondary);
+  color: white;
 }

@@ -2,9 +2,6 @@
 import { Suspense, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/utils/supabase";
-import { useApi } from "@/app/_hooks/useApi";
-import { FriendLinkResponse } from "@/schemas/friend";
-import { ProfileResponse } from "@/schemas/me";
 import Loading from "@/app/_components/Loading";
 
 function AuthCallbackContent() {
@@ -12,15 +9,13 @@ function AuthCallbackContent() {
   const postedRef = useRef(false);
   const searchParams = useSearchParams();
   const inviteToken = searchParams.get("inviteToken");
-  const { callApi, token: useApiToken } = useApi();
 
   useEffect(() => {
-    if (!useApiToken || postedRef.current) return;
+    if (postedRef.current) return;
     postedRef.current = true;
 
     (async () => {
       try {
-        // リダイレクトURLの ?code=... をセッションに交換
         const url = new URL(window.location.href);
         const code = url.searchParams.get("code");
         const optToken = url.searchParams.get("token");
@@ -47,23 +42,33 @@ function AuthCallbackContent() {
 
         // /api/me を upsert（timezoneを保存）
         const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        await callApi<ProfileResponse>("/api/me", "POST", {
-          timezone: tz,
+        await fetch("/api/me", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({ timezone: tz }),
         });
 
         if (inviteToken) {
-          await callApi<FriendLinkResponse>("/api/friends/link", "PATCH", {
-            inviteToken,
+          await fetch("/api/friends/link", {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${session.access_token}`,
+            },
+            body: JSON.stringify({ inviteToken }),
           });
         }
 
         router.replace("/admin/me");
       } catch (error) {
-        console.error("Auth callback error:", error);
+        router.replace("/login");
       }
     })();
-  }, [router, inviteToken, callApi, useApiToken]);
-  return null;
+  }, [router, inviteToken]);
+  return <Loading />;
 }
 
 export default function AuthCallback() {

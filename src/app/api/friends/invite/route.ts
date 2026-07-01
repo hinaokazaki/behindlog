@@ -20,7 +20,7 @@ async function sendInviteEmail(to: string, token: string) {
   const inviteUrl = `${process.env.NEXT_PUBLIC_APP_URL}/invite?inviteToken=${token}`;
 
   await resend.emails.send({
-    from: "onboarding@resend.dev",
+    from: "Behindlog <noreply@hinaokazaki.com>",
     to,
     subject: "Behindlogに招待されました",
     html: `

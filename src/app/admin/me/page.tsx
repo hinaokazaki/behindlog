@@ -47,7 +47,7 @@ export default function ProfilePage() {
   // GET: api/me profile情報取得
   const { data, error, isLoading } = useFetch<{ profile: Profile }>("/api/me");
   if (isLoading) return <Loading />;
-  if (error) return <p>エラーが発生しました: {error.message}</p>;
+  if (error) return <p>エラーが発生しました</p>;
   if (!data) return <p>データがありません</p>;
 
   const profile = data.profile;

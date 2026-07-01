@@ -48,10 +48,7 @@ export default function DashboardPage() {
       </p>
     );
 
-  if (
-    committimeSummaryQuery.error ||
-    !committimeSummaryQuery.data?.totalStudyTime
-  )
+  if (committimeSummaryQuery.error)
     return (
       <p>
         合計時間の取得でエラーが発生しました:{" "}
@@ -62,8 +59,14 @@ export default function DashboardPage() {
   const profile: Profile = profileQuery.data?.profile;
   const todos: Todos = todosData.data?.todos ?? [];
   const goals: Goals = goalsData.data?.goals ?? [];
-  const totalStudyTime: TotalStudyTime =
-    committimeSummaryQuery.data?.totalStudyTime;
+  const totalStudyTime: TotalStudyTime = committimeSummaryQuery.data
+    ?.totalStudyTime ?? {
+    committimeId: 0,
+    totalStudyTimeByPeriod: 0,
+    startDate: "",
+    endDate: "",
+    targetTime: 0,
+  };
 
   return (
     <div className="min-h-[calc(100vh-120px)] px-4 py-4 pb-24 sm:px-6 2xl:h-[calc(100vh-120px)] 2xl:overflow-hidden 2xl:px-10 2xl:pb-4">

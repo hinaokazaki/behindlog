@@ -55,7 +55,7 @@ export default function DashboardPage() {
     return (
       <p>
         合計時間の取得でエラーが発生しました:{" "}
-        {committimeSummaryQuery.error.message ?? "エラーが発生しました"}
+        {committimeSummaryQuery.error?.message ?? "エラーが発生しました"}
       </p>
     );
 

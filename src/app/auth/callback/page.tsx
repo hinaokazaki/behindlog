@@ -63,7 +63,7 @@ function AuthCallbackContent() {
         }
 
         router.replace("/admin/me");
-      } catch (error) {
+      } catch {
         router.replace("/login");
       }
     })();

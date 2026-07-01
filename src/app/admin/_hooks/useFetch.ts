@@ -14,7 +14,16 @@ const useFetch = <T = unknown>(url: string | null) => {
       },
     });
 
-    if (!res.ok) throw new Error("API fetch failed");
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => null);
+
+      const message =
+        typeof errorData?.error === "string"
+          ? errorData.error
+          : errorData?.error?.message || "API fetch failed";
+
+      throw new Error(message);
+    }
     return res.json();
   };
 

@@ -41,25 +41,20 @@ function AuthCallbackContent() {
         const { data } = await supabase.auth.getSession();
         const session = data.session;
         if (!session) {
-          console.log("no session");
           router.replace("/login");
           return;
         }
 
         // /api/me を upsert（timezoneを保存）
         const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const res = await callApi<ProfileResponse>("/api/me", "POST", {
+        await callApi<ProfileResponse>("/api/me", "POST", {
           timezone: tz,
         });
-        console.log("POST /api/me success", res);
 
         if (inviteToken) {
-          const res2 = await callApi<FriendLinkResponse>(
-            "/api/friends/link",
-            "PATCH",
-            { inviteToken },
-          );
-          console.log("Friend link success:", res2);
+          await callApi<FriendLinkResponse>("/api/friends/link", "PATCH", {
+            inviteToken,
+          });
         }
 
         router.replace("/admin/me");

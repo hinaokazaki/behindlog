@@ -1,20 +1,44 @@
 "use client";
 import { useSearchParams } from "next/navigation";
 import { FriendInviteResponse } from "@/schemas/friend";
-import useFetch from "../admin/_hooks/useFetch";
 import Loading from "../_components/Loading";
 import Link from "next/link";
 import { HeroSection } from "../_components/HeroSection";
 import { User, Mail } from "lucide-react";
-import { Suspense } from "react";
+import { useEffect, useState, Suspense } from "react";
 
 function InvitePageContent() {
   const searchParams = useSearchParams();
   const token = searchParams.get("inviteToken");
 
-  const { data, error, isLoading } = useFetch<FriendInviteResponse>(
-    token ? `/api/friends/invite?inviteToken=${token}` : null,
-  );
+  const [data, setData] = useState<FriendInviteResponse | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!token) return;
+
+    const fetchInvite = async () => {
+      setIsLoading(true);
+
+      try {
+        const res = await fetch(`/api/friends/invite?inviteToken=${token}`);
+
+        if (!res.ok) {
+          throw new Error("招待情報の取得に失敗しました");
+        }
+
+        const result: FriendInviteResponse = await res.json();
+        setData(result);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "エラーが発生しました");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchInvite();
+  }, [token]);
 
   if (!token) {
     return (
@@ -27,10 +51,9 @@ function InvitePageContent() {
   }
 
   if (isLoading) return <Loading />;
-  if (error)
-    return (
-      <p className="px-4 text-center">エラーが発生しました: {error.message}</p>
-    );
+  if (error) {
+    return <p className="px-4 text-center">エラーが発生しました: {error}</p>;
+  }
 
   if (!data?.friendInvite) {
     return (

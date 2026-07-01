@@ -60,7 +60,12 @@ const GoalSection: React.FC = () => {
 
   if (goalsData.isLoading) return <Loading />;
   if (goalsData.error)
-    return <p>目標の取得でエラーが発生しました: {goalsData.error.message}</p>;
+    return (
+      <p>
+        目標の取得でエラーが発生しました:{" "}
+        {goalsData.error.message ?? "エラーが発生しました"}
+      </p>
+    );
 
   const goals: Goals = goalsData.data?.goals ?? [];
 

@@ -116,19 +116,25 @@ export default function RecordsPage({ params }: { params: { date: string } }) {
     return (
       <p>
         合計学習時間の取得でエラーが発生しました:{" "}
-        {committimeSummaryQuery.error.message}
+        {committimeSummaryQuery.error.message ?? "エラーが発生しました"}
       </p>
     );
 
   if (committimeQuery.error)
     return (
       <p>
-        目標時間の取得でエラーが発生しました: {committimeQuery.error.message}
+        目標時間の取得でエラーが発生しました:{" "}
+        {committimeQuery.error.message ?? "エラーが発生しました"}
       </p>
     );
 
   if (todoQuery.error)
-    return <p>Todoの取得でエラーが発生しました: {todoQuery.error.message}</p>;
+    return (
+      <p>
+        Todoの取得でエラーが発生しました:{" "}
+        {todoQuery.error.message ?? "エラーが発生しました"}
+      </p>
+    );
 
   // committime
   const record = recordQuery.data?.dailyRecord ?? null;

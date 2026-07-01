@@ -33,10 +33,20 @@ export default function DashboardPage() {
   }
 
   if (todosData.error)
-    return <p>Todoの取得でエラーが発生しました: {todosData.error.message}</p>;
+    return (
+      <p>
+        Todoの取得でエラーが発生しました:{" "}
+        {todosData.error.message ?? "エラーが発生しました"}
+      </p>
+    );
 
   if (goalsData.error)
-    return <p>目標の取得でエラーが発生しました: {goalsData.error.message}</p>;
+    return (
+      <p>
+        目標の取得でエラーが発生しました:{" "}
+        {goalsData.error.message ?? "エラーが発生しました"}
+      </p>
+    );
 
   if (
     committimeSummaryQuery.error ||
@@ -45,7 +55,7 @@ export default function DashboardPage() {
     return (
       <p>
         合計時間の取得でエラーが発生しました:{" "}
-        {committimeSummaryQuery.error.message}
+        {committimeSummaryQuery.error.message ?? "エラーが発生しました"}
       </p>
     );
 

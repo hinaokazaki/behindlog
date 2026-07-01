@@ -66,7 +66,12 @@ const TodoSection: React.FC = () => {
 
   if (todosData.isLoading) return <Loading />;
   if (todosData.error)
-    return <p>Todoの取得でエラーが発生しました: {todosData.error.message}</p>;
+    return (
+      <p>
+        Todoの取得でエラーが発生しました:{" "}
+        {todosData.error.message ?? "エラーが発生しました"}
+      </p>
+    );
 
   const todos: Todos = todosData.data?.todos ?? [];
 

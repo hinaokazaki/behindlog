@@ -65,11 +65,17 @@ export default function CommunityPage() {
 
   if (friends.isLoading || friendRequests.isLoading) return <Loading />;
   if (friends.error)
-    return <p>友達の取得でエラーが発生しました: {friends.error.message}</p>;
+    return (
+      <p>
+        友達の取得でエラーが発生しました:{" "}
+        {friends.error.message ?? "エラーが発生しました"}
+      </p>
+    );
   if (friendRequests.error)
     return (
       <p>
-        友達招待の取得でエラーが発生しました: {friendRequests.error.message}
+        友達招待の取得でエラーが発生しました:{" "}
+        {friendRequests.error.message ?? "エラーが発生しました"}
       </p>
     );
 

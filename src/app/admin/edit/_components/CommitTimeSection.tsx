@@ -54,7 +54,8 @@ const CommitTimeSection = () => {
   if (committimeQuery.error)
     return (
       <p>
-        目標時間の取得でエラーが発生しました: {committimeQuery.error.message}
+        目標時間の取得でエラーが発生しました:{" "}
+        {committimeQuery.error.message ?? "エラーが発生しました"}
       </p>
     );
 
